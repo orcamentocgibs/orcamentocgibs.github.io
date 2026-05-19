@@ -6,7 +6,6 @@
 <title>CGIBS | Arquitetura Orçamentária 2026</title>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 <style>
-
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap');
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -498,7 +497,6 @@ tbody tr.data-row td { padding: 10px 16px; vertical-align: middle; }
 
 
 
-
 /* ─── SYNC BAR ───────────────────────────────────────────────── */
 .sync-bar{background:var(--white);border-bottom:1px solid var(--slate-200);padding:0 32px}
 .sync-bar-inner{max-width:1400px;margin:0 auto;height:38px;display:flex;align-items:center;gap:12px}
@@ -516,26 +514,9 @@ tbody tr.data-row td { padding: 10px 16px; vertical-align: middle; }
 .sync-link:hover{background:var(--blue-100)}
 .spin{display:inline-block;animation:spin 1s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
-
 </style>
 </head>
 <body>
-
-<!-- SYNC BAR -->
-<div class="sync-bar">
-  <div class="sync-bar-inner">
-    <span class="sync-dot" id="syncDot"></span>
-    <span class="sync-label" id="syncLabel">Dados locais</span>
-    <span class="sync-time" id="syncTime"></span>
-    <a class="sync-link" href="https://docs.google.com/spreadsheets/d/e/2PACX-1vSYA6B6DpSzF0wVdYVJIhyeDNT3_iyCJnKmMbk9BYq9LODpbSQcA-3yOTfFbSRQce_2IWNGjrYs_G-n/pubhtml" target="_blank">
-      <i class="fas fa-table-cells"></i> Planilha
-    </a>
-    <button class="sync-btn" id="syncBtn" onclick="doSync()">
-      <i class="fas fa-rotate-right" id="syncIcon"></i> Sincronizar
-    </button>
-  </div>
-</div>
-
 
 <!-- HEADER -->
 <header class="header">
@@ -576,6 +557,21 @@ tbody tr.data-row td { padding: 10px 16px; vertical-align: middle; }
   </div>
 </header>
 
+
+<!-- SYNC BAR -->
+<div class="sync-bar">
+  <div class="sync-bar-inner">
+    <span class="sync-dot" id="syncDot"></span>
+    <span class="sync-label" id="syncLabel">Dados locais</span>
+    <span class="sync-time" id="syncTime"></span>
+    <a class="sync-link" href="https://docs.google.com/spreadsheets/d/e/2PACX-1vSYA6B6DpSzF0wVdYVJIhyeDNT3_iyCJnKmMbk9BYq9LODpbSQcA-3yOTfFbSRQce_2IWNGjrYs_G-n/pubhtml" target="_blank">
+      <i class="fas fa-table-cells"></i> Planilha
+    </a>
+    <button class="sync-btn" id="syncBtn" onclick="doSync()">
+      <i class="fas fa-rotate-right" id="syncIcon"></i> Sincronizar
+    </button>
+  </div>
+</div>
 <!-- TABS -->
 <nav class="nav-wrap">
   <div class="nav-inner">
@@ -617,14 +613,14 @@ tbody tr.data-row td { padding: 10px 16px; vertical-align: middle; }
   <div class="kpi-grid">
     <div class="kpi" style="--kpi-color:#1d5fa6">
       <div class="kpi-label">Total do Programa</div>
-      <div class="kpi-main">38</div>
-      <div class="kpi-sub">itens de despesa · 3 ações · 7 subações</div>
+      <div class="kpi-main">39</div>
+      <div class="kpi-sub">itens de despesa · 3 ações · 9 subações</div>
       <span class="kpi-tag">Portaria 163</span>
     </div>
     <div class="kpi" style="--kpi-color:#5b4db8">
       <div class="kpi-label">2001 — Pessoal e Encargos</div>
       <div class="kpi-main">4 itens</div>
-      <div class="kpi-sub">12,8% das dotações · 2 subações</div>
+      <div class="kpi-sub">12,8% das dotações · 3 subações</div>
     </div>
     <div class="kpi" style="--kpi-color:#b45309">
       <div class="kpi-label">2002 — Apoio Administrativo</div>
@@ -685,130 +681,252 @@ tbody tr.data-row td { padding: 10px 16px; vertical-align: middle; }
 </div><!-- /main -->
 
 <script>
-// ══════════════════════════════════════════════════════════════════════
-// DADOS — gerados automaticamente pelo Cowork a partir do Google Sheets
-// NÃO edite manualmente. O Cowork substitui const DATA = [
-  {acao: "2001", acaoFull: "2001 - Remuneração de Pessoal", sub: "10001", subFull: "10001 - Gestão da Folha de Pagamento Própria", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Vencimento de Pessoal Civil", elem: "Vencimentos e Vantagens Fixas - Pessoal Civil", cod: "319011", nat: "Corrente"},
-  {acao: "2001", acaoFull: "2001 - Remuneração de Pessoal", sub: "10001", subFull: "10001 - Gestão da Folha de Pagamento Própria", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Patronal", elem: "Obrigações Patronais", cod: "319013", nat: "Corrente"},
-  {acao: "2001", acaoFull: "2001 - Remuneração de Pessoal", sub: "10002", subFull: "10002 - Ressarcimento e Indenização de Servidores Requisitados", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Indenização de Servidores Cedidos", elem: "Vencimentos e Vantagens Fixas - Pessoal Civil", cod: "319011", nat: "Corrente"},
-  {acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10003", subFull: "10003 - Manutenção de Infraestrutura Física e Logística", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Contrato de Aluguel de Imóvel", elem: "Outros Serviços de Terceiros - Pessoa Jurídica", cod: "339039", nat: "Corrente"},
-  {acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10003", subFull: "10003 - Manutenção de Infraestrutura Física e Logística", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Obras e Instalações (reforma de prédio alugado)", elem: "Obras e Instalações", cod: "449051", nat: "Capital"},
-  {acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10003", subFull: "10003 - Manutenção de Infraestrutura Física e Logística", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Contrato de Manutenção de Ar-Condicionado", elem: "Outros Serviços de Terceiros - Pessoa Jurídica", cod: "339039", nat: "Corrente"},
-  {acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10003", subFull: "10003 - Manutenção de Infraestrutura Física e Logística", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Contrato de Conservação e Limpeza", elem: "Locação de Mão-de-Obra", cod: "339037", nat: "Corrente"},
-  {acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10003", subFull: "10003 - Manutenção de Infraestrutura Física e Logística", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Contrato de Serviço de Vigilância", elem: "Locação de Mão-de-Obra", cod: "339037", nat: "Corrente"},
-  {acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10003", subFull: "10003 - Manutenção de Infraestrutura Física e Logística", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Energia Elétrica", elem: "Outros Serviços de Terceiros - Pessoa Jurídica", cod: "339039", nat: "Corrente"},
-  {acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10003", subFull: "10003 - Manutenção de Infraestrutura Física e Logística", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Água e Esgoto", elem: "Outros Serviços de Terceiros - Pessoa Jurídica", cod: "339039", nat: "Corrente"},
-  {acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10003", subFull: "10003 - Manutenção de Infraestrutura Física e Logística", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Telefonia", elem: "Outros Serviços de Terceiros - Pessoa Jurídica", cod: "339039", nat: "Corrente"},
-  {acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10003", subFull: "10003 - Manutenção de Infraestrutura Física e Logística", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Contrato de Locação de Veículos", elem: "Outros Serviços de Terceiros - Pessoa Jurídica", cod: "339039", nat: "Corrente"},
-  {acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10004", subFull: "10004 - Comunicação Formação e Mobilidade Institucional", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Diárias no País", elem: "Diárias - Civil", cod: "339014", nat: "Corrente"},
-  {acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10004", subFull: "10004 - Comunicação Formação e Mobilidade Institucional", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Contrato de Passagens e Despesas com Locomoção", elem: "Passagens e Despesas com Locomoção", cod: "339033", nat: "Corrente"},
-  {acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10004", subFull: "10004 - Comunicação Formação e Mobilidade Institucional", func: "04", funcFull: "04 - Administração", sfunc: "128", sfuncFull: "128 - Formação de Recursos Humanos", despesa: "Cursos e Capacitação", elem: "Outros Serviços de Terceiros - Pessoa Jurídica", cod: "339039", nat: "Corrente"},
-  {acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10004", subFull: "10004 - Comunicação Formação e Mobilidade Institucional", func: "04", funcFull: "04 - Administração", sfunc: "131", sfuncFull: "131 - Comunicação Social", despesa: "Contrato de Imprensa Oficial", elem: "Outros Serviços de Terceiros - Pessoa Jurídica", cod: "339039", nat: "Corrente"},
-  {acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10004", subFull: "10004 - Comunicação Formação e Mobilidade Institucional", func: "04", funcFull: "04 - Administração", sfunc: "131", sfuncFull: "131 - Comunicação Social", despesa: "Publicidade e Propaganda", elem: "Outros Serviços de Terceiros - Pessoa Jurídica", cod: "339039", nat: "Corrente"},
-  {acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10004", subFull: "10004 - Comunicação Formação e Mobilidade Institucional", func: "04", funcFull: "04 - Administração", sfunc: "131", sfuncFull: "131 - Comunicação Social", despesa: "Material Bens ou Serviço para Distribuição Gratuita", elem: "Material, Bem ou Serviço para Distribuição Gratuita", cod: "339032", nat: "Corrente"},
-  {acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10005", subFull: "10005 - Gestão de Serviços Operacionais e Encargos", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Materiais de Uso e Consumo", elem: "Material de Consumo", cod: "339030", nat: "Corrente"},
-  {acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10005", subFull: "10005 - Gestão de Serviços Operacionais e Encargos", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Materiais de Escritório", elem: "Material de Consumo", cod: "339030", nat: "Corrente"},
-  {acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10005", subFull: "10005 - Gestão de Serviços Operacionais e Encargos", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Combustíveis e Lubrificantes Automotivos", elem: "Material de Consumo", cod: "339030", nat: "Corrente"},
-  {acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10005", subFull: "10005 - Gestão de Serviços Operacionais e Encargos", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Contrato de Serviços de Impressão", elem: "Outros Serviços de Terceiros - Pessoa Jurídica", cod: "339039", nat: "Corrente"},
-  {acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10005", subFull: "10005 - Gestão de Serviços Operacionais e Encargos", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Contrato de Coffee Breaks", elem: "Outros Serviços de Terceiros - Pessoa Jurídica", cod: "339039", nat: "Corrente"},
-  {acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10005", subFull: "10005 - Gestão de Serviços Operacionais e Encargos", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Contrato de Serviços Gráficos", elem: "Outros Serviços de Terceiros - Pessoa Jurídica", cod: "339039", nat: "Corrente"},
-  {acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10005", subFull: "10005 - Gestão de Serviços Operacionais e Encargos", func: "04", funcFull: "04 - Administração", sfunc: "121", sfuncFull: "121 - Planejamento e Orçamento", despesa: "Contrato de Serviço de Consultoria", elem: "Serviços de Consultoria", cod: "339035", nat: "Corrente"},
-  {acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10005", subFull: "10005 - Gestão de Serviços Operacionais e Encargos", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Contrato de Estagiários", elem: "Outros Serviços de Terceiros - Pessoa Jurídica", cod: "339039", nat: "Corrente"},
-  {acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10005", subFull: "10005 - Gestão de Serviços Operacionais e Encargos", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Contrato de Serviço Terceirizado de Apoio Administrativo", elem: "Locação de Mão-de-Obra", cod: "339037", nat: "Corrente"},
-  {acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10005", subFull: "10005 - Gestão de Serviços Operacionais e Encargos", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Auxílio-Alimentação", elem: "Auxílio-Alimentação", cod: "339046", nat: "Corrente"},
-  {acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10005", subFull: "10005 - Gestão de Serviços Operacionais e Encargos", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Auxílio-Saúde", elem: "Outros Benefícios Assistenciais", cod: "339008", nat: "Corrente"},
-  {acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10005", subFull: "10005 - Gestão de Serviços Operacionais e Encargos", func: "28", funcFull: "28 - Encargos Especiais", sfunc: "846", sfuncFull: "846 - Outros Encargos Especiais", despesa: "Obrigações Tributárias e Contributivas", elem: "Obrigações Tributárias e Contributivas", cod: "339047", nat: "Corrente"},
-  {acao: "2003", acaoFull: "2003 - Instalação e Manutenção da Infraestrutura Tecnológica da Informação e Comunicação", sub: "10006", subFull: "10006 - Manutenção de Sistemas e Serviços de TIC", func: "04", funcFull: "04 - Administração", sfunc: "126", sfuncFull: "126 - Tecnologia da Informação", despesa: "Serviço de TIC", elem: "Serviços de Tecnologia da Informação e Comunicação - Pessoa Jurídica", cod: "339040", nat: "Corrente"},
-  {acao: "2003", acaoFull: "2003 - Instalação e Manutenção da Infraestrutura Tecnológica da Informação e Comunicação", sub: "10006", subFull: "10006 - Manutenção de Sistemas e Serviços de TIC", func: "04", funcFull: "04 - Administração", sfunc: "126", sfuncFull: "126 - Tecnologia da Informação", despesa: "Contrato Link de Internet", elem: "Serviços de Tecnologia da Informação e Comunicação - Pessoa Jurídica", cod: "339040", nat: "Corrente"},
-  {acao: "2003", acaoFull: "2003 - Instalação e Manutenção da Infraestrutura Tecnológica da Informação e Comunicação", sub: "10006", subFull: "10006 - Manutenção de Sistemas e Serviços de TIC", func: "04", funcFull: "04 - Administração", sfunc: "126", sfuncFull: "126 - Tecnologia da Informação", despesa: "Modernização da Infraestrutura Tecnológica", elem: "Serviços de Tecnologia da Informação e Comunicação - Pessoa Jurídica", cod: "339040", nat: "Corrente"},
-  {acao: "2003", acaoFull: "2003 - Instalação e Manutenção da Infraestrutura Tecnológica da Informação e Comunicação", sub: "10006", subFull: "10006 - Manutenção de Sistemas e Serviços de TIC", func: "04", funcFull: "04 - Administração", sfunc: "126", sfuncFull: "126 - Tecnologia da Informação", despesa: "Locação de Computadores", elem: "Serviços de Tecnologia da Informação e Comunicação - Pessoa Jurídica", cod: "339040", nat: "Corrente"},
-  {acao: "2003", acaoFull: "2003 - Instalação e Manutenção da Infraestrutura Tecnológica da Informação e Comunicação", sub: "10006", subFull: "10006 - Manutenção de Sistemas e Serviços de TIC", func: "04", funcFull: "04 - Administração", sfunc: "126", sfuncFull: "126 - Tecnologia da Informação", despesa: "Contrato de Empresa de Tecnologia de Informação", elem: "Serviços de Tecnologia da Informação e Comunicação - Pessoa Jurídica", cod: "339040", nat: "Corrente"},
-  {acao: "2003", acaoFull: "2003 - Instalação e Manutenção da Infraestrutura Tecnológica da Informação e Comunicação", sub: "10007", subFull: "10007 - Investimentos em Tecnologia e Ativos Intangíveis", func: "04", funcFull: "04 - Administração", sfunc: "126", sfuncFull: "126 - Tecnologia da Informação", despesa: "Aquisição de equipamentos (Computador Ar-Condicionado etc)", elem: "Equipamentos e Material Permanente", cod: "449052", nat: "Capital"},
-  {acao: "2003", acaoFull: "2003 - Instalação e Manutenção da Infraestrutura Tecnológica da Informação e Comunicação", sub: "10007", subFull: "10007 - Investimentos em Tecnologia e Ativos Intangíveis", func: "04", funcFull: "04 - Administração", sfunc: "126", sfuncFull: "126 - Tecnologia da Informação", despesa: "Aquisição de Sistemas e Softwares", elem: "Serviços de Tecnologia da Informação e Comunicação - Pessoa Jurídica", cod: "449040", nat: "Capital"}
-]; abaixo.
-// ══════════════════════════════════════════════════════════════════════
-const DATA = [
-  {acao: "2001", acaoFull: "2001 - Remuneração de Pessoal", sub: "10001", subFull: "10001 - Gestão da Folha de Pagamento Própria", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Vencimento de Pessoal Civil", elem: "Vencimentos e Vantagens Fixas - Pessoal Civil", cod: "319011", nat: "Corrente"},
-  {acao: "2001", acaoFull: "2001 - Remuneração de Pessoal", sub: "10001", subFull: "10001 - Gestão da Folha de Pagamento Própria", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Patronal", elem: "Obrigações Patronais", cod: "319013", nat: "Corrente"},
-  {acao: "2001", acaoFull: "2001 - Remuneração de Pessoal", sub: "10002", subFull: "10002 - Ressarcimento e Indenização de Servidores Requisitados", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Indenização de Servidores Cedidos", elem: "Vencimentos e Vantagens Fixas - Pessoal Civil", cod: "319011", nat: "Corrente"},
-  {acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10003", subFull: "10003 - Manutenção de Infraestrutura Física e Logística", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Contrato de Aluguel de Imóvel", elem: "Outros Serviços de Terceiros - Pessoa Jurídica", cod: "339039", nat: "Corrente"},
-  {acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10003", subFull: "10003 - Manutenção de Infraestrutura Física e Logística", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Obras e Instalações (reforma de prédio alugado)", elem: "Obras e Instalações", cod: "449051", nat: "Capital"},
-  {acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10003", subFull: "10003 - Manutenção de Infraestrutura Física e Logística", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Contrato de Manutenção de Ar-Condicionado", elem: "Outros Serviços de Terceiros - Pessoa Jurídica", cod: "339039", nat: "Corrente"},
-  {acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10003", subFull: "10003 - Manutenção de Infraestrutura Física e Logística", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Contrato de Conservação e Limpeza", elem: "Locação de Mão-de-Obra", cod: "339037", nat: "Corrente"},
-  {acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10003", subFull: "10003 - Manutenção de Infraestrutura Física e Logística", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Contrato de Serviço de Vigilância", elem: "Locação de Mão-de-Obra", cod: "339037", nat: "Corrente"},
-  {acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10003", subFull: "10003 - Manutenção de Infraestrutura Física e Logística", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Energia Elétrica", elem: "Outros Serviços de Terceiros - Pessoa Jurídica", cod: "339039", nat: "Corrente"},
-  {acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10003", subFull: "10003 - Manutenção de Infraestrutura Física e Logística", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Água e Esgoto", elem: "Outros Serviços de Terceiros - Pessoa Jurídica", cod: "339039", nat: "Corrente"},
-  {acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10003", subFull: "10003 - Manutenção de Infraestrutura Física e Logística", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Telefonia", elem: "Outros Serviços de Terceiros - Pessoa Jurídica", cod: "339039", nat: "Corrente"},
-  {acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10003", subFull: "10003 - Manutenção de Infraestrutura Física e Logística", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Contrato de Locação de Veículos", elem: "Outros Serviços de Terceiros - Pessoa Jurídica", cod: "339039", nat: "Corrente"},
-  {acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10004", subFull: "10004 - Comunicação Formação e Mobilidade Institucional", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Diárias no País", elem: "Diárias - Civil", cod: "339014", nat: "Corrente"},
-  {acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10004", subFull: "10004 - Comunicação Formação e Mobilidade Institucional", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Contrato de Passagens e Despesas com Locomoção", elem: "Passagens e Despesas com Locomoção", cod: "339033", nat: "Corrente"},
-  {acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10004", subFull: "10004 - Comunicação Formação e Mobilidade Institucional", func: "04", funcFull: "04 - Administração", sfunc: "128", sfuncFull: "128 - Formação de Recursos Humanos", despesa: "Cursos e Capacitação", elem: "Outros Serviços de Terceiros - Pessoa Jurídica", cod: "339039", nat: "Corrente"},
-  {acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10004", subFull: "10004 - Comunicação Formação e Mobilidade Institucional", func: "04", funcFull: "04 - Administração", sfunc: "131", sfuncFull: "131 - Comunicação Social", despesa: "Contrato de Imprensa Oficial", elem: "Outros Serviços de Terceiros - Pessoa Jurídica", cod: "339039", nat: "Corrente"},
-  {acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10004", subFull: "10004 - Comunicação Formação e Mobilidade Institucional", func: "04", funcFull: "04 - Administração", sfunc: "131", sfuncFull: "131 - Comunicação Social", despesa: "Publicidade e Propaganda", elem: "Outros Serviços de Terceiros - Pessoa Jurídica", cod: "339039", nat: "Corrente"},
-  {acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10004", subFull: "10004 - Comunicação Formação e Mobilidade Institucional", func: "04", funcFull: "04 - Administração", sfunc: "131", sfuncFull: "131 - Comunicação Social", despesa: "Material Bens ou Serviço para Distribuição Gratuita", elem: "Material, Bem ou Serviço para Distribuição Gratuita", cod: "339032", nat: "Corrente"},
-  {acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10005", subFull: "10005 - Gestão de Serviços Operacionais e Encargos", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Materiais de Uso e Consumo", elem: "Material de Consumo", cod: "339030", nat: "Corrente"},
-  {acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10005", subFull: "10005 - Gestão de Serviços Operacionais e Encargos", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Materiais de Escritório", elem: "Material de Consumo", cod: "339030", nat: "Corrente"},
-  {acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10005", subFull: "10005 - Gestão de Serviços Operacionais e Encargos", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Combustíveis e Lubrificantes Automotivos", elem: "Material de Consumo", cod: "339030", nat: "Corrente"},
-  {acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10005", subFull: "10005 - Gestão de Serviços Operacionais e Encargos", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Contrato de Serviços de Impressão", elem: "Outros Serviços de Terceiros - Pessoa Jurídica", cod: "339039", nat: "Corrente"},
-  {acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10005", subFull: "10005 - Gestão de Serviços Operacionais e Encargos", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Contrato de Coffee Breaks", elem: "Outros Serviços de Terceiros - Pessoa Jurídica", cod: "339039", nat: "Corrente"},
-  {acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10005", subFull: "10005 - Gestão de Serviços Operacionais e Encargos", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Contrato de Serviços Gráficos", elem: "Outros Serviços de Terceiros - Pessoa Jurídica", cod: "339039", nat: "Corrente"},
-  {acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10005", subFull: "10005 - Gestão de Serviços Operacionais e Encargos", func: "04", funcFull: "04 - Administração", sfunc: "121", sfuncFull: "121 - Planejamento e Orçamento", despesa: "Contrato de Serviço de Consultoria", elem: "Serviços de Consultoria", cod: "339035", nat: "Corrente"},
-  {acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10005", subFull: "10005 - Gestão de Serviços Operacionais e Encargos", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Contrato de Estagiários", elem: "Outros Serviços de Terceiros - Pessoa Jurídica", cod: "339039", nat: "Corrente"},
-  {acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10005", subFull: "10005 - Gestão de Serviços Operacionais e Encargos", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Contrato de Serviço Terceirizado de Apoio Administrativo", elem: "Locação de Mão-de-Obra", cod: "339037", nat: "Corrente"},
-  {acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10005", subFull: "10005 - Gestão de Serviços Operacionais e Encargos", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Auxílio-Alimentação", elem: "Auxílio-Alimentação", cod: "339046", nat: "Corrente"},
-  {acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10005", subFull: "10005 - Gestão de Serviços Operacionais e Encargos", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Auxílio-Saúde", elem: "Outros Benefícios Assistenciais", cod: "339008", nat: "Corrente"},
-  {acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10005", subFull: "10005 - Gestão de Serviços Operacionais e Encargos", func: "28", funcFull: "28 - Encargos Especiais", sfunc: "846", sfuncFull: "846 - Outros Encargos Especiais", despesa: "Obrigações Tributárias e Contributivas", elem: "Obrigações Tributárias e Contributivas", cod: "339047", nat: "Corrente"},
-  {acao: "2003", acaoFull: "2003 - Instalação e Manutenção da Infraestrutura Tecnológica da Informação e Comunicação", sub: "10006", subFull: "10006 - Manutenção de Sistemas e Serviços de TIC", func: "04", funcFull: "04 - Administração", sfunc: "126", sfuncFull: "126 - Tecnologia da Informação", despesa: "Serviço de TIC", elem: "Serviços de Tecnologia da Informação e Comunicação - Pessoa Jurídica", cod: "339040", nat: "Corrente"},
-  {acao: "2003", acaoFull: "2003 - Instalação e Manutenção da Infraestrutura Tecnológica da Informação e Comunicação", sub: "10006", subFull: "10006 - Manutenção de Sistemas e Serviços de TIC", func: "04", funcFull: "04 - Administração", sfunc: "126", sfuncFull: "126 - Tecnologia da Informação", despesa: "Contrato Link de Internet", elem: "Serviços de Tecnologia da Informação e Comunicação - Pessoa Jurídica", cod: "339040", nat: "Corrente"},
-  {acao: "2003", acaoFull: "2003 - Instalação e Manutenção da Infraestrutura Tecnológica da Informação e Comunicação", sub: "10006", subFull: "10006 - Manutenção de Sistemas e Serviços de TIC", func: "04", funcFull: "04 - Administração", sfunc: "126", sfuncFull: "126 - Tecnologia da Informação", despesa: "Modernização da Infraestrutura Tecnológica", elem: "Serviços de Tecnologia da Informação e Comunicação - Pessoa Jurídica", cod: "339040", nat: "Corrente"},
-  {acao: "2003", acaoFull: "2003 - Instalação e Manutenção da Infraestrutura Tecnológica da Informação e Comunicação", sub: "10006", subFull: "10006 - Manutenção de Sistemas e Serviços de TIC", func: "04", funcFull: "04 - Administração", sfunc: "126", sfuncFull: "126 - Tecnologia da Informação", despesa: "Locação de Computadores", elem: "Serviços de Tecnologia da Informação e Comunicação - Pessoa Jurídica", cod: "339040", nat: "Corrente"},
-  {acao: "2003", acaoFull: "2003 - Instalação e Manutenção da Infraestrutura Tecnológica da Informação e Comunicação", sub: "10006", subFull: "10006 - Manutenção de Sistemas e Serviços de TIC", func: "04", funcFull: "04 - Administração", sfunc: "126", sfuncFull: "126 - Tecnologia da Informação", despesa: "Contrato de Empresa de Tecnologia de Informação", elem: "Serviços de Tecnologia da Informação e Comunicação - Pessoa Jurídica", cod: "339040", nat: "Corrente"},
-  {acao: "2003", acaoFull: "2003 - Instalação e Manutenção da Infraestrutura Tecnológica da Informação e Comunicação", sub: "10007", subFull: "10007 - Investimentos em Tecnologia e Ativos Intangíveis", func: "04", funcFull: "04 - Administração", sfunc: "126", sfuncFull: "126 - Tecnologia da Informação", despesa: "Aquisição de equipamentos (Computador Ar-Condicionado etc)", elem: "Equipamentos e Material Permanente", cod: "449052", nat: "Capital"},
-  {acao: "2003", acaoFull: "2003 - Instalação e Manutenção da Infraestrutura Tecnológica da Informação e Comunicação", sub: "10007", subFull: "10007 - Investimentos em Tecnologia e Ativos Intangíveis", func: "04", funcFull: "04 - Administração", sfunc: "126", sfuncFull: "126 - Tecnologia da Informação", despesa: "Aquisição de Sistemas e Softwares", elem: "Serviços de Tecnologia da Informação e Comunicação - Pessoa Jurídica", cod: "449040", nat: "Capital"}
-];
-
-
 // ═══════════════════════════════════════════════════════════════════
 // DATA — extraído do Orcamento_CGIBS_2026_Completo_(2).xlsx
 // ═══════════════════════════════════════════════════════════════════
-// const DATA = [
-  {acao: "2001", acaoFull: "2001 - Remuneração de Pessoal", sub: "10001", subFull: "10001 - Gestão da Folha de Pagamento Própria", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Vencimento de Pessoal Civil", elem: "Vencimentos e Vantagens Fixas - Pessoal Civil", cod: "319011", nat: "Corrente"},
-  {acao: "2001", acaoFull: "2001 - Remuneração de Pessoal", sub: "10001", subFull: "10001 - Gestão da Folha de Pagamento Própria", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Patronal", elem: "Obrigações Patronais", cod: "319013", nat: "Corrente"},
-  {acao: "2001", acaoFull: "2001 - Remuneração de Pessoal", sub: "10002", subFull: "10002 - Ressarcimento e Indenização de Servidores Requisitados", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Indenização de Servidores Cedidos", elem: "Vencimentos e Vantagens Fixas - Pessoal Civil", cod: "319011", nat: "Corrente"},
-  {acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10003", subFull: "10003 - Manutenção de Infraestrutura Física e Logística", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Contrato de Aluguel de Imóvel", elem: "Outros Serviços de Terceiros - Pessoa Jurídica", cod: "339039", nat: "Corrente"},
-  {acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10003", subFull: "10003 - Manutenção de Infraestrutura Física e Logística", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Obras e Instalações (reforma de prédio alugado)", elem: "Obras e Instalações", cod: "449051", nat: "Capital"},
-  {acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10003", subFull: "10003 - Manutenção de Infraestrutura Física e Logística", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Contrato de Manutenção de Ar-Condicionado", elem: "Outros Serviços de Terceiros - Pessoa Jurídica", cod: "339039", nat: "Corrente"},
-  {acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10003", subFull: "10003 - Manutenção de Infraestrutura Física e Logística", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Contrato de Conservação e Limpeza", elem: "Locação de Mão-de-Obra", cod: "339037", nat: "Corrente"},
-  {acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10003", subFull: "10003 - Manutenção de Infraestrutura Física e Logística", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Contrato de Serviço de Vigilância", elem: "Locação de Mão-de-Obra", cod: "339037", nat: "Corrente"},
-  {acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10003", subFull: "10003 - Manutenção de Infraestrutura Física e Logística", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Energia Elétrica", elem: "Outros Serviços de Terceiros - Pessoa Jurídica", cod: "339039", nat: "Corrente"},
-  {acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10003", subFull: "10003 - Manutenção de Infraestrutura Física e Logística", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Água e Esgoto", elem: "Outros Serviços de Terceiros - Pessoa Jurídica", cod: "339039", nat: "Corrente"},
-  {acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10003", subFull: "10003 - Manutenção de Infraestrutura Física e Logística", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Telefonia", elem: "Outros Serviços de Terceiros - Pessoa Jurídica", cod: "339039", nat: "Corrente"},
-  {acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10003", subFull: "10003 - Manutenção de Infraestrutura Física e Logística", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Contrato de Locação de Veículos", elem: "Outros Serviços de Terceiros - Pessoa Jurídica", cod: "339039", nat: "Corrente"},
-  {acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10004", subFull: "10004 - Comunicação Formação e Mobilidade Institucional", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Diárias no País", elem: "Diárias - Civil", cod: "339014", nat: "Corrente"},
-  {acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10004", subFull: "10004 - Comunicação Formação e Mobilidade Institucional", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Contrato de Passagens e Despesas com Locomoção", elem: "Passagens e Despesas com Locomoção", cod: "339033", nat: "Corrente"},
-  {acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10004", subFull: "10004 - Comunicação Formação e Mobilidade Institucional", func: "04", funcFull: "04 - Administração", sfunc: "128", sfuncFull: "128 - Formação de Recursos Humanos", despesa: "Cursos e Capacitação", elem: "Outros Serviços de Terceiros - Pessoa Jurídica", cod: "339039", nat: "Corrente"},
-  {acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10004", subFull: "10004 - Comunicação Formação e Mobilidade Institucional", func: "04", funcFull: "04 - Administração", sfunc: "131", sfuncFull: "131 - Comunicação Social", despesa: "Contrato de Imprensa Oficial", elem: "Outros Serviços de Terceiros - Pessoa Jurídica", cod: "339039", nat: "Corrente"},
-  {acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10004", subFull: "10004 - Comunicação Formação e Mobilidade Institucional", func: "04", funcFull: "04 - Administração", sfunc: "131", sfuncFull: "131 - Comunicação Social", despesa: "Publicidade e Propaganda", elem: "Outros Serviços de Terceiros - Pessoa Jurídica", cod: "339039", nat: "Corrente"},
-  {acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10004", subFull: "10004 - Comunicação Formação e Mobilidade Institucional", func: "04", funcFull: "04 - Administração", sfunc: "131", sfuncFull: "131 - Comunicação Social", despesa: "Material Bens ou Serviço para Distribuição Gratuita", elem: "Material, Bem ou Serviço para Distribuição Gratuita", cod: "339032", nat: "Corrente"},
-  {acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10005", subFull: "10005 - Gestão de Serviços Operacionais e Encargos", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Materiais de Uso e Consumo", elem: "Material de Consumo", cod: "339030", nat: "Corrente"},
-  {acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10005", subFull: "10005 - Gestão de Serviços Operacionais e Encargos", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Materiais de Escritório", elem: "Material de Consumo", cod: "339030", nat: "Corrente"},
-  {acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10005", subFull: "10005 - Gestão de Serviços Operacionais e Encargos", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Combustíveis e Lubrificantes Automotivos", elem: "Material de Consumo", cod: "339030", nat: "Corrente"},
-  {acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10005", subFull: "10005 - Gestão de Serviços Operacionais e Encargos", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Contrato de Serviços de Impressão", elem: "Outros Serviços de Terceiros - Pessoa Jurídica", cod: "339039", nat: "Corrente"},
-  {acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10005", subFull: "10005 - Gestão de Serviços Operacionais e Encargos", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Contrato de Coffee Breaks", elem: "Outros Serviços de Terceiros - Pessoa Jurídica", cod: "339039", nat: "Corrente"},
-  {acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10005", subFull: "10005 - Gestão de Serviços Operacionais e Encargos", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Contrato de Serviços Gráficos", elem: "Outros Serviços de Terceiros - Pessoa Jurídica", cod: "339039", nat: "Corrente"},
-  {acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10005", subFull: "10005 - Gestão de Serviços Operacionais e Encargos", func: "04", funcFull: "04 - Administração", sfunc: "121", sfuncFull: "121 - Planejamento e Orçamento", despesa: "Contrato de Serviço de Consultoria", elem: "Serviços de Consultoria", cod: "339035", nat: "Corrente"},
-  {acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10005", subFull: "10005 - Gestão de Serviços Operacionais e Encargos", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Contrato de Estagiários", elem: "Outros Serviços de Terceiros - Pessoa Jurídica", cod: "339039", nat: "Corrente"},
-  {acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10005", subFull: "10005 - Gestão de Serviços Operacionais e Encargos", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Contrato de Serviço Terceirizado de Apoio Administrativo", elem: "Locação de Mão-de-Obra", cod: "339037", nat: "Corrente"},
-  {acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10005", subFull: "10005 - Gestão de Serviços Operacionais e Encargos", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Auxílio-Alimentação", elem: "Auxílio-Alimentação", cod: "339046", nat: "Corrente"},
-  {acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10005", subFull: "10005 - Gestão de Serviços Operacionais e Encargos", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Auxílio-Saúde", elem: "Outros Benefícios Assistenciais", cod: "339008", nat: "Corrente"},
-  {acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10005", subFull: "10005 - Gestão de Serviços Operacionais e Encargos", func: "28", funcFull: "28 - Encargos Especiais", sfunc: "846", sfuncFull: "846 - Outros Encargos Especiais", despesa: "Obrigações Tributárias e Contributivas", elem: "Obrigações Tributárias e Contributivas", cod: "339047", nat: "Corrente"},
-  {acao: "2003", acaoFull: "2003 - Instalação e Manutenção da Infraestrutura Tecnológica da Informação e Comunicação", sub: "10006", subFull: "10006 - Manutenção de Sistemas e Serviços de TIC", func: "04", funcFull: "04 - Administração", sfunc: "126", sfuncFull: "126 - Tecnologia da Informação", despesa: "Serviço de TIC", elem: "Serviços de Tecnologia da Informação e Comunicação - Pessoa Jurídica", cod: "339040", nat: "Corrente"},
-  {acao: "2003", acaoFull: "2003 - Instalação e Manutenção da Infraestrutura Tecnológica da Informação e Comunicação", sub: "10006", subFull: "10006 - Manutenção de Sistemas e Serviços de TIC", func: "04", funcFull: "04 - Administração", sfunc: "126", sfuncFull: "126 - Tecnologia da Informação", despesa: "Contrato Link de Internet", elem: "Serviços de Tecnologia da Informação e Comunicação - Pessoa Jurídica", cod: "339040", nat: "Corrente"},
-  {acao: "2003", acaoFull: "2003 - Instalação e Manutenção da Infraestrutura Tecnológica da Informação e Comunicação", sub: "10006", subFull: "10006 - Manutenção de Sistemas e Serviços de TIC", func: "04", funcFull: "04 - Administração", sfunc: "126", sfuncFull: "126 - Tecnologia da Informação", despesa: "Modernização da Infraestrutura Tecnológica", elem: "Serviços de Tecnologia da Informação e Comunicação - Pessoa Jurídica", cod: "339040", nat: "Corrente"},
-  {acao: "2003", acaoFull: "2003 - Instalação e Manutenção da Infraestrutura Tecnológica da Informação e Comunicação", sub: "10006", subFull: "10006 - Manutenção de Sistemas e Serviços de TIC", func: "04", funcFull: "04 - Administração", sfunc: "126", sfuncFull: "126 - Tecnologia da Informação", despesa: "Locação de Computadores", elem: "Serviços de Tecnologia da Informação e Comunicação - Pessoa Jurídica", cod: "339040", nat: "Corrente"},
-  {acao: "2003", acaoFull: "2003 - Instalação e Manutenção da Infraestrutura Tecnológica da Informação e Comunicação", sub: "10006", subFull: "10006 - Manutenção de Sistemas e Serviços de TIC", func: "04", funcFull: "04 - Administração", sfunc: "126", sfuncFull: "126 - Tecnologia da Informação", despesa: "Contrato de Empresa de Tecnologia de Informação", elem: "Serviços de Tecnologia da Informação e Comunicação - Pessoa Jurídica", cod: "339040", nat: "Corrente"},
-  {acao: "2003", acaoFull: "2003 - Instalação e Manutenção da Infraestrutura Tecnológica da Informação e Comunicação", sub: "10007", subFull: "10007 - Investimentos em Tecnologia e Ativos Intangíveis", func: "04", funcFull: "04 - Administração", sfunc: "126", sfuncFull: "126 - Tecnologia da Informação", despesa: "Aquisição de equipamentos (Computador Ar-Condicionado etc)", elem: "Equipamentos e Material Permanente", cod: "449052", nat: "Capital"},
-  {acao: "2003", acaoFull: "2003 - Instalação e Manutenção da Infraestrutura Tecnológica da Informação e Comunicação", sub: "10007", subFull: "10007 - Investimentos em Tecnologia e Ativos Intangíveis", func: "04", funcFull: "04 - Administração", sfunc: "126", sfuncFull: "126 - Tecnologia da Informação", despesa: "Aquisição de Sistemas e Softwares", elem: "Serviços de Tecnologia da Informação e Comunicação - Pessoa Jurídica", cod: "449040", nat: "Capital"}
+const DATA = [
+ // ── AÇÃO 2001 ──────────────────────────────────────────────────────
+ {acao:'2001',acaoFull:'2001 - Remuneração de Pessoal e Encargos Sociais',
+  sub:'10001',subFull:'10001 - Gestão da Folha de Pagamento Própria',
+  func:'04',funcFull:'04 - Administração',sfunc:'122',sfuncFull:'122 - Administração Geral',
+  despesa:'Vencimento de Pessoal Civil',
+  elem:'Vencimentos e Vantagens Fixas - Pessoal Civil',cod:'319011',nat:'Corrente'},
+
+ {acao:'2001',acaoFull:'2001 - Remuneração de Pessoal e Encargos Sociais',
+  sub:'10001',subFull:'10001 - Gestão da Folha de Pagamento Própria',
+  func:'04',funcFull:'04 - Administração',sfunc:'122',sfuncFull:'122 - Administração Geral',
+  despesa:'Patronal',
+  elem:'Obrigações Patronais',cod:'319013',nat:'Corrente'},
+
+ {acao:'2001',acaoFull:'2001 - Remuneração de Pessoal e Encargos Sociais',
+  sub:'10002a',subFull:'10002-A - Indenização de Servidores Cedidos pelos Estados',
+  func:'04',funcFull:'04 - Administração',sfunc:'122',sfuncFull:'122 - Administração Geral',
+  despesa:'Indenização de Servidores Cedidos — Estados',
+  elem:'Vencimentos e Vantagens Fixas - Pessoal Civil',cod:'319096',nat:'Corrente'},
+
+ {acao:'2001',acaoFull:'2001 - Remuneração de Pessoal e Encargos Sociais',
+  sub:'10002b',subFull:'10002-B - Indenização de Servidores Cedidos pelos Municípios',
+  func:'04',funcFull:'04 - Administração',sfunc:'122',sfuncFull:'122 - Administração Geral',
+  despesa:'Indenização de Servidores Cedidos — Municípios',
+  elem:'Vencimentos e Vantagens Fixas - Pessoal Civil',cod:'319096',nat:'Corrente'},
+
+ // ── AÇÃO 2002 ──────────────────────────────────────────────────────
+ {acao:'2002',acaoFull:'2002 - Apoio Administrativo',
+  sub:'10003',subFull:'10003 - Manutenção de Infraestrutura Física e Logística',
+  func:'04',funcFull:'04 - Administração',sfunc:'122',sfuncFull:'122 - Administração Geral',
+  despesa:'Contrato de Aluguel de Imóvel',
+  elem:'Outros Serviços de Terceiros - Pessoa Jurídica',cod:'339039',nat:'Corrente'},
+
+ {acao:'2002',acaoFull:'2002 - Apoio Administrativo',
+  sub:'10003',subFull:'10003 - Manutenção de Infraestrutura Física e Logística',
+  func:'04',funcFull:'04 - Administração',sfunc:'122',sfuncFull:'122 - Administração Geral',
+  despesa:'Obras e Instalações (reforma de prédio alugado)',
+  elem:'Obras e Instalações',cod:'449051',nat:'Capital'},
+
+ {acao:'2002',acaoFull:'2002 - Apoio Administrativo',
+  sub:'10003',subFull:'10003 - Manutenção de Infraestrutura Física e Logística',
+  func:'04',funcFull:'04 - Administração',sfunc:'122',sfuncFull:'122 - Administração Geral',
+  despesa:'Contrato de Manutenção de Ar-Condicionado',
+  elem:'Outros Serviços de Terceiros - Pessoa Jurídica',cod:'339039',nat:'Corrente'},
+
+ {acao:'2002',acaoFull:'2002 - Apoio Administrativo',
+  sub:'10003',subFull:'10003 - Manutenção de Infraestrutura Física e Logística',
+  func:'04',funcFull:'04 - Administração',sfunc:'122',sfuncFull:'122 - Administração Geral',
+  despesa:'Contrato de Conservação e Limpeza',
+  elem:'Locação de Mão-de-Obra',cod:'339037',nat:'Corrente'},
+
+ {acao:'2002',acaoFull:'2002 - Apoio Administrativo',
+  sub:'10003',subFull:'10003 - Manutenção de Infraestrutura Física e Logística',
+  func:'04',funcFull:'04 - Administração',sfunc:'122',sfuncFull:'122 - Administração Geral',
+  despesa:'Contrato de Serviço de Vigilância',
+  elem:'Locação de Mão-de-Obra',cod:'339037',nat:'Corrente'},
+
+ {acao:'2002',acaoFull:'2002 - Apoio Administrativo',
+  sub:'10003',subFull:'10003 - Manutenção de Infraestrutura Física e Logística',
+  func:'04',funcFull:'04 - Administração',sfunc:'122',sfuncFull:'122 - Administração Geral',
+  despesa:'Energia Elétrica',
+  elem:'Outros Serviços de Terceiros - Pessoa Jurídica',cod:'339039',nat:'Corrente'},
+
+ {acao:'2002',acaoFull:'2002 - Apoio Administrativo',
+  sub:'10003',subFull:'10003 - Manutenção de Infraestrutura Física e Logística',
+  func:'04',funcFull:'04 - Administração',sfunc:'122',sfuncFull:'122 - Administração Geral',
+  despesa:'Água e Esgoto',
+  elem:'Outros Serviços de Terceiros - Pessoa Jurídica',cod:'339039',nat:'Corrente'},
+
+ {acao:'2002',acaoFull:'2002 - Apoio Administrativo',
+  sub:'10003',subFull:'10003 - Manutenção de Infraestrutura Física e Logística',
+  func:'04',funcFull:'04 - Administração',sfunc:'122',sfuncFull:'122 - Administração Geral',
+  despesa:'Telefonia',
+  elem:'Outros Serviços de Terceiros - Pessoa Jurídica',cod:'339039',nat:'Corrente'},
+
+ {acao:'2002',acaoFull:'2002 - Apoio Administrativo',
+  sub:'10003',subFull:'10003 - Manutenção de Infraestrutura Física e Logística',
+  func:'04',funcFull:'04 - Administração',sfunc:'122',sfuncFull:'122 - Administração Geral',
+  despesa:'Contrato de Locação de Veículos',
+  elem:'Outros Serviços de Terceiros - Pessoa Jurídica',cod:'339039',nat:'Corrente'},
+
+ {acao:'2002',acaoFull:'2002 - Apoio Administrativo',
+  sub:'10004',subFull:'10004 - Comunicação, Formação e Mobilidade Institucional',
+  func:'04',funcFull:'04 - Administração',sfunc:'122',sfuncFull:'122 - Administração Geral',
+  despesa:'Diárias no País',
+  elem:'Diárias - Civil',cod:'339014',nat:'Corrente'},
+
+ {acao:'2002',acaoFull:'2002 - Apoio Administrativo',
+  sub:'10004',subFull:'10004 - Comunicação, Formação e Mobilidade Institucional',
+  func:'04',funcFull:'04 - Administração',sfunc:'122',sfuncFull:'122 - Administração Geral',
+  despesa:'Contrato de Passagens e Despesas com Locomoção',
+  elem:'Passagens e Despesas com Locomoção',cod:'339033',nat:'Corrente'},
+
+ {acao:'2002',acaoFull:'2002 - Apoio Administrativo',
+  sub:'10004',subFull:'10004 - Comunicação, Formação e Mobilidade Institucional',
+  func:'04',funcFull:'04 - Administração',sfunc:'128',sfuncFull:'128 - Formação de Recursos Humanos',
+  despesa:'Cursos e Capacitação',
+  elem:'Outros Serviços de Terceiros - Pessoa Jurídica',cod:'339039',nat:'Corrente'},
+
+ {acao:'2002',acaoFull:'2002 - Apoio Administrativo',
+  sub:'10004',subFull:'10004 - Comunicação, Formação e Mobilidade Institucional',
+  func:'04',funcFull:'04 - Administração',sfunc:'131',sfuncFull:'131 - Comunicação Social',
+  despesa:'Contrato de Imprensa Oficial',
+  elem:'Outros Serviços de Terceiros - Pessoa Jurídica',cod:'339039',nat:'Corrente'},
+
+ {acao:'2002',acaoFull:'2002 - Apoio Administrativo',
+  sub:'10004',subFull:'10004 - Comunicação, Formação e Mobilidade Institucional',
+  func:'04',funcFull:'04 - Administração',sfunc:'131',sfuncFull:'131 - Comunicação Social',
+  despesa:'Publicidade e Propaganda',
+  elem:'Outros Serviços de Terceiros - Pessoa Jurídica',cod:'339039',nat:'Corrente'},
+
+ {acao:'2002',acaoFull:'2002 - Apoio Administrativo',
+  sub:'10004',subFull:'10004 - Comunicação, Formação e Mobilidade Institucional',
+  func:'04',funcFull:'04 - Administração',sfunc:'131',sfuncFull:'131 - Comunicação Social',
+  despesa:'Material, Bens ou Serviço para Distribuição Gratuita',
+  elem:'Material, Bem ou Serviço para Distribuição Gratuita',cod:'339032',nat:'Corrente'},
+
+ {acao:'2002',acaoFull:'2002 - Apoio Administrativo',
+  sub:'10005',subFull:'10005 - Gestão de Serviços Operacionais e Encargos',
+  func:'04',funcFull:'04 - Administração',sfunc:'122',sfuncFull:'122 - Administração Geral',
+  despesa:'Materiais de Uso e Consumo',
+  elem:'Material de Consumo',cod:'339030',nat:'Corrente'},
+
+ {acao:'2002',acaoFull:'2002 - Apoio Administrativo',
+  sub:'10005',subFull:'10005 - Gestão de Serviços Operacionais e Encargos',
+  func:'04',funcFull:'04 - Administração',sfunc:'122',sfuncFull:'122 - Administração Geral',
+  despesa:'Materiais de Escritório',
+  elem:'Material de Consumo',cod:'339030',nat:'Corrente'},
+
+ {acao:'2002',acaoFull:'2002 - Apoio Administrativo',
+  sub:'10005',subFull:'10005 - Gestão de Serviços Operacionais e Encargos',
+  func:'04',funcFull:'04 - Administração',sfunc:'122',sfuncFull:'122 - Administração Geral',
+  despesa:'Combustíveis e Lubrificantes Automotivos',
+  elem:'Material de Consumo',cod:'339030',nat:'Corrente'},
+
+ {acao:'2002',acaoFull:'2002 - Apoio Administrativo',
+  sub:'10005',subFull:'10005 - Gestão de Serviços Operacionais e Encargos',
+  func:'04',funcFull:'04 - Administração',sfunc:'122',sfuncFull:'122 - Administração Geral',
+  despesa:'Contrato de Serviços de Impressão',
+  elem:'Outros Serviços de Terceiros - Pessoa Jurídica',cod:'339039',nat:'Corrente'},
+
+ {acao:'2002',acaoFull:'2002 - Apoio Administrativo',
+  sub:'10005',subFull:'10005 - Gestão de Serviços Operacionais e Encargos',
+  func:'04',funcFull:'04 - Administração',sfunc:'122',sfuncFull:'122 - Administração Geral',
+  despesa:'Contrato de Coffee Breaks',
+  elem:'Outros Serviços de Terceiros - Pessoa Jurídica',cod:'339039',nat:'Corrente'},
+
+ {acao:'2002',acaoFull:'2002 - Apoio Administrativo',
+  sub:'10005',subFull:'10005 - Gestão de Serviços Operacionais e Encargos',
+  func:'04',funcFull:'04 - Administração',sfunc:'122',sfuncFull:'122 - Administração Geral',
+  despesa:'Contrato de Serviços Gráficos',
+  elem:'Outros Serviços de Terceiros - Pessoa Jurídica',cod:'339039',nat:'Corrente'},
+
+ {acao:'2002',acaoFull:'2002 - Apoio Administrativo',
+  sub:'10005',subFull:'10005 - Gestão de Serviços Operacionais e Encargos',
+  func:'04',funcFull:'04 - Administração',sfunc:'121',sfuncFull:'121 - Planejamento e Orçamento',
+  despesa:'Contrato de Serviço de Consultoria',
+  elem:'Serviços de Consultoria',cod:'339035',nat:'Corrente'},
+
+ {acao:'2002',acaoFull:'2002 - Apoio Administrativo',
+  sub:'10005',subFull:'10005 - Gestão de Serviços Operacionais e Encargos',
+  func:'04',funcFull:'04 - Administração',sfunc:'122',sfuncFull:'122 - Administração Geral',
+  despesa:'Contrato de Estagiários',
+  elem:'Outros Serviços de Terceiros - Pessoa Jurídica',cod:'339039',nat:'Corrente'},
+
+ {acao:'2002',acaoFull:'2002 - Apoio Administrativo',
+  sub:'10005',subFull:'10005 - Gestão de Serviços Operacionais e Encargos',
+  func:'04',funcFull:'04 - Administração',sfunc:'122',sfuncFull:'122 - Administração Geral',
+  despesa:'Contrato de Serviço Terceirizado de Apoio Administrativo',
+  elem:'Locação de Mão-de-Obra',cod:'339037',nat:'Corrente'},
+
+ {acao:'2002',acaoFull:'2002 - Apoio Administrativo',
+  sub:'10005',subFull:'10005 - Gestão de Serviços Operacionais e Encargos',
+  func:'04',funcFull:'04 - Administração',sfunc:'122',sfuncFull:'122 - Administração Geral',
+  despesa:'Auxílio-Alimentação',
+  elem:'Auxílio-Alimentação',cod:'339046',nat:'Corrente'},
+
+ {acao:'2002',acaoFull:'2002 - Apoio Administrativo',
+  sub:'10005',subFull:'10005 - Gestão de Serviços Operacionais e Encargos',
+  func:'04',funcFull:'04 - Administração',sfunc:'122',sfuncFull:'122 - Administração Geral',
+  despesa:'Auxílio-Saúde',
+  elem:'Outros Benefícios Assistenciais',cod:'339008',nat:'Corrente'},
+
+ {acao:'2002',acaoFull:'2002 - Apoio Administrativo',
+  sub:'10005',subFull:'10005 - Gestão de Serviços Operacionais e Encargos',
+  func:'28',funcFull:'28 - Encargos Especiais',sfunc:'846',sfuncFull:'846 - Outros Encargos Especiais',
+  despesa:'Obrigações Tributárias e Contributivas',
+  elem:'Obrigações Tributárias e Contributivas',cod:'339047',nat:'Corrente'},
+
+ // ── AÇÃO 2003 ──────────────────────────────────────────────────────
+ {acao:'2003',acaoFull:'2003 - Desenvolvimento, Implantação e Operação das Plataformas Digitais do IBS',
+  sub:'10006',subFull:'10006 - Desenvolvimento e Implantação do Sistema de Distribuição (SD-IBS)',
+  func:'04',funcFull:'04 - Administração',sfunc:'126',sfuncFull:'126 - Tecnologia da Informação',
+  despesa:'Fábrica de Software — Desenvolvimento do SD-IBS',
+  elem:'Serviços de Tecnologia da Informação e Comunicação - Pessoa Jurídica',cod:'339040',nat:'Corrente'},
+
+ {acao:'2003',acaoFull:'2003 - Desenvolvimento, Implantação e Operação das Plataformas Digitais do IBS',
+  sub:'10006',subFull:'10006 - Desenvolvimento e Implantação do Sistema de Distribuição (SD-IBS)',
+  func:'04',funcFull:'04 - Administração',sfunc:'126',sfuncFull:'126 - Tecnologia da Informação',
+  despesa:'Contrato de Empresa Especializada em TI — SD-IBS',
+  elem:'Serviços de Tecnologia da Informação e Comunicação - Pessoa Jurídica',cod:'339040',nat:'Corrente'},
+
+ {acao:'2003',acaoFull:'2003 - Desenvolvimento, Implantação e Operação das Plataformas Digitais do IBS',
+  sub:'10007',subFull:'10007 - Desenvolvimento e Implantação do Sistema de Gestão Fiscal (SIGEF-IBS)',
+  func:'04',funcFull:'04 - Administração',sfunc:'126',sfuncFull:'126 - Tecnologia da Informação',
+  despesa:'Fábrica de Software — Desenvolvimento do SIGEF-IBS',
+  elem:'Serviços de Tecnologia da Informação e Comunicação - Pessoa Jurídica',cod:'339040',nat:'Corrente'},
+
+ {acao:'2003',acaoFull:'2003 - Desenvolvimento, Implantação e Operação das Plataformas Digitais do IBS',
+  sub:'10007',subFull:'10007 - Desenvolvimento e Implantação do Sistema de Gestão Fiscal (SIGEF-IBS)',
+  func:'04',funcFull:'04 - Administração',sfunc:'126',sfuncFull:'126 - Tecnologia da Informação',
+  despesa:'Modernização e Adequação da Infraestrutura do SIGEF-IBS',
+  elem:'Serviços de Tecnologia da Informação e Comunicação - Pessoa Jurídica',cod:'339040',nat:'Corrente'},
+
+ {acao:'2003',acaoFull:'2003 - Desenvolvimento, Implantação e Operação das Plataformas Digitais do IBS',
+  sub:'10007',subFull:'10007 - Desenvolvimento e Implantação do Sistema de Gestão Fiscal (SIGEF-IBS)',
+  func:'04',funcFull:'04 - Administração',sfunc:'126',sfuncFull:'126 - Tecnologia da Informação',
+  despesa:'Locação de Estações de Trabalho — SIGEF-IBS',
+  elem:'Serviços de Tecnologia da Informação e Comunicação - Pessoa Jurídica',cod:'339040',nat:'Corrente'},
+
+ {acao:'2003',acaoFull:'2003 - Desenvolvimento, Implantação e Operação das Plataformas Digitais do IBS',
+  sub:'10008',subFull:'10008 - Infraestrutura Tecnológica: Servidores, Nuvem e Banco de Dados',
+  func:'04',funcFull:'04 - Administração',sfunc:'126',sfuncFull:'126 - Tecnologia da Informação',
+  despesa:'Aquisição de Servidores, Storage e Equipamentos de Datacenter',
+  elem:'Equipamentos e Material Permanente',cod:'449052',nat:'Capital'},
+
+ {acao:'2003',acaoFull:'2003 - Desenvolvimento, Implantação e Operação das Plataformas Digitais do IBS',
+  sub:'10008',subFull:'10008 - Infraestrutura Tecnológica: Servidores, Nuvem e Banco de Dados',
+  func:'04',funcFull:'04 - Administração',sfunc:'126',sfuncFull:'126 - Tecnologia da Informação',
+  despesa:'Licenças de Sistemas, Banco de Dados e Middleware',
+  elem:'Serviços de Tecnologia da Informação e Comunicação - Pessoa Jurídica',cod:'449040',nat:'Capital'},
+
+ {acao:'2003',acaoFull:'2003 - Desenvolvimento, Implantação e Operação das Plataformas Digitais do IBS',
+  sub:'10009',subFull:'10009 - Manutenção, Suporte e Sustentação das Plataformas Digitais',
+  func:'04',funcFull:'04 - Administração',sfunc:'126',sfuncFull:'126 - Tecnologia da Informação',
+  despesa:'Contrato de Suporte e Manutenção Evolutiva das Plataformas',
+  elem:'Serviços de Tecnologia da Informação e Comunicação - Pessoa Jurídica',cod:'339040',nat:'Corrente'},
+
+ {acao:'2003',acaoFull:'2003 - Desenvolvimento, Implantação e Operação das Plataformas Digitais do IBS',
+  sub:'10009',subFull:'10009 - Manutenção, Suporte e Sustentação das Plataformas Digitais',
+  func:'04',funcFull:'04 - Administração',sfunc:'126',sfuncFull:'126 - Tecnologia da Informação',
+  despesa:'Contrato Link de Internet e Conectividade Dedicada',
+  elem:'Serviços de Tecnologia da Informação e Comunicação - Pessoa Jurídica',cod:'339040',nat:'Corrente'},
 ];
 
 // ═══ ESTADO ═══════════════════════════════════════════════════════════
@@ -1174,34 +1292,25 @@ window.addEventListener('DOMContentLoaded', () => {
   buildNatureza();
 });
 
-
-
 // ── SINCRONIZAÇÃO GOOGLE SHEETS ──────────────────────────────────────
-// A URL CSV_URL é gerada pelo Cowork automaticamente a partir dos dados
-// lidos da planilha. Em uso manual, aponta para a URL publicada.
 const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSYA6B6DpSzF0wVdYVJIhyeDNT3_iyCJnKmMbk9BYq9LODpbSQcA-3yOTfFbSRQce_2IWNGjrYs_G-n/pub?gid=0&single=true&output=csv';
 
 function setSyncUI(state, label, time) {
-  document.getElementById('syncDot').className    = 'sync-dot ' + state;
+  document.getElementById('syncDot').className   = 'sync-dot ' + state;
   document.getElementById('syncLabel').textContent = label;
   document.getElementById('syncTime').textContent  = time || '';
-  const icon = document.getElementById('syncIcon');
-  const btn  = document.getElementById('syncBtn');
-  if (icon) icon.className = state === 'syncing' ? 'fas fa-rotate-right spin' : 'fas fa-rotate-right';
-  if (btn)  btn.disabled   = state === 'syncing';
+  document.getElementById('syncIcon').className    = state === 'syncing' ? 'fas fa-rotate-right spin' : 'fas fa-rotate-right';
+  document.getElementById('syncBtn').disabled      = state === 'syncing';
 }
 
 function parseCSV(txt) {
-  const lines = txt.split(/
-?
-/);
+  const lines = txt.split(/\r?\n/);
   const headers = [];
   const rows = [];
+  let inQ = false, cur = '', cols = [];
   for (let li = 0; li < lines.length; li++) {
     const line = lines[li];
-    if (!line.trim()) continue;
-    const cols = [];
-    let cur = '', inQ = false;
+    cols = []; cur = ''; inQ = false;
     for (let i = 0; i < line.length; i++) {
       const c = line[i];
       if (c === '"') { inQ = !inQ; continue; }
@@ -1210,6 +1319,7 @@ function parseCSV(txt) {
     }
     cols.push(cur.trim());
     if (li === 0) { cols.forEach(c => headers.push(c.trim())); continue; }
+    if (cols.every(c => !c)) continue;
     const obj = {};
     headers.forEach((h, i) => obj[h] = (cols[i] || '').trim());
     rows.push(obj);
@@ -1218,18 +1328,10 @@ function parseCSV(txt) {
 }
 
 function csvRowToEntry(r) {
-  const norm = s => s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
-  const g = (...ks) => {
-    for (const k of ks) {
-      const f = Object.keys(r).find(rk => norm(rk) === norm(k));
-      if (f !== undefined && r[f] !== '' && r[f] !== null) return String(r[f]).trim();
-    }
-    return '';
-  };
-  const acaoRaw = g('AÇÃO','ACAO'); const subRaw  = g('SUBAÇÃO','SUBACAO');
+  const g = (...ks) => { for (const k of ks) { const f = Object.keys(r).find(rk => rk.toLowerCase().replace(/[áàãâ]/g,'a').replace(/[çc]/g,'c').replace(/[õô]/g,'o') === k.toLowerCase().replace(/[áàãâ]/g,'a').replace(/[çc]/g,'c').replace(/[õô]/g,'o')); if (f && r[f]) return String(r[f]).trim(); } return ''; };
+  const acaoRaw = g('AÇÃO','ACAO'); const subRaw = g('SUBAÇÃO','SUBACAO');
   const funcRaw = g('FUNÇÃO','FUNCAO'); const sfRaw = g('SUBFUNÇÃO','SUBFUNCAO');
-  const despesa = g('DESPESA');
-  const elem    = g('NOME DO ELEMENTO (PORTARIA 163)','NOME ELEMENTO (P163)','ELEMENTO');
+  const despesa = g('DESPESA'); const elem = g('NOME DO ELEMENTO (PORTARIA 163)','NOME ELEMENTO (P163)','ELEMENTO');
   const codRaw  = g('CLASSIFICAÇÃO ECONÔMICA DA DESPESA','CLASSIFICACAO ECONOMICA DA DESPESA','CÓDIGO','COD');
   const acao  = (acaoRaw.match(/^(\d{4})/) || ['',''])[1];
   const sub   = (subRaw.match(/^(\d{5}[a-z]?)/) || ['',''])[1];
@@ -1241,41 +1343,30 @@ function csvRowToEntry(r) {
 }
 
 async function doSync() {
-  if (!CSV_URL || CSV_URL === 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSYA6B6DpSzF0wVdYVJIhyeDNT3_iyCJnKmMbk9BYq9LODpbSQcA-3yOTfFbSRQce_2IWNGjrYs_G-n/pub?gid=0&single=true&output=csv') {
-    setSyncUI('error', 'URL da planilha não configurada', '');
-    return;
-  }
-  setSyncUI('syncing', 'Sincronizando com Google Sheets...', '');
+  setSyncUI('syncing', 'Sincronizando...', '');
   try {
-    const res = await fetch(CSV_URL, {cache:'no-cache'});
+    const res  = await fetch(CSV_URL, {cache:'no-cache'});
     if (!res.ok) throw new Error('HTTP ' + res.status);
-    const txt = await res.text();
+    const txt  = await res.text();
     if (!txt || txt.length < 30) throw new Error('Resposta vazia');
-    if (txt.trim().startsWith('<')) throw new Error('Planilha não publicada como CSV');
+    if (txt.trim().startsWith('<')) throw new Error('Planilha não está publicada como CSV');
     const rows = parseCSV(txt).map(csvRowToEntry).filter(e => e.despesa && e.acao);
-    if (!rows.length) throw new Error('Nenhum dado reconhecido na planilha');
-    DATA.length = 0;
-    rows.forEach(e => DATA.push(e));
+    if (!rows.length) throw new Error('Nenhum dado reconhecido');
+    DATA.length = 0; rows.forEach(e => DATA.push(e));
     filtered = [...DATA];
     renderTable(DATA); buildAcao(); buildFuncao(); buildElemento(); buildNatureza();
     const now = new Date().toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
-    setSyncUI('ok', 'Sincronizado — ' + DATA.length + ' itens', 'Atualizado ' + now);
-    setTimeout(() => doSync(), 10 * 60 * 1000); // re-sync a cada 10 min
+    setSyncUI('ok', `Sincronizado — ${DATA.length} itens`, now);
+    setTimeout(() => doSync(), 5*60*1000); // auto-refresh 5 min
   } catch(e) {
     console.warn('[Sync]', e.message);
-    setSyncUI('error', 'Erro: ' + e.message, '');
+    setSyncUI('error', 'Erro — usando dados locais: ' + e.message, '');
   }
 }
 
 window.addEventListener('load', () => {
-  if (CSV_URL && CSV_URL !== 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSYA6B6DpSzF0wVdYVJIhyeDNT3_iyCJnKmMbk9BYq9LODpbSQcA-3yOTfFbSRQce_2IWNGjrYs_G-n/pub?gid=0&single=true&output=csv') {
-    setSyncUI('syncing', 'Conectando ao Google Sheets...', '');
-    setTimeout(doSync, 800);
-  } else {
-    setSyncUI('', 'Dados locais — sem sincronização configurada', '');
-  }
+  setTimeout(doSync, 800);
 });
-
 </script>
 </body>
 </html>
