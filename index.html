@@ -1,0 +1,1372 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CGIBS | Arquitetura Orçamentária 2026</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --blue-900: #0c1e3d;
+  --blue-800: #0f2d5a;
+  --blue-700: #1a4080;
+  --blue-600: #1d5fa6;
+  --blue-500: #2b7fd4;
+  --blue-400: #60a5e8;
+  --blue-100: #dbeafe;
+  --blue-50:  #eff6ff;
+  --green:    #1B9E6E;
+  --green-pale: #e1f5ee;
+  --amber:    #b45309;
+  --amber-pale: #fef3dc;
+  --purple:   #5b4db8;
+  --purple-pale: #edebfc;
+  --slate-900: #0f172a;
+  --slate-800: #1e293b;
+  --slate-700: #334155;
+  --slate-600: #475569;
+  --slate-500: #64748b;
+  --slate-400: #94a3b8;
+  --slate-200: #e2e8f0;
+  --slate-100: #f1f5f9;
+  --slate-50:  #f8fafc;
+  --white:     #ffffff;
+  --radius:    10px;
+  --shadow:    0 4px 24px rgba(0,0,0,0.08);
+}
+
+body { font-family: 'Inter', system-ui, sans-serif; background: var(--slate-50); color: var(--slate-900); min-height: 100vh; }
+
+/* ─── HEADER ─────────────────────────────────────────────── */
+.header {
+  background: var(--white);
+  border-bottom: 2px solid var(--slate-200);
+  box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+  position: sticky; top: 0; z-index: 100;
+}
+.header-top {
+  background: var(--blue-900);
+  padding: 0 32px;
+}
+.header-top-inner {
+  max-width: 1400px; margin: 0 auto;
+  display: flex; align-items: center; gap: 0;
+  height: 44px;
+}
+.header-top-ids {
+  display: flex; align-items: center; gap: 0; flex: 1;
+}
+.hid-item {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 0 18px 0 0;
+  border-right: 1px solid rgba(255,255,255,0.12);
+  margin-right: 18px;
+}
+.hid-item:last-child { border-right: none; margin-right: 0; padding-right: 0; }
+.hid-tag {
+  font-size: 9px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .08em; color: rgba(255,255,255,0.45);
+  white-space: nowrap;
+}
+.hid-cod {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; font-weight: 700;
+  background: rgba(255,255,255,0.12);
+  color: rgba(255,255,255,0.9);
+  padding: 1px 6px; border-radius: 3px;
+  border: 1px solid rgba(255,255,255,0.15);
+}
+.hid-nome {
+  font-size: 11px; font-weight: 600;
+  color: rgba(255,255,255,0.75);
+  white-space: nowrap;
+}
+.header-top-year {
+  background: var(--accent, #1B9E6E);
+  color: #fff; font-size: 10px; font-weight: 800;
+  letter-spacing: .1em; padding: 3px 10px;
+  border-radius: 4px; margin-left: auto; flex-shrink: 0;
+}
+.header-main {
+  background: var(--white);
+  padding: 0 32px;
+  border-top: 1px solid var(--blue-100);
+}
+.header-main-inner {
+  max-width: 1400px; margin: 0 auto;
+  display: flex; align-items: center; gap: 20px;
+  height: 72px;
+}
+.logo-wrap {
+  background: var(--blue-50);
+  border: 1px solid var(--blue-100);
+  border-radius: 10px;
+  padding: 10px 16px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; height: 56px;
+}
+.logo-wrap img { height: 36px; display: block; }
+.header-divider {
+  width: 1px; height: 36px; background: var(--slate-200); flex-shrink: 0;
+}
+.header-titles { flex: 1; }
+.header-titles h1 {
+  font-size: 19px; font-weight: 900;
+  color: var(--slate-900); letter-spacing: -0.02em; line-height: 1.1;
+}
+.header-titles p {
+  font-size: 10.5px; font-weight: 600; letter-spacing: 0.09em;
+  text-transform: uppercase; color: var(--blue-600); margin-top: 3px;
+}
+.header-total {
+  text-align: right; flex-shrink: 0;
+  padding-left: 20px;
+  border-left: 1px solid var(--slate-200);
+}
+.header-total .lbl { font-size: 9px; font-weight: 700; color: var(--slate-400); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 2px; }
+.header-total .val { font-size: 18px; font-weight: 900; color: var(--blue-800); line-height: 1.1; white-space: nowrap; }
+.header-total .lbl { font-size: 10px; font-weight: 700; color: var(--slate-500); text-transform: uppercase; letter-spacing: 0.08em; }
+.header-total .val { font-size: 20px; font-weight: 900; color: var(--blue-800); line-height: 1.2; }
+
+/* ─── NAV TABS ───────────────────────────────────────────── */
+.nav-wrap {
+  background: var(--white);
+  border-bottom: 1px solid var(--slate-200);
+  position: sticky; top: 154px; z-index: 90;
+  padding: 0 32px;
+}
+.nav-inner {
+  max-width: 1400px; margin: 0 auto;
+  display: flex; gap: 0;
+}
+.tab-btn {
+  display: flex; align-items: center; gap: 7px;
+  padding: 14px 20px; border: none; background: none;
+  font-family: inherit; font-size: 13px; font-weight: 600;
+  color: var(--slate-500); cursor: pointer;
+  border-bottom: 3px solid transparent;
+  transition: all 0.15s; white-space: nowrap;
+}
+.tab-btn:hover { color: var(--blue-600); background: var(--blue-50); }
+.tab-btn.active { color: var(--blue-700); border-bottom-color: var(--blue-600); background: var(--blue-50); }
+.tab-btn i { font-size: 13px; }
+
+/* ─── SEARCH BAR ─────────────────────────────────────────── */
+.search-bar {
+  max-width: 1400px; margin: 0 auto;
+  padding: 18px 32px 0;
+}
+.search-wrap {
+  display: flex; gap: 10px; align-items: center; flex-wrap: wrap;
+}
+.search-input-wrap {
+  position: relative; flex: 1; min-width: 260px;
+}
+.search-input-wrap i {
+  position: absolute; left: 13px; top: 50%; transform: translateY(-50%);
+  color: var(--slate-400); font-size: 13px;
+}
+.search-input {
+  width: 100%; padding: 9px 12px 9px 36px;
+  border: 1px solid var(--slate-200); border-radius: 8px;
+  font-family: inherit; font-size: 13px; color: var(--slate-900);
+  background: var(--white); outline: none;
+}
+.search-input:focus { border-color: var(--blue-500); box-shadow: 0 0 0 3px rgba(43,127,212,0.1); }
+.filter-sel {
+  padding: 9px 28px 9px 12px; border: 1px solid var(--slate-200);
+  border-radius: 8px; font-family: inherit; font-size: 13px;
+  color: var(--slate-700); background: var(--white) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%2394a3b8'/%3E%3C/svg%3E") no-repeat right 10px center;
+  appearance: none; outline: none; cursor: pointer; min-width: 160px;
+}
+.filter-sel:focus { border-color: var(--blue-500); }
+.results-count { font-size: 12px; color: var(--slate-500); white-space: nowrap; }
+.btn-clear {
+  padding: 9px 14px; border: 1px solid var(--slate-200); border-radius: 8px;
+  background: var(--white); font-family: inherit; font-size: 12px;
+  color: var(--slate-600); cursor: pointer; white-space: nowrap;
+}
+.btn-clear:hover { border-color: var(--blue-400); color: var(--blue-600); }
+
+/* ─── MAIN CONTAINER ─────────────────────────────────────── */
+.main { max-width: 1400px; margin: 0 auto; padding: 20px 32px 60px; }
+
+/* ─── VIEWS ──────────────────────────────────────────────── */
+.view { display: none; }
+.view.active { display: block; animation: fadeUp 0.2s ease; }
+@keyframes fadeUp { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
+
+/* ─── CARD ───────────────────────────────────────────────── */
+.card {
+  background: var(--white);
+  border: 1px solid var(--slate-200);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+.card + .card { margin-top: 16px; }
+.card-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 22px; background: var(--slate-50);
+  border-bottom: 1px solid var(--slate-200);
+}
+.card-header-title {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 14px; font-weight: 800; color: var(--slate-800);
+}
+.card-header-title i { color: var(--blue-600); font-size: 14px; }
+.portaria-badge {
+  background: var(--blue-100); color: var(--blue-700);
+  font-size: 11px; font-weight: 700; padding: 3px 10px;
+  border-radius: 20px; letter-spacing: 0.04em;
+}
+
+/* ─── KPI GRID ───────────────────────────────────────────── */
+.kpi-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 14px; margin-bottom: 20px;
+}
+.kpi {
+  background: var(--white); border: 1px solid var(--slate-200);
+  border-radius: 12px; padding: 18px 20px; position: relative; overflow: hidden;
+}
+.kpi::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:3px;
+  background: var(--kpi-color, var(--blue-600));
+}
+.kpi-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--slate-400); margin-bottom: 8px; }
+.kpi-main { font-size: 26px; font-weight: 900; color: var(--slate-900); line-height: 1; margin-bottom: 4px; }
+.kpi-sub  { font-size: 12px; color: var(--slate-500); }
+.kpi-tag  { display:inline-block; margin-top:7px; font-size:10px; font-weight:700; padding:2px 9px; border-radius:20px; background:var(--blue-50); color:var(--blue-700); }
+
+/* ─── TABLE ──────────────────────────────────────────────── */
+.tbl-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+thead th {
+  background: var(--slate-900); color: var(--white);
+  padding: 12px 16px; text-align: left;
+  font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .07em;
+  white-space: nowrap; cursor: pointer; user-select: none;
+  position: sticky; top: 0;
+}
+thead th:hover { background: var(--slate-700); }
+thead th.sorted { background: var(--blue-700); }
+thead th .sort-icon { margin-left: 4px; opacity: 0.5; font-size: 10px; }
+thead th.sorted .sort-icon { opacity: 1; }
+
+/* section divider rows */
+.tbl-section {
+  background: var(--blue-50);
+  border-left: 4px solid var(--blue-600);
+}
+.tbl-section td {
+  padding: 10px 16px;
+  font-size: 13px; font-weight: 900;
+  color: var(--blue-900);
+  letter-spacing: 0.02em;
+  border-top: 2px solid var(--slate-200);
+  border-bottom: 1px solid var(--slate-200);
+}
+
+/* data rows */
+tbody tr.data-row {
+  border-bottom: 1px solid var(--slate-200);
+  transition: background 0.1s;
+}
+tbody tr.data-row:hover { background: #f0f6ff; }
+tbody tr.data-row td { padding: 10px 16px; vertical-align: middle; }
+.td-despesa { font-weight: 700; color: var(--slate-900); }
+.td-sub { color: var(--slate-600); font-weight: 600; font-size: 12px; }
+.td-muted { color: var(--slate-500); font-size: 12px; }
+.td-elem { color: var(--slate-700); font-style: italic; font-size: 12px; }
+.cod-badge {
+  font-family: 'JetBrains Mono', monospace;
+  background: var(--slate-900); color: var(--white);
+  padding: 3px 10px; border-radius: 5px;
+  font-size: 12px; font-weight: 600; display: inline-block;
+  white-space: nowrap;
+}
+.nat-badge {
+  font-size: 10px; font-weight: 700; padding: 2px 9px;
+  border-radius: 20px; display: inline-block; white-space: nowrap;
+}
+.nat-c { background: var(--green-pale); color: #0f6e56; }
+.nat-k { background: var(--purple-pale); color: var(--purple); }
+.acao-badge {
+  font-size: 10px; font-weight: 800; padding: 3px 9px;
+  border-radius: 20px; display: inline-block; white-space: nowrap;
+}
+.a2001 { background: var(--purple-pale); color: var(--purple); }
+.a2002 { background: var(--amber-pale); color: var(--amber); }
+.a2003 { background: var(--green-pale); color: var(--green); }
+
+.no-res { padding: 48px 24px; text-align: center; color: var(--slate-400); font-size: 14px; }
+
+/* ─── FUNCAO VIEW ────────────────────────────────────────── */
+.funcao-block { margin-bottom: 24px; }
+.funcao-hdr {
+  display: flex; align-items: center; gap: 10px;
+  background: var(--blue-900); color: var(--white);
+  padding: 12px 18px; border-radius: 10px 10px 0 0;
+  font-size: 14px; font-weight: 800; letter-spacing: 0.01em;
+}
+.funcao-hdr .f-code {
+  background: rgba(255,255,255,0.15);
+  font-family: 'JetBrains Mono', monospace;
+  padding: 2px 9px; border-radius: 4px; font-size: 12px; font-weight: 600;
+}
+.subfuncao-block { border: 1px solid var(--slate-200); border-top: none; }
+.subfuncao-block + .subfuncao-block { border-top: 1px solid var(--slate-200); }
+.subfuncao-hdr {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 18px; background: var(--blue-50);
+  border-bottom: 1px solid var(--slate-200);
+}
+.subfuncao-hdr .sf-code {
+  background: var(--blue-100); color: var(--blue-800);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 4px;
+}
+.subfuncao-hdr .sf-name { font-size: 12px; font-weight: 700; color: var(--slate-700); }
+.sfunc-count { margin-left: auto; font-size: 11px; color: var(--slate-500); }
+.chips-row { display: flex; flex-wrap: wrap; gap: 7px; padding: 12px 18px; }
+.chip {
+  display: flex; align-items: center; gap: 5px;
+  background: var(--white); border: 1px solid var(--slate-200);
+  border-radius: 6px; padding: 5px 11px;
+  font-size: 12px; color: var(--slate-700);
+  cursor: default; transition: all 0.1s;
+}
+.chip:hover { border-color: var(--blue-400); color: var(--blue-700); box-shadow: 0 2px 6px rgba(0,0,0,0.06); }
+.chip .cod-sm {
+  font-family: 'JetBrains Mono', monospace;
+  background: var(--slate-100); color: var(--slate-600);
+  padding: 1px 5px; border-radius: 3px; font-size: 10px; font-weight: 600;
+}
+
+/* ─── AÇÃO DETAIL ────────────────────────────────────────── */
+.acao-cards { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
+.acao-card {
+  background: var(--white); border: 1px solid var(--slate-200);
+  border-radius: 14px; overflow: hidden;
+}
+.acao-card-hdr { padding: 14px 18px; border-bottom: 1px solid var(--slate-200); }
+.ac-2001 .acao-card-hdr { border-left: 4px solid var(--purple); }
+.ac-2002 .acao-card-hdr { border-left: 4px solid var(--amber); }
+.ac-2003 .acao-card-hdr { border-left: 4px solid var(--green); }
+.acao-card-num { font-size: 10px; font-weight: 800; padding: 2px 8px; border-radius: 4px; display: inline-block; margin-bottom: 5px; }
+.ac-2001 .acao-card-num { background: var(--purple-pale); color: var(--purple); }
+.ac-2002 .acao-card-num { background: var(--amber-pale); color: var(--amber); }
+.ac-2003 .acao-card-num { background: var(--green-pale); color: var(--green); }
+.acao-card-title { font-size: 13px; font-weight: 800; color: var(--slate-900); line-height: 1.3; }
+.acao-card-meta { font-size: 11px; color: var(--slate-500); margin-top: 3px; }
+.sub-rows { padding: 8px 0; }
+.sub-row { padding: 8px 18px; border-bottom: 1px solid var(--slate-100); display: flex; align-items: center; gap: 10px; }
+.sub-row:last-child { border-bottom: none; }
+.sub-row-name { font-size: 12px; font-weight: 600; color: var(--slate-800); flex: 1; min-width: 0; }
+.sub-row-ct { font-size: 11px; color: var(--slate-500); white-space: nowrap; }
+.sub-mini-bar { width: 100%; height: 3px; background: var(--slate-100); border-radius: 2px; margin-top: 3px; overflow: hidden; }
+.ac-2001 .sub-mini-bar-fill { background: var(--purple); }
+.ac-2002 .sub-mini-bar-fill { background: var(--amber); }
+.ac-2003 .sub-mini-bar-fill { background: var(--green); }
+.sub-mini-bar-fill { height: 100%; border-radius: 2px; }
+
+/* ─── RESPONSIVE ─────────────────────────────────────────── */
+@media (max-width: 1100px) {
+  .kpi-grid { grid-template-columns: repeat(2,1fr); }
+  .acao-cards { grid-template-columns: 1fr; }
+}
+@media (max-width: 700px) {
+  .header-inner { height: auto; padding: 12px 0; flex-wrap: wrap; }
+  .main, .search-bar { padding-left: 16px; padding-right: 16px; }
+  .nav-wrap, .header { padding-left: 16px; padding-right: 16px; }
+  .tab-btn { padding: 12px 12px; font-size: 12px; }
+}
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-thumb { background: var(--slate-300); border-radius: 3px; }
+
+/* ─── NATUREZA VIEW ──────────────────────────────────────── */
+.nat-summary-grid {
+  display: grid; grid-template-columns: repeat(2,1fr);
+  gap: 14px; margin-bottom: 22px;
+}
+.nat-summary-card {
+  background: var(--white); border: 1px solid var(--slate-200);
+  border-radius: 14px; padding: 20px 24px; position: relative; overflow: hidden;
+}
+.nat-summary-card::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:4px;
+  background: var(--nc-color, var(--blue-600));
+}
+.nat-summary-card .ns-label { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:var(--slate-400); margin-bottom:8px; }
+.nat-summary-card .ns-main { font-size:28px; font-weight:900; color:var(--slate-900); line-height:1; margin-bottom:4px; }
+.nat-summary-card .ns-sub { font-size:12px; color:var(--slate-500); }
+.nat-summary-card .ns-pct {
+  position:absolute; right:20px; top:50%; transform:translateY(-50%);
+  font-size:40px; font-weight:900; opacity:.07; color:var(--nc-color, #000);
+}
+
+.nat-section { margin-bottom: 24px; }
+.nat-section-hdr {
+  display: flex; align-items: center; gap: 12px;
+  padding: 13px 20px; border-radius: 10px 10px 0 0;
+  font-size: 14px; font-weight: 900; letter-spacing: .01em;
+}
+.nat-c-hdr { background: var(--green); color: #fff; }
+.nat-k-hdr { background: var(--purple); color: #fff; }
+.nat-hdr-badge {
+  background: rgba(255,255,255,0.2); padding: 2px 10px;
+  border-radius: 20px; font-size: 11px; font-weight: 700;
+}
+.nat-hdr-count { margin-left: auto; font-size: 12px; opacity: .85; }
+
+.nat-cod-groups { border: 1px solid var(--slate-200); border-top: none; }
+.nat-cod-row {
+  display: flex; align-items: stretch;
+  border-bottom: 1px solid var(--slate-200);
+}
+.nat-cod-row:last-child { border-bottom: none; }
+.nat-cod-cell {
+  width: 120px; flex-shrink: 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 12px 10px; border-right: 1px solid var(--slate-200);
+  background: var(--slate-50); gap: 5px;
+}
+.nat-cod-cell .cod-badge { font-size: 13px; }
+.nat-elem-label { font-size: 10px; color: var(--slate-400); text-align: center; font-style: italic; line-height: 1.3; }
+.nat-despesas-cell { flex: 1; padding: 10px 16px; display: flex; flex-direction: column; gap: 6px; justify-content: center; }
+.nat-despesa-row {
+  display: flex; align-items: center; gap: 8px;
+  padding: 6px 10px; border-radius: 6px;
+  background: var(--slate-50); border: 1px solid var(--slate-100);
+  font-size: 12px; color: var(--slate-800);
+  transition: all .1s;
+}
+.nat-despesa-row:hover { background: var(--blue-50); border-color: var(--blue-200); color: var(--blue-800); }
+.nat-despesa-acao { flex-shrink: 0; }
+.nat-despesa-sub { font-size: 10px; color: var(--slate-400); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 220px; }
+
+/* ─── ÁRVORE HIERÁRQUICA ─────────────────────────────────── */
+.hier-tree { border: 1px solid var(--slate-200); border-top: none; }
+
+.hier-grupo { border-bottom: 2px solid var(--slate-200); }
+.hier-grupo:last-child { border-bottom: none; }
+.hier-grupo-hdr {
+  display: flex; align-items: center; gap: 9px; flex-wrap: wrap;
+  padding: 11px 18px; background: #f0fdf4;
+  border-bottom: 1px solid #bbf7d0;
+}
+.hier-grupo-body { padding: 0; }
+
+.hier-mod { border-bottom: 1px solid var(--slate-200); }
+.hier-mod:last-child { border-bottom: none; }
+.hier-mod-hdr {
+  display: flex; align-items: center; gap: 9px; flex-wrap: wrap;
+  padding: 9px 18px 9px 32px; background: #f0f9ff;
+  border-bottom: 1px solid #bae6fd;
+}
+.hier-mod-body { padding: 0; }
+
+.hier-elem { border-bottom: 1px solid var(--slate-100); }
+.hier-elem:last-child { border-bottom: none; }
+.hier-elem-hdr {
+  display: flex; align-items: center; gap: 9px; flex-wrap: wrap;
+  padding: 8px 18px 8px 48px; background: var(--slate-50);
+  border-bottom: 1px solid var(--slate-200);
+}
+
+.hier-level-tag {
+  font-size: 9px; font-weight: 800; letter-spacing: .08em;
+  text-transform: uppercase; padding: 2px 7px; border-radius: 3px;
+  flex-shrink: 0;
+}
+.hier-cod {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px; font-weight: 700; padding: 2px 9px;
+  border-radius: 5px; flex-shrink: 0; white-space: nowrap;
+}
+.hier-label { font-size: 13px; font-weight: 700; color: var(--slate-800); }
+.hier-desc  { font-size: 11px; color: var(--slate-400); font-style: italic; }
+.hier-count { margin-left: auto; font-size: 11px; color: var(--slate-500); white-space: nowrap; }
+
+.nat-despesas-cell { padding: 10px 18px 10px 64px; display: flex; flex-direction: column; gap: 5px; background: var(--white); }
+
+
+
+/* ─── SYNC BAR ───────────────────────────────────────────────── */
+.sync-bar{background:var(--white);border-bottom:1px solid var(--slate-200);padding:0 32px}
+.sync-bar-inner{max-width:1400px;margin:0 auto;height:38px;display:flex;align-items:center;gap:12px}
+.sync-dot{width:8px;height:8px;border-radius:50%;background:var(--slate-300);flex-shrink:0;transition:background .3s}
+.sync-dot.ok{background:#22c55e;box-shadow:0 0 0 3px rgba(34,197,94,.18)}
+.sync-dot.syncing{background:#f59e0b;animation:blink 1s infinite}
+.sync-dot.error{background:#ef4444}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.sync-label{font-size:12px;font-weight:600;color:var(--slate-700)}
+.sync-time{font-size:11px;color:var(--slate-400)}
+.sync-btn{margin-left:auto;display:flex;align-items:center;gap:6px;padding:5px 14px;border-radius:6px;border:1px solid var(--slate-200);background:var(--white);font-family:inherit;font-size:12px;font-weight:600;color:var(--blue-700);cursor:pointer;transition:all .15s}
+.sync-btn:hover{background:var(--blue-50);border-color:var(--blue-400)}
+.sync-btn:disabled{opacity:.5;cursor:not-allowed}
+.sync-link{font-size:11px;color:var(--blue-600);text-decoration:none;display:flex;align-items:center;gap:4px;padding:3px 9px;border-radius:5px;border:1px solid var(--blue-100);background:var(--blue-50)}
+.sync-link:hover{background:var(--blue-100)}
+.spin{display:inline-block;animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <!-- faixa superior: identificação institucional -->
+  <div class="header-top">
+    <div class="header-top-inner">
+      <div class="header-top-ids">
+        <span class="hid-item">
+          <span class="hid-tag">Órgão</span>
+          <span class="hid-cod">1000</span>
+          <span class="hid-nome">Comitê Gestor do IBS</span>
+        </span>
+        <span class="hid-item">
+          <span class="hid-tag">Unidade Orçamentária</span>
+          <span class="hid-cod">10001</span>
+          <span class="hid-nome">Comitê Gestor do IBS</span>
+        </span>
+      </div>
+      <span class="header-top-year">EXERCÍCIO 2026</span>
+    </div>
+  </div>
+  <!-- faixa principal: logo + título + total -->
+  <div class="header-main">
+    <div class="header-main-inner">
+      <div class="logo-wrap">
+        <img src="data:image/png;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCABTAXEDASIAAhEBAxEB/8QAHQABAAICAwEBAAAAAAAAAAAAAAYHBQgBAwQCCf/EAE0QAAEDAwIEBAIFBQsJCQAAAAECAwQABREGEgcIITETQVFhFCIVMnGBoSNCUnKxFhczNnWRlLO0wtEkJVVidpLB0vA1N0WEoqSy4eL/xAAbAQEAAwEBAQEAAAAAAAAAAAAAAQIDBAUGB//EAC8RAAIBAwMCBAQGAwAAAAAAAAABAgMEERIhMRNBBSIyUQYUYXEVIzVDgZGxweH/2gAMAwEAAhEDEQA/ANy6d6UoB5UpSgFKUoBSlKAUpSgFKUoBSlKAUpSgFKUoBSlKAUpSgFKUoBSlKAGlKUApSlAKUpQClKUApSlAKUpQClKUApSlAKUpQClKUApSlAKUoaAUzXhvV2tlmgLn3afGgxG8Bb0hwIQCe3U9KwKOJGgFjKdZ2H+nN/41ZQlLhEZR79S6y0ppl5pjUOorXa3XklTbcqSltSh6gE5xXgtvErh/cp7MCBrOxSZT6whlpuagqWo9gBnqfaqy4s6U4JcSL8xfL1rmJGmMsBgqi3VpIWgEkZBz1GT2qNWXhHy/W67w7gNfiQqK+h9Dbl4ZCVKSoKGcAHGQPOuqNGloy85+xVyeTZ6lYuw6isV+S8bJeINyDJAdMZ5LgQT2yQeldkO9Wqbc5FtizmHpcYAvNJVlSM+tcjTQlOMWk3yZClKVBcUpSgFKUoBSlKAUpSgFKUoBSlKAUpSgFKUoBSlcHFAc5pSuKAGuaUoBSlKAUpSgFKUoBSlKAUpSgFKUoBSlKAUpSgFcVya+VrQhJUsgAdST5UBW3Giz8PdfaeXpXU2qYcDwZCXvyc9tDrbic4yFH3PQiqaPL7wUb6HiaR/56N/hWSvvL/wnul7m3FPEZTHxT63lNfFxl7SpRJG5Qyep868R5Z+Fr6kob4lLUtRwkB2KST6dq9SjOFKOI1Gv4MWm3wdJ4AcFFD/vO/8AfRv8Ky0Xlb4ZvW1N1a1fdH4BTv8AiG3mS2pI7kKCcY96+FctXDHRcpq9amv0+5xGVbkwXm20JfV5A7RuUPYY966db6smX5LduiMottljgIjwWQEpCR23AdPu7CqVbuovRUbPD8X8bt/DIYnvLsjNTdWWfT9mb0dw1got1tb/ACapDSPyj6j0JB7kn9I9T5VlNLWaFoeRG1Hqe8OxZygVNwWPmcWk9wv1/wCutRvhRCisz7jqOYgOMWaKX0pPYuHO39hqL3G7zrtcn7lPcLj7yipRPkPID0A7Vwyy92fE1PFqmI31fzTfpXZJdzbm1zY9ytzE+Kvew+2HEH1BFdsp9mLGdkyHEtMtIK3FqOAlIGST91QLgLcTN0G20pWTGeW0Pszkftrzcz1wftvArVD8dRQ45GDAUD1AWtKT+BNIQ1zUfc/TbK6VzbQre6ya4cYeZjVF7vEmDoiWbLZWllDcpCAZEgDpvyfqA+QHX1NV6NWcXGWBeF37WTbB+YSluPBs++SNuK9/LBpmDqTjVZYFyjokQ2A5KW0sZSstpykEeYzjp7V+g7rLLkdUdxpC2VJ2KbUkFJT2wR2xXuXFalZSVKME/cvGLqbtmovA3mPv0a9xbHr6SifbpKw0i4lIS7HUTgFeOik57nuO/WtqdV6gtWmNNTdQ3eSGbfCZLrqx1JHkB6knAA9TWq2u+WHVcrVt1kaZcs7VmfkKciNuvqSptCuu0gJOMEkD2AqVc3Qudl5e9N2CbKD0ovxY8xxBOHVNtEk9e4KhmuWvTt61WHR21cotFyinkqTiNzF691RcnE2Wc9p62lW1iPD/AIZQ8t68ZKj6DAqNp1rxYshbnvag1bCSs/I5JW6EL/3xg1OeSDTtuu/Ea6XW4R25C7TDSuMHE5CHFqxvx6gA4+2tu9Wr0vNtkix6kk20xpbRS5HlvITuSemQFH+Y101rilbT6Uaaa7lFFyWWyiuXXmBnX+9xtI638JUyUdkK4NpCA4vybcSOgJ8iO56YqVc4Op9R6W4dQJum7tItkl65IaceYICijYs4yfcCoLaOXzRES9xJsTiq3uYlIeabSWN/yrCkpCt/foBnH3VJ+eUZ4W2z+Vm/6tyuVqhO6h01s+UXTkoPJHuTPXGstU6o1BD1NqGbdWGITTrKZCgdiisgkdPSo9zb8SNdaa4si06f1PPtkFFvZcDMdQSCpRVknp1PSvrkO/jnqX+Tmv6w1GudZCVcalZ/0ax+1VdUaNP8QcMbf8K6n08mAteueP10gtzrbdtZTYrmdj0dhS0KwcHCgnB612W/jbxi0teAm53y4OOowXId2j9FD3BAUPtFX7yzcQtC6e4LWS13nVdqgzWfG8Rh+QErRl1RGR9hFVTzma90drK52KLpiYxcn4AdMmayPkwrbtbCvzuoJ6dBV6clUruk6SxvvghrEc5NoOCvEKFxK0OzqCKx8LIQssTI27d4TqQCQD5pIIIPoaojmM5hrzb9STNI6GfbiCEotTLjtC1qcH1kN56ADsVd85xUj5ErNPhcObvdJKFtRrlcAqLuGN6UI2lY9iemf9WtVdcWuXZ+IV6h3RkmRGubpdbc/PHiFQz7KBH3GsLO1pSuZxe6XCLTm9CM+3qjjBOjKvbd61m/GHzGU2t4tj3yBtxVi8FuZDUtovUW2a3mG8WZ5YbVLcSPHjZON5UPrpHmD1xV58PePPDC92qLEXdWLDIS0lswpqfCSjAxtSr6hH31iLny68K9WXKXfoE+chua4XVJt0xBYSVd9o2kAeeKmpc0pZhXpafbBCi+YsvNpxDrSXW1JWhaQpKknIIPYioTxOW4i+6GDbi0BWoUhYSojcPh3uh9RUts8Fm12mJbYxcLMRlDLZWrcopSABk+Z6VEOKJxftCe+ok/2d6vGj6jd8E6rjI9a5qlrnn90N+3fTZ1abi+LYI5cx8P4P5LP5ng+vnu96RjqDZc+4Zxmvodq15cj3B74FnRki5xWj9GGSsh3aJ4WsrCt/qkAOeWCM9az+moOop2uFsaqalKE2a4uVGStZYZSuEkhpKh0KUnAyO6gfOrOGFnJCZbdyudvtoZM+YzG8d0Mtb1Y3rPZI969lUA/a2INq0UmXFjstuR5apf0mJCkFzKAM7TuC8DpmpXxYIbuqly4777KbT/AJrQl55pCpO87glTYJDu3ZtyP+NV0k5LUpmqLiNeNL1b8e65CuCzICHWkyHJzSClvqE9EKQBnO3BxnHWlvs9vvNnt4NrccQxqJmMp6K/IMd5hSQVlsLO5KCfrA5AIPU1KiMl6UrX+8tyWW5zUD6WOokOXJE5KS8R8GGXAyP0dv8AA7cdc5x1zWWsMO8W3QuuYrsd6C6m3NmNFjOOuIwY2fFbUoA7lEkFIHQp981PT+oyXVSqMbct/wAa0iKLgdFfERPjiPG8LxfBe39/m27vB3Y6ZxnzrOyDdv3urBtTcd3x7/hhW/xfh/DkeFu/O+rs79e3nVXHAyWtStf7vA1wixQmbk9OfYYsj8WKEuK3SchlQde29Urwdnr8qiO9ZW76fVYpkZOqFLj6ckqkOiJCkSHWYzwabS2N/ReVEOKAwAFHp1qdC9xkuulUFYEyXNUWVu/fSE65TG4rMiO94zMmOgx8KUkj5HGCOqwcELKupOBXqg2yzWyHBVeY0qPYnb1cm55Ut4oIbccTGC8HIQBnb5Zx7VLp4GS86VGuF5mq0FaTP+J8bwTt+Iz4nh7j4e7PXOzb36+tSWs3sSMClcYpQA9qx2pLS1fbDPs8lx1tibHXHcW0ratKVJIJB8j1rJUongGqZ5V9BxXlMv8AEd5txBwpCxHSpPsQT3rI2bly4f227QrijiIpxcSQ2+lJVHAUUKCgD7dK79S8qlgm3efdndcXCM3JfW8Q/HbXtKlE4KyRnv3rCucq2lSPl4lq/o7P/PXrKvqjh1X/AEY6cPgt/ijpiLrFaJ9jvEWTPitFPwyZCVpWnPlg/KffzqjJ8eRElORJTLjD7Z2rbWMFJqQab5bbdp+8MXex8XJVvnR1bm3mWGgR7H5+oPmD0NXDqnSFq1NZWG513hO3ploJE9pKUeIr3QFHofTPTyrhqQjF+V5/g+Q+IfhlX7dxR2n/AJKu4dM/GaU1bamyTIehpdbSO6gnOR+z+eoIcYwnrmpV4OpOH2rWX5UUpU2SM92pDZ+sAf8AojpWcuWjImod970W62+l353retQS4ys9wAfLP/1WT4PkKllWuaEKKX5lPKce7XuiccuUdbejZDqgcOy1kfcAK83NsFfvCahKQTjwCfs8ZFTvQVlNg0nBtiwPFbby7j9M9T+Jr54i6cZ1doe8abfUEJuEVbKVn81WMpP3EA1NKajUjJ9mj9T8Mtnb2UKUuUjTDk2ebRx1gJWoJK4UlKc+Z2Zx+Fb2ntX5oR3tS8MuIjTpYVBvtmk58N1J2qx0P6yFDzHcGr/e5u5KrOUR9FpbuZRgLcmbmEq9cBO4j26fbXs+IWlS4qKpTWU0dNOaisMu3UXGnhpp6+SrJd9Ux48+IvY+14S1eGrGcEgEZ61VvO9Mj3bhTpm6219EmFIuCXWnkHKVoW0opI+0VrVYrZf+JOv/AIKIhcy7XeUp19wJ6I3KytxX6KRkn8K3U41cNVX/AIGJ0jZEeJKtDDKreg9PEUynbt+1Scj7TWM6FOzrU8vfuSpOcWUtyD4/dNqpBIClQ45A9gtWf21JuZLgXrLX/EYaisUi1fCGE2xslPqQpKkk56BJGDmtfOF2t75wx1r9LwYwLzYVHmwpAKPERnqhXmlQIyD5Grp1bzXy51heh6f0ubfPebKPiZEkOBkkY3JSAMn0ziuq4trhXPVorKZWMo6cM1nfhLt1/Xb3A2X4swsLU2cgrQvaSk+mR0Nbi87az+9HZgVHd9JtA59fCXWu/ALQFw19xIgMpZcXbokhEq5SVAlKUJVu2k/pLIxj3JrYjnqQU8L7WSf/ABdH9WurXU4u6pR7oQXkbIPyGqB1pqUD/RzX9YajHOs6BxtWj0tkf+9Ui5B/47an/k1n+sNRvnWQDxwcUT0+jI/96kf1J/b/AER+0e/hLy6va+0Fb9VI1U1BTN34YMLxCjasp+tuGe2e1RbjlwWu3DBMKVJuMe6W6astNvttltSXAM7VJJPcZIIPkanHBzmKtWgeHdt0q/pedOch+Jl9uShKVblqV0BGfOorx941vcUWLfAZtH0VbYTqntrjwccdcI25JAAAAJ6e9aUvnfmPN6M/TgPRp+pffJvr6dqnR0vT11Uhcqx+Ghl1KAnewoHaCB0ykgjPn0qW8XOD2i+JLok3DfBu6E7EzoiwHCB2C0nosD36j1qsuSrRs5vR+ob7ObdisXpIixFEFKlNpSrc4PbKsA+xrXjUsLVfDbiAqJJkTIt0tckOx3VKVtdAOUODJwpKh/xFcCt1Uup9GWGuC+rEFlFq6r5UNXQg47p++227tj6rT4Md0+3mk/ziqms161pwt1a6zDkzLLdIToTIiqV8ivPatH1VJI/A9Kvi3c3BTaUouWiluXAJwpUeYEsrPrgjKR7da1913qG98R+IMq+OQN1xuTqG2IcZJV0ACUIT5k+9d9sriWY3K8v1M5aeYn6F8M9UNaz0HZ9TNNhr4+MlxbYOQhY6KT9ygawvFYH90Ggf9o0/2d6vZwV0u/o7hfYdPSyPiosUfEY7BxRK1D7ioj7q8nFT/t/QX+0aP7O9XzrUeo9PG509ieVX9y4gSbdfbvFlWyM3GtyHVBpcgolPJQ3uDqElO1SFH5flUSO58xU/HbPaonddB2m6XJyTcZlykxlOOOpguSMsocWgoUpPTcOij0zgE5xWax3LGDu+vr3Z2/hLpbrVHuCnYpS4H3FRw0/4mCcJ3bklpQwBg5BrFvcW5oVblN223ASYrT5jrkr8eQpb6mtrACfmPy7gFYOD1xUsPD+CWtyrzeVTQ6y4iap9JeQGgsIQMp27QFr8upUSa5Z4d6fZiLYQZhcWhsF8vZdC0PKeDgOOi961EkeuMYqycSNzx6B1rO1Je50Z36KbZjOyGww0p0yE+G8WwVZSEdduehPeopH4yT3LbLkm32oqQwHkbXncMD4lLOHcoGfrbsoz2I9KsXTmlW7FNedjXi6OxXXHXRCecQWUKcWVqKQEhX1lHz86wg4WWQw/hXLpeXUNILcTdITmIC6l0+H8vfchPVWegxUpwyNzwO8TH4LkdufGgyG5NukSmpkRxYYDqCQ20reAob9qhnHcY8xWV0/rSdcdXfQz9uhxGiPlS5IUmQoeGF+IlJSErbOSPlUSMZIr1TtA2m52+XDvcqfdhLhKhOuSXE7y2V7wQUpGFJVggjtiu+HoyBGvMe4/H3J5uM4XmIjr+5lt0o2FYGM52k9M46k4qvlwDwaV1dMvWrrjalKtTbEOQ+z4KVOGSQ2QAo9NmDn1rDS+JVyjwbxJctltZVCOEx3pS0vM/lw0C8jbnaQdwUjcPKpdZtMItV4lT413uZZkvOPrhLcQWAtfVRA27u/XvWLmcObXM8YyLrenVFBbjKXKClRElxDhDZIz9ZCfrbugxTbI3I5e+KFwtSooW1YJBchqlHZKdSZH5YthpgFGVOHHYgdSB717p3EuVGtyyLOhVwjmaZkdTpHgojgYJOPzitv/AHj6VnZOhbbNZfTdJ1wuL78URVSHnEhxKQ4XEqSUpACkqOQceQr6laCsMm43ue6JJkXqIiLLUHcfKkYykY+VSsJyfPaPSrJx7jcxCdeXYQJmoFWJlzT7C32gtuT/AJRuaJTuKSAnYpYKRg5GQT7dV111qC1Ieh3Gy29mcythbj4kuLiMsuhwpWtQRuGFNqQemMkHOK71cOmHtRyxJlyHdNusrcbt3xBCW5Tu4OuAAdiDkdeiiSB6ZBvQcVtDjib9ffpBxSCZ5lDxihCSlLZ+XaUAKV0Ke5J71D0jckFjlruVmhznmW2XJDKXFIbdDqU5GcBY6KHuO9e0JGMYFeOwWqHY7NFtEBKkxorYbbClblYHmT5mvdVCTgd65pSgFKUoBTNcU86Ar3jvw0HFDSseym9yLSqPJEhK2070LIBG1acjI65HoapNPJ8rz12r+g//ALra+lb07mrTWIsq4JvLNT18obaCArX5RntmEB/fr6a5R0BY28QlZz02xBn/AOdS3jFy+3nXOvZmpYmtlxGpKUARn2lrDO1IThBCgNpxnt3JqLQuVS/tS2XHOIIQhCwpSmY7gWAD+ad/Q13RuG4ZdXf7Genfgu/RmhZ8DRx0xq6+jVDDYCY8h+PseQnyBVk7iPJXf7a82i+GbOn9UOXVU5UhlsYiI7KTnuV+uPKrAjNFmM0yXFultATvWcqVgYyT6muyvMcm3lmNXw+3q1Y1px80eGKHqKUqp2EV13w70brhhDep7FGnrbGG3jlDqB/qrThQ+zNV83yw8KkPeIYd2WjOfDVcF7fs6dfxq66EdK1hXqwWIyaKuKfYjmidD6U0XEVG0xY4luQv+EU2nK3P1lnKlfeakVc0rOUnJ5ZbGCEa84UaC1s+ZV/0+w7MIwZTKiy8ftUkjP35qHQ+WbhWxJDzkC5ykg/wb09ez/04P41dFK0jcVYrEZPBVxT7GL0zp6yaataLZYLZFtsNHUNMNhIJ9T6n3NeHX+idOa7syLRqeCZkRt4PISHVNlKwCAQUkHsTUipVFKSerO5OCF8O+F+itASpcrS9qVEfloS28tchxwqSk5A+YnHU+VeXX3CDQOub0m86js65M5LQZ8VElxrKQSQCEqAOMmp9SrdWerXncYWMFQDlv4Rg/wAXX8fyg/8A81ZGy8BOFFqlIks6SjvuoOUmU848Af1VqI/CrOpV3c1msOT/ALI0R9j4ZabZZQyy2httCQlCEDASB2AA7CsJrHR2mNYQhE1LZYlybT9Quo+dH6qh8yfuNZ6lYptPKLFMPcsvCtx8uJg3RpJOfDRcF7fxyfxqbaE4YaF0S542ndPxo0ojBkrJdex+uokj7sVMaVrK4qzWJSbRVRS4QrH3ezQLrJt0ia0VuW6UJUYhZG1wJUnPTv0UehrIUrHgscDvXNKUApSlAKUpQClKUANcVzimKAUpSgFKUoBSlKAUpSgHSlMj1pQHW2SQCT3FfdKUfJWPBzSlKFhSlKAUpSoApSlSBSlKAUpSgFKUoBXFKUBzSlKAUFKUApSlAKUpQClKUApSlAKUpQClKUApSlAKUpQClKUApSlADQ0pQDzoaUoBSlKA/9k=" alt="CGIBS — Comitê Gestor do Imposto sobre Bens e Serviços">
+      </div>
+      <div class="header-divider"></div>
+      <div class="header-titles">
+        <h1>ARQUITETURA ORÇAMENTÁRIA 2026</h1>
+        <p>Estrutura de Gestão Compartilhada &nbsp;·&nbsp; Governança e Gestão Compartilhada do IBS &nbsp;·&nbsp; Portaria SOF/SEPLAN 163</p>
+      </div>
+      <div class="header-total">
+        <div class="lbl">Total do Programa</div>
+        <div class="val">R$&nbsp;950.000.000,00</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+
+<!-- SYNC BAR -->
+<div class="sync-bar">
+  <div class="sync-bar-inner">
+    <span class="sync-dot" id="syncDot"></span>
+    <span class="sync-label" id="syncLabel">Dados locais</span>
+    <span class="sync-time" id="syncTime"></span>
+    <a class="sync-link" href="https://docs.google.com/spreadsheets/d/e/2PACX-1vSYA6B6DpSzF0wVdYVJIhyeDNT3_iyCJnKmMbk9BYq9LODpbSQcA-3yOTfFbSRQce_2IWNGjrYs_G-n/pubhtml" target="_blank">
+      <i class="fas fa-table-cells"></i> Planilha
+    </a>
+    <button class="sync-btn" id="syncBtn" onclick="doSync()">
+      <i class="fas fa-rotate-right" id="syncIcon"></i> Sincronizar
+    </button>
+  </div>
+</div>
+<!-- TABS -->
+<nav class="nav-wrap">
+  <div class="nav-inner">
+    <button class="tab-btn active" onclick="showTab('tabela',this)"><i class="fas fa-table-list"></i> Tabela Completa</button>
+    <button class="tab-btn" onclick="showTab('acao',this)"><i class="fas fa-layer-group"></i> Por Ação e Subação</button>
+    <button class="tab-btn" onclick="showTab('funcao',this)"><i class="fas fa-sitemap"></i> Por Função / Subfunção</button>
+    <button class="tab-btn" onclick="showTab('elemento',this)"><i class="fas fa-tags"></i> Por Elemento</button>
+    <button class="tab-btn" onclick="showTab('natureza',this)"><i class="fas fa-scale-balanced"></i> Por Natureza</button>
+  </div>
+</nav>
+
+<!-- SEARCH -->
+<div class="search-bar">
+  <div class="search-wrap">
+    <div class="search-input-wrap">
+      <i class="fas fa-search"></i>
+      <input type="text" class="search-input" id="searchInput" placeholder="Buscar por despesa, elemento, subação, código..." oninput="applySearch()">
+    </div>
+    <select class="filter-sel" id="filterAcao" onchange="applySearch()">
+      <option value="">Todas as Ações</option>
+      <option value="2001">2001 — Remuneração de Pessoal</option>
+      <option value="2002">2002 — Apoio Administrativo</option>
+      <option value="2003">2003 — Plataformas Digitais IBS</option>
+    </select>
+    <select class="filter-sel" id="filterNat" onchange="applySearch()">
+      <option value="">Corrente + Capital</option>
+      <option value="Corrente">Despesas Correntes</option>
+      <option value="Capital">Despesas de Capital</option>
+    </select>
+    <span class="results-count" id="resultsCount"></span>
+    <button class="btn-clear" onclick="clearFilters()"><i class="fas fa-rotate-left"></i> Limpar</button>
+  </div>
+</div>
+
+<div class="main">
+
+<!-- ══ TABELA COMPLETA ════════════════════════════════════ -->
+<div class="view active" id="view-tabela">
+  <div class="kpi-grid">
+    <div class="kpi" style="--kpi-color:#1d5fa6">
+      <div class="kpi-label">Total do Programa</div>
+      <div class="kpi-main">39</div>
+      <div class="kpi-sub">itens de despesa · 3 ações · 9 subações</div>
+      <span class="kpi-tag">Portaria 163</span>
+    </div>
+    <div class="kpi" style="--kpi-color:#5b4db8">
+      <div class="kpi-label">2001 — Pessoal e Encargos</div>
+      <div class="kpi-main">4 itens</div>
+      <div class="kpi-sub">12,8% das dotações · 3 subações</div>
+    </div>
+    <div class="kpi" style="--kpi-color:#b45309">
+      <div class="kpi-label">2002 — Apoio Administrativo</div>
+      <div class="kpi-main">27 itens</div>
+      <div class="kpi-sub">17,5% das dotações · 4 subações</div>
+    </div>
+    <div class="kpi" style="--kpi-color:#1b9e6e">
+      <div class="kpi-label">2003 — Plataformas Digitais IBS</div>
+      <div class="kpi-main">7 itens</div>
+      <div class="kpi-sub">69,6% das dotações · 4 subações</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-header-title"><i class="fas fa-list-check"></i> Detalhamento Integral — 38 Despesas</div>
+      <span class="portaria-badge">PORTARIA 163</span>
+    </div>
+    <div class="tbl-wrap">
+      <table id="mainTable">
+        <thead><tr>
+          <th onclick="sortTbl(0)">Ação <span class="sort-icon">⇅</span></th>
+          <th onclick="sortTbl(1)">Subação <span class="sort-icon">⇅</span></th>
+          <th onclick="sortTbl(2)">Função <span class="sort-icon">⇅</span></th>
+          <th onclick="sortTbl(3)">Subfunção <span class="sort-icon">⇅</span></th>
+          <th onclick="sortTbl(4)">Despesa (Item) <span class="sort-icon">⇅</span></th>
+          <th onclick="sortTbl(5)">Elemento de Despesa (Portaria 163) <span class="sort-icon">⇅</span></th>
+          <th onclick="sortTbl(6)" style="text-align:center">Código <span class="sort-icon">⇅</span></th>
+          <th onclick="sortTbl(7)">Natureza <span class="sort-icon">⇅</span></th>
+        </tr></thead>
+        <tbody id="tblBody"></tbody>
+      </table>
+      <div class="no-res" id="noRes" style="display:none"><i class="fas fa-search" style="font-size:24px;margin-bottom:8px;display:block"></i>Nenhuma despesa encontrada com esses filtros.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ POR AÇÃO ════════════════════════════════════════════ -->
+<div class="view" id="view-acao">
+  <div class="acao-cards" id="acaoCards"></div>
+</div>
+
+<!-- ══ POR FUNÇÃO / SUBFUNÇÃO ═════════════════════════════ -->
+<div class="view" id="view-funcao">
+  <div id="funcaoContainer"></div>
+</div>
+
+<!-- ══ POR ELEMENTO ═══════════════════════════════════════ -->
+<div class="view" id="view-elemento">
+  <div id="elemContainer"></div>
+</div>
+
+<!-- ══ POR NATUREZA DA DESPESA ════════════════════════════ -->
+<div class="view" id="view-natureza">
+  <div id="natContainer"></div>
+</div>
+
+</div><!-- /main -->
+
+<script>
+// ═══════════════════════════════════════════════════════════════════
+// DATA — extraído do Orcamento_CGIBS_2026_Completo_(2).xlsx
+// ═══════════════════════════════════════════════════════════════════
+const DATA = [
+ // ── AÇÃO 2001 ──────────────────────────────────────────────────────
+ {acao:'2001',acaoFull:'2001 - Remuneração de Pessoal e Encargos Sociais',
+  sub:'10001',subFull:'10001 - Gestão da Folha de Pagamento Própria',
+  func:'04',funcFull:'04 - Administração',sfunc:'122',sfuncFull:'122 - Administração Geral',
+  despesa:'Vencimento de Pessoal Civil',
+  elem:'Vencimentos e Vantagens Fixas - Pessoal Civil',cod:'319011',nat:'Corrente'},
+
+ {acao:'2001',acaoFull:'2001 - Remuneração de Pessoal e Encargos Sociais',
+  sub:'10001',subFull:'10001 - Gestão da Folha de Pagamento Própria',
+  func:'04',funcFull:'04 - Administração',sfunc:'122',sfuncFull:'122 - Administração Geral',
+  despesa:'Patronal',
+  elem:'Obrigações Patronais',cod:'319013',nat:'Corrente'},
+
+ {acao:'2001',acaoFull:'2001 - Remuneração de Pessoal e Encargos Sociais',
+  sub:'10002a',subFull:'10002-A - Indenização de Servidores Cedidos pelos Estados',
+  func:'04',funcFull:'04 - Administração',sfunc:'122',sfuncFull:'122 - Administração Geral',
+  despesa:'Indenização de Servidores Cedidos — Estados',
+  elem:'Vencimentos e Vantagens Fixas - Pessoal Civil',cod:'319096',nat:'Corrente'},
+
+ {acao:'2001',acaoFull:'2001 - Remuneração de Pessoal e Encargos Sociais',
+  sub:'10002b',subFull:'10002-B - Indenização de Servidores Cedidos pelos Municípios',
+  func:'04',funcFull:'04 - Administração',sfunc:'122',sfuncFull:'122 - Administração Geral',
+  despesa:'Indenização de Servidores Cedidos — Municípios',
+  elem:'Vencimentos e Vantagens Fixas - Pessoal Civil',cod:'319096',nat:'Corrente'},
+
+ // ── AÇÃO 2002 ──────────────────────────────────────────────────────
+ {acao:'2002',acaoFull:'2002 - Apoio Administrativo',
+  sub:'10003',subFull:'10003 - Manutenção de Infraestrutura Física e Logística',
+  func:'04',funcFull:'04 - Administração',sfunc:'122',sfuncFull:'122 - Administração Geral',
+  despesa:'Contrato de Aluguel de Imóvel',
+  elem:'Outros Serviços de Terceiros - Pessoa Jurídica',cod:'339039',nat:'Corrente'},
+
+ {acao:'2002',acaoFull:'2002 - Apoio Administrativo',
+  sub:'10003',subFull:'10003 - Manutenção de Infraestrutura Física e Logística',
+  func:'04',funcFull:'04 - Administração',sfunc:'122',sfuncFull:'122 - Administração Geral',
+  despesa:'Obras e Instalações (reforma de prédio alugado)',
+  elem:'Obras e Instalações',cod:'449051',nat:'Capital'},
+
+ {acao:'2002',acaoFull:'2002 - Apoio Administrativo',
+  sub:'10003',subFull:'10003 - Manutenção de Infraestrutura Física e Logística',
+  func:'04',funcFull:'04 - Administração',sfunc:'122',sfuncFull:'122 - Administração Geral',
+  despesa:'Contrato de Manutenção de Ar-Condicionado',
+  elem:'Outros Serviços de Terceiros - Pessoa Jurídica',cod:'339039',nat:'Corrente'},
+
+ {acao:'2002',acaoFull:'2002 - Apoio Administrativo',
+  sub:'10003',subFull:'10003 - Manutenção de Infraestrutura Física e Logística',
+  func:'04',funcFull:'04 - Administração',sfunc:'122',sfuncFull:'122 - Administração Geral',
+  despesa:'Contrato de Conservação e Limpeza',
+  elem:'Locação de Mão-de-Obra',cod:'339037',nat:'Corrente'},
+
+ {acao:'2002',acaoFull:'2002 - Apoio Administrativo',
+  sub:'10003',subFull:'10003 - Manutenção de Infraestrutura Física e Logística',
+  func:'04',funcFull:'04 - Administração',sfunc:'122',sfuncFull:'122 - Administração Geral',
+  despesa:'Contrato de Serviço de Vigilância',
+  elem:'Locação de Mão-de-Obra',cod:'339037',nat:'Corrente'},
+
+ {acao:'2002',acaoFull:'2002 - Apoio Administrativo',
+  sub:'10003',subFull:'10003 - Manutenção de Infraestrutura Física e Logística',
+  func:'04',funcFull:'04 - Administração',sfunc:'122',sfuncFull:'122 - Administração Geral',
+  despesa:'Energia Elétrica',
+  elem:'Outros Serviços de Terceiros - Pessoa Jurídica',cod:'339039',nat:'Corrente'},
+
+ {acao:'2002',acaoFull:'2002 - Apoio Administrativo',
+  sub:'10003',subFull:'10003 - Manutenção de Infraestrutura Física e Logística',
+  func:'04',funcFull:'04 - Administração',sfunc:'122',sfuncFull:'122 - Administração Geral',
+  despesa:'Água e Esgoto',
+  elem:'Outros Serviços de Terceiros - Pessoa Jurídica',cod:'339039',nat:'Corrente'},
+
+ {acao:'2002',acaoFull:'2002 - Apoio Administrativo',
+  sub:'10003',subFull:'10003 - Manutenção de Infraestrutura Física e Logística',
+  func:'04',funcFull:'04 - Administração',sfunc:'122',sfuncFull:'122 - Administração Geral',
+  despesa:'Telefonia',
+  elem:'Outros Serviços de Terceiros - Pessoa Jurídica',cod:'339039',nat:'Corrente'},
+
+ {acao:'2002',acaoFull:'2002 - Apoio Administrativo',
+  sub:'10003',subFull:'10003 - Manutenção de Infraestrutura Física e Logística',
+  func:'04',funcFull:'04 - Administração',sfunc:'122',sfuncFull:'122 - Administração Geral',
+  despesa:'Contrato de Locação de Veículos',
+  elem:'Outros Serviços de Terceiros - Pessoa Jurídica',cod:'339039',nat:'Corrente'},
+
+ {acao:'2002',acaoFull:'2002 - Apoio Administrativo',
+  sub:'10004',subFull:'10004 - Comunicação, Formação e Mobilidade Institucional',
+  func:'04',funcFull:'04 - Administração',sfunc:'122',sfuncFull:'122 - Administração Geral',
+  despesa:'Diárias no País',
+  elem:'Diárias - Civil',cod:'339014',nat:'Corrente'},
+
+ {acao:'2002',acaoFull:'2002 - Apoio Administrativo',
+  sub:'10004',subFull:'10004 - Comunicação, Formação e Mobilidade Institucional',
+  func:'04',funcFull:'04 - Administração',sfunc:'122',sfuncFull:'122 - Administração Geral',
+  despesa:'Contrato de Passagens e Despesas com Locomoção',
+  elem:'Passagens e Despesas com Locomoção',cod:'339033',nat:'Corrente'},
+
+ {acao:'2002',acaoFull:'2002 - Apoio Administrativo',
+  sub:'10004',subFull:'10004 - Comunicação, Formação e Mobilidade Institucional',
+  func:'04',funcFull:'04 - Administração',sfunc:'128',sfuncFull:'128 - Formação de Recursos Humanos',
+  despesa:'Cursos e Capacitação',
+  elem:'Outros Serviços de Terceiros - Pessoa Jurídica',cod:'339039',nat:'Corrente'},
+
+ {acao:'2002',acaoFull:'2002 - Apoio Administrativo',
+  sub:'10004',subFull:'10004 - Comunicação, Formação e Mobilidade Institucional',
+  func:'04',funcFull:'04 - Administração',sfunc:'131',sfuncFull:'131 - Comunicação Social',
+  despesa:'Contrato de Imprensa Oficial',
+  elem:'Outros Serviços de Terceiros - Pessoa Jurídica',cod:'339039',nat:'Corrente'},
+
+ {acao:'2002',acaoFull:'2002 - Apoio Administrativo',
+  sub:'10004',subFull:'10004 - Comunicação, Formação e Mobilidade Institucional',
+  func:'04',funcFull:'04 - Administração',sfunc:'131',sfuncFull:'131 - Comunicação Social',
+  despesa:'Publicidade e Propaganda',
+  elem:'Outros Serviços de Terceiros - Pessoa Jurídica',cod:'339039',nat:'Corrente'},
+
+ {acao:'2002',acaoFull:'2002 - Apoio Administrativo',
+  sub:'10004',subFull:'10004 - Comunicação, Formação e Mobilidade Institucional',
+  func:'04',funcFull:'04 - Administração',sfunc:'131',sfuncFull:'131 - Comunicação Social',
+  despesa:'Material, Bens ou Serviço para Distribuição Gratuita',
+  elem:'Material, Bem ou Serviço para Distribuição Gratuita',cod:'339032',nat:'Corrente'},
+
+ {acao:'2002',acaoFull:'2002 - Apoio Administrativo',
+  sub:'10005',subFull:'10005 - Gestão de Serviços Operacionais e Encargos',
+  func:'04',funcFull:'04 - Administração',sfunc:'122',sfuncFull:'122 - Administração Geral',
+  despesa:'Materiais de Uso e Consumo',
+  elem:'Material de Consumo',cod:'339030',nat:'Corrente'},
+
+ {acao:'2002',acaoFull:'2002 - Apoio Administrativo',
+  sub:'10005',subFull:'10005 - Gestão de Serviços Operacionais e Encargos',
+  func:'04',funcFull:'04 - Administração',sfunc:'122',sfuncFull:'122 - Administração Geral',
+  despesa:'Materiais de Escritório',
+  elem:'Material de Consumo',cod:'339030',nat:'Corrente'},
+
+ {acao:'2002',acaoFull:'2002 - Apoio Administrativo',
+  sub:'10005',subFull:'10005 - Gestão de Serviços Operacionais e Encargos',
+  func:'04',funcFull:'04 - Administração',sfunc:'122',sfuncFull:'122 - Administração Geral',
+  despesa:'Combustíveis e Lubrificantes Automotivos',
+  elem:'Material de Consumo',cod:'339030',nat:'Corrente'},
+
+ {acao:'2002',acaoFull:'2002 - Apoio Administrativo',
+  sub:'10005',subFull:'10005 - Gestão de Serviços Operacionais e Encargos',
+  func:'04',funcFull:'04 - Administração',sfunc:'122',sfuncFull:'122 - Administração Geral',
+  despesa:'Contrato de Serviços de Impressão',
+  elem:'Outros Serviços de Terceiros - Pessoa Jurídica',cod:'339039',nat:'Corrente'},
+
+ {acao:'2002',acaoFull:'2002 - Apoio Administrativo',
+  sub:'10005',subFull:'10005 - Gestão de Serviços Operacionais e Encargos',
+  func:'04',funcFull:'04 - Administração',sfunc:'122',sfuncFull:'122 - Administração Geral',
+  despesa:'Contrato de Coffee Breaks',
+  elem:'Outros Serviços de Terceiros - Pessoa Jurídica',cod:'339039',nat:'Corrente'},
+
+ {acao:'2002',acaoFull:'2002 - Apoio Administrativo',
+  sub:'10005',subFull:'10005 - Gestão de Serviços Operacionais e Encargos',
+  func:'04',funcFull:'04 - Administração',sfunc:'122',sfuncFull:'122 - Administração Geral',
+  despesa:'Contrato de Serviços Gráficos',
+  elem:'Outros Serviços de Terceiros - Pessoa Jurídica',cod:'339039',nat:'Corrente'},
+
+ {acao:'2002',acaoFull:'2002 - Apoio Administrativo',
+  sub:'10005',subFull:'10005 - Gestão de Serviços Operacionais e Encargos',
+  func:'04',funcFull:'04 - Administração',sfunc:'121',sfuncFull:'121 - Planejamento e Orçamento',
+  despesa:'Contrato de Serviço de Consultoria',
+  elem:'Serviços de Consultoria',cod:'339035',nat:'Corrente'},
+
+ {acao:'2002',acaoFull:'2002 - Apoio Administrativo',
+  sub:'10005',subFull:'10005 - Gestão de Serviços Operacionais e Encargos',
+  func:'04',funcFull:'04 - Administração',sfunc:'122',sfuncFull:'122 - Administração Geral',
+  despesa:'Contrato de Estagiários',
+  elem:'Outros Serviços de Terceiros - Pessoa Jurídica',cod:'339039',nat:'Corrente'},
+
+ {acao:'2002',acaoFull:'2002 - Apoio Administrativo',
+  sub:'10005',subFull:'10005 - Gestão de Serviços Operacionais e Encargos',
+  func:'04',funcFull:'04 - Administração',sfunc:'122',sfuncFull:'122 - Administração Geral',
+  despesa:'Contrato de Serviço Terceirizado de Apoio Administrativo',
+  elem:'Locação de Mão-de-Obra',cod:'339037',nat:'Corrente'},
+
+ {acao:'2002',acaoFull:'2002 - Apoio Administrativo',
+  sub:'10005',subFull:'10005 - Gestão de Serviços Operacionais e Encargos',
+  func:'04',funcFull:'04 - Administração',sfunc:'122',sfuncFull:'122 - Administração Geral',
+  despesa:'Auxílio-Alimentação',
+  elem:'Auxílio-Alimentação',cod:'339046',nat:'Corrente'},
+
+ {acao:'2002',acaoFull:'2002 - Apoio Administrativo',
+  sub:'10005',subFull:'10005 - Gestão de Serviços Operacionais e Encargos',
+  func:'04',funcFull:'04 - Administração',sfunc:'122',sfuncFull:'122 - Administração Geral',
+  despesa:'Auxílio-Saúde',
+  elem:'Outros Benefícios Assistenciais',cod:'339008',nat:'Corrente'},
+
+ {acao:'2002',acaoFull:'2002 - Apoio Administrativo',
+  sub:'10005',subFull:'10005 - Gestão de Serviços Operacionais e Encargos',
+  func:'28',funcFull:'28 - Encargos Especiais',sfunc:'846',sfuncFull:'846 - Outros Encargos Especiais',
+  despesa:'Obrigações Tributárias e Contributivas',
+  elem:'Obrigações Tributárias e Contributivas',cod:'339047',nat:'Corrente'},
+
+ // ── AÇÃO 2003 ──────────────────────────────────────────────────────
+ {acao:'2003',acaoFull:'2003 - Desenvolvimento, Implantação e Operação das Plataformas Digitais do IBS',
+  sub:'10006',subFull:'10006 - Desenvolvimento e Implantação do Sistema de Distribuição (SD-IBS)',
+  func:'04',funcFull:'04 - Administração',sfunc:'126',sfuncFull:'126 - Tecnologia da Informação',
+  despesa:'Fábrica de Software — Desenvolvimento do SD-IBS',
+  elem:'Serviços de Tecnologia da Informação e Comunicação - Pessoa Jurídica',cod:'339040',nat:'Corrente'},
+
+ {acao:'2003',acaoFull:'2003 - Desenvolvimento, Implantação e Operação das Plataformas Digitais do IBS',
+  sub:'10006',subFull:'10006 - Desenvolvimento e Implantação do Sistema de Distribuição (SD-IBS)',
+  func:'04',funcFull:'04 - Administração',sfunc:'126',sfuncFull:'126 - Tecnologia da Informação',
+  despesa:'Contrato de Empresa Especializada em TI — SD-IBS',
+  elem:'Serviços de Tecnologia da Informação e Comunicação - Pessoa Jurídica',cod:'339040',nat:'Corrente'},
+
+ {acao:'2003',acaoFull:'2003 - Desenvolvimento, Implantação e Operação das Plataformas Digitais do IBS',
+  sub:'10007',subFull:'10007 - Desenvolvimento e Implantação do Sistema de Gestão Fiscal (SIGEF-IBS)',
+  func:'04',funcFull:'04 - Administração',sfunc:'126',sfuncFull:'126 - Tecnologia da Informação',
+  despesa:'Fábrica de Software — Desenvolvimento do SIGEF-IBS',
+  elem:'Serviços de Tecnologia da Informação e Comunicação - Pessoa Jurídica',cod:'339040',nat:'Corrente'},
+
+ {acao:'2003',acaoFull:'2003 - Desenvolvimento, Implantação e Operação das Plataformas Digitais do IBS',
+  sub:'10007',subFull:'10007 - Desenvolvimento e Implantação do Sistema de Gestão Fiscal (SIGEF-IBS)',
+  func:'04',funcFull:'04 - Administração',sfunc:'126',sfuncFull:'126 - Tecnologia da Informação',
+  despesa:'Modernização e Adequação da Infraestrutura do SIGEF-IBS',
+  elem:'Serviços de Tecnologia da Informação e Comunicação - Pessoa Jurídica',cod:'339040',nat:'Corrente'},
+
+ {acao:'2003',acaoFull:'2003 - Desenvolvimento, Implantação e Operação das Plataformas Digitais do IBS',
+  sub:'10007',subFull:'10007 - Desenvolvimento e Implantação do Sistema de Gestão Fiscal (SIGEF-IBS)',
+  func:'04',funcFull:'04 - Administração',sfunc:'126',sfuncFull:'126 - Tecnologia da Informação',
+  despesa:'Locação de Estações de Trabalho — SIGEF-IBS',
+  elem:'Serviços de Tecnologia da Informação e Comunicação - Pessoa Jurídica',cod:'339040',nat:'Corrente'},
+
+ {acao:'2003',acaoFull:'2003 - Desenvolvimento, Implantação e Operação das Plataformas Digitais do IBS',
+  sub:'10008',subFull:'10008 - Infraestrutura Tecnológica: Servidores, Nuvem e Banco de Dados',
+  func:'04',funcFull:'04 - Administração',sfunc:'126',sfuncFull:'126 - Tecnologia da Informação',
+  despesa:'Aquisição de Servidores, Storage e Equipamentos de Datacenter',
+  elem:'Equipamentos e Material Permanente',cod:'449052',nat:'Capital'},
+
+ {acao:'2003',acaoFull:'2003 - Desenvolvimento, Implantação e Operação das Plataformas Digitais do IBS',
+  sub:'10008',subFull:'10008 - Infraestrutura Tecnológica: Servidores, Nuvem e Banco de Dados',
+  func:'04',funcFull:'04 - Administração',sfunc:'126',sfuncFull:'126 - Tecnologia da Informação',
+  despesa:'Licenças de Sistemas, Banco de Dados e Middleware',
+  elem:'Serviços de Tecnologia da Informação e Comunicação - Pessoa Jurídica',cod:'449040',nat:'Capital'},
+
+ {acao:'2003',acaoFull:'2003 - Desenvolvimento, Implantação e Operação das Plataformas Digitais do IBS',
+  sub:'10009',subFull:'10009 - Manutenção, Suporte e Sustentação das Plataformas Digitais',
+  func:'04',funcFull:'04 - Administração',sfunc:'126',sfuncFull:'126 - Tecnologia da Informação',
+  despesa:'Contrato de Suporte e Manutenção Evolutiva das Plataformas',
+  elem:'Serviços de Tecnologia da Informação e Comunicação - Pessoa Jurídica',cod:'339040',nat:'Corrente'},
+
+ {acao:'2003',acaoFull:'2003 - Desenvolvimento, Implantação e Operação das Plataformas Digitais do IBS',
+  sub:'10009',subFull:'10009 - Manutenção, Suporte e Sustentação das Plataformas Digitais',
+  func:'04',funcFull:'04 - Administração',sfunc:'126',sfuncFull:'126 - Tecnologia da Informação',
+  despesa:'Contrato Link de Internet e Conectividade Dedicada',
+  elem:'Serviços de Tecnologia da Informação e Comunicação - Pessoa Jurídica',cod:'339040',nat:'Corrente'},
+];
+
+// ═══ ESTADO ═══════════════════════════════════════════════════════════
+let filtered = [...DATA];
+let sortCol = 0, sortAsc = true;
+
+// ═══ TABELA ═══════════════════════════════════════════════════════════
+const KEYS = ['acaoFull','subFull','funcFull','sfuncFull','despesa','elem','cod','nat'];
+const ACAO_COLORS = {'2001':'a2001','2002':'a2002','2003':'a2003'};
+
+function renderTable(data) {
+  const body = document.getElementById('tblBody');
+  const noRes = document.getElementById('noRes');
+  document.getElementById('resultsCount').textContent = data.length + ' de ' + DATA.length + ' registros';
+  if (!data.length) { body.innerHTML=''; noRes.style.display='block'; return; }
+  noRes.style.display = 'none';
+
+  // Group by ação for section headers
+  let html = '';
+  let lastAcao = null;
+  data.forEach(d => {
+    if (d.acao !== lastAcao) {
+      lastAcao = d.acao;
+      const acaoNames = {'2001':'AÇÃO 2001 - REMUNERAÇÃO DE PESSOAL E ENCARGOS SOCIAIS','2002':'AÇÃO 2002 - APOIO ADMINISTRATIVO','2003':'AÇÃO 2003 - DESENVOLVIMENTO, IMPLANTAÇÃO E OPERAÇÃO DAS PLATAFORMAS DIGITAIS DO IBS'};
+      html += `<tr class="tbl-section"><td colspan="8">${acaoNames[d.acao]}</td></tr>`;
+    }
+    const natCls = d.nat === 'Capital' ? 'nat-k' : 'nat-c';
+    const acaoCls = ACAO_COLORS[d.acao];
+    html += `<tr class="data-row">
+      <td><span class="acao-badge ${acaoCls}">${d.acao}</span></td>
+      <td class="td-sub">${d.subFull}</td>
+      <td class="td-muted">${d.funcFull}</td>
+      <td class="td-muted">${d.sfuncFull}</td>
+      <td class="td-despesa">${d.despesa}</td>
+      <td class="td-elem">${d.elem}</td>
+      <td style="text-align:center"><span class="cod-badge">${d.cod}</span></td>
+      <td><span class="nat-badge ${natCls}">${d.nat}</span></td>
+    </tr>`;
+  });
+  body.innerHTML = html;
+}
+
+function applySearch() {
+  const q = document.getElementById('searchInput').value.toLowerCase();
+  const acao = document.getElementById('filterAcao').value;
+  const nat  = document.getElementById('filterNat').value;
+  filtered = DATA.filter(d => {
+    if (acao && !d.acao.startsWith(acao)) return false;
+    if (nat  && d.nat !== nat) return false;
+    if (q) {
+      const hay = [d.despesa,d.elem,d.subFull,d.sfuncFull,d.cod,d.nat].join(' ').toLowerCase();
+      if (!hay.includes(q)) return false;
+    }
+    return true;
+  });
+  renderTable(filtered);
+}
+
+function clearFilters() {
+  document.getElementById('searchInput').value = '';
+  document.getElementById('filterAcao').value = '';
+  document.getElementById('filterNat').value = '';
+  filtered = [...DATA];
+  renderTable(filtered);
+}
+
+function sortTbl(col) {
+  if (sortCol===col) sortAsc=!sortAsc; else { sortCol=col; sortAsc=true; }
+  document.querySelectorAll('thead th').forEach((th,i)=>th.classList.toggle('sorted',i===col));
+  filtered.sort((a,b)=>{
+    const av=a[KEYS[col]], bv=b[KEYS[col]];
+    return sortAsc ? av.localeCompare(bv,'pt-BR') : bv.localeCompare(av,'pt-BR');
+  });
+  renderTable(filtered);
+}
+
+// ═══ POR AÇÃO ═════════════════════════════════════════════════════════
+function buildAcao() {
+  const acoes = [
+    {id:'2001',cls:'ac-2001',full:'Remuneração de Pessoal e Encargos Sociais'},
+    {id:'2002',cls:'ac-2002',full:'Apoio Administrativo'},
+    {id:'2003',cls:'ac-2003',full:'Desenvolvimento, Implantação e Operação das Plataformas Digitais do IBS'},
+  ];
+  const cont = document.getElementById('acaoCards');
+  cont.innerHTML = '';
+  acoes.forEach(a => {
+    const rows = DATA.filter(d => d.acao===a.id);
+    const subs = {};
+    rows.forEach(d => { if(!subs[d.sub]) subs[d.sub]={full:d.subFull,count:0}; subs[d.sub].count++; });
+    const maxC = Math.max(...Object.values(subs).map(s=>s.count));
+    let subHtml = Object.entries(subs).map(([k,s])=>`
+      <div class="sub-row">
+        <div style="flex:1;min-width:0">
+          <div class="sub-row-name">${s.full.replace(/10\d{3} - /,'')}</div>
+          <div class="sub-mini-bar"><div class="sub-mini-bar-fill" style="width:${(s.count/maxC*100).toFixed(0)}%"></div></div>
+        </div>
+        <div class="sub-row-ct">${s.count} item${s.count>1?'s':''}</div>
+      </div>`).join('');
+    const card = document.createElement('div');
+    card.className = `acao-card ${a.cls}`;
+    card.innerHTML = `
+      <div class="acao-card-hdr">
+        <div class="acao-card-num">${a.id}</div>
+        <div class="acao-card-title">${a.full}</div>
+        <div class="acao-card-meta">${rows.length} itens · ${Object.keys(subs).length} subações</div>
+      </div>
+      <div class="sub-rows">${subHtml}</div>`;
+    cont.appendChild(card);
+  });
+}
+
+// ═══ POR FUNÇÃO ═══════════════════════════════════════════════════════
+function buildFuncao() {
+  const funcoes = {};
+  DATA.forEach(d => {
+    if(!funcoes[d.func]) funcoes[d.func]={label:d.funcFull, sfs:{}};
+    if(!funcoes[d.func].sfs[d.sfunc]) funcoes[d.func].sfs[d.sfunc]={label:d.sfuncFull, items:[]};
+    funcoes[d.func].sfs[d.sfunc].items.push(d);
+  });
+  const cont = document.getElementById('funcaoContainer');
+  cont.innerHTML = '';
+  Object.entries(funcoes).sort().forEach(([fk,fv]) => {
+    const block = document.createElement('div');
+    block.className = 'funcao-block';
+    let sfHtml = '';
+    Object.entries(fv.sfs).sort().forEach(([sfk,sfv]) => {
+      const chips = sfv.items.map(d => {
+        const ac = ACAO_COLORS[d.acao];
+        return `<div class="chip" title="Ação: ${d.acaoFull}&#10;Elemento: ${d.elem}&#10;Código: ${d.cod}&#10;Natureza: ${d.nat}">
+          <span class="acao-badge ${ac}" style="font-size:9px;padding:1px 5px">${d.acao}</span>
+          ${d.despesa}
+          <span class="cod-sm">${d.cod}</span>
+        </div>`;
+      }).join('');
+      sfHtml += `
+        <div class="subfuncao-block">
+          <div class="subfuncao-hdr">
+            <span class="sf-code">${sfk}</span>
+            <span class="sf-name">${sfv.label.replace(/^\d+ - /,'')}</span>
+            <span class="sfunc-count">${sfv.items.length} item${sfv.items.length>1?'s':''}</span>
+          </div>
+          <div class="chips-row">${chips}</div>
+        </div>`;
+    });
+    block.innerHTML = `
+      <div class="funcao-hdr">
+        <span class="f-code">${fk}</span>
+        <span>${fv.label.replace(/^\d+ - /,'')}</span>
+      </div>
+      ${sfHtml}`;
+    cont.appendChild(block);
+  });
+}
+
+// ═══ POR ELEMENTO ═════════════════════════════════════════════════════
+function buildElemento() {
+  const elems = {};
+  DATA.forEach(d => {
+    if(!elems[d.elem]) elems[d.elem]={items:[]};
+    elems[d.elem].items.push(d);
+  });
+  const cont = document.getElementById('elemContainer');
+  cont.innerHTML = '';
+  Object.entries(elems).sort((a,b)=>b[1].items.length-a[1].items.length).forEach(([ek,ev]) => {
+    const block = document.createElement('div');
+    block.className = 'funcao-block';
+    const chips = ev.items.map(d => {
+      const ac = ACAO_COLORS[d.acao];
+      return `<div class="chip" title="Ação: ${d.acaoFull}&#10;Subação: ${d.subFull}&#10;Código: ${d.cod}">
+        <span class="acao-badge ${ac}" style="font-size:9px;padding:1px 5px">${d.acao}</span>
+        ${d.despesa}
+        <span class="cod-sm">${d.cod}</span>
+      </div>`;
+    }).join('');
+    const codsUniq = [...new Set(ev.items.map(d=>d.cod))];
+    block.innerHTML = `
+      <div class="funcao-hdr">
+        <span class="f-code" style="font-family:'JetBrains Mono',monospace">${codsUniq.join(', ')}</span>
+        <span>${ek}</span>
+        <span style="margin-left:auto;font-size:12px;opacity:.7">${ev.items.length} item${ev.items.length>1?'s':''}</span>
+      </div>
+      <div class="subfuncao-block"><div class="chips-row">${chips}</div></div>`;
+    cont.appendChild(block);
+  });
+}
+
+// ═══ POR NATUREZA ═════════════════════════════════════════════════════
+// Tabelas de classificação econômica (Portaria SOF 42/1999 e atualizações)
+const CLASS_ECON = {
+  categoria: {
+    '3': { cod:'3', label:'Despesas Correntes', desc:'Despesas que não contribuem diretamente para a formação de capital' },
+    '4': { cod:'4', label:'Despesas de Capital', desc:'Despesas que contribuem para a formação de capital ou aquisição de ativos' },
+  },
+  grupo: {
+    '31': { cod:'1', label:'Pessoal e Encargos Sociais', desc:'Vencimentos, salários, encargos sociais e ressarcimentos de pessoal' },
+    '33': { cod:'3', label:'Outras Despesas Correntes', desc:'Aquisição de material, prestação de serviços e outras despesas de custeio' },
+    '44': { cod:'4', label:'Investimentos', desc:'Obras, aquisição de equipamentos e formação de capital' },
+  },
+  modalidade: {
+    '319': { cod:'90', label:'Aplicações Diretas', desc:'Gastos realizados diretamente pelo órgão ou entidade' },
+    '339': { cod:'90', label:'Aplicações Diretas', desc:'Gastos realizados diretamente pelo órgão ou entidade' },
+    '449': { cod:'90', label:'Aplicações Diretas', desc:'Gastos realizados diretamente pelo órgão ou entidade' },
+  },
+  elemento: {
+    '319011': 'Vencimentos e Vantagens Fixas — Pessoal Civil',
+    '319013': 'Obrigações Patronais',
+    '319096': 'Ressarcimento de Despesas de Pessoal Requisitado',
+    '339008': 'Outros Benefícios Assistenciais ao Servidor e ao Militar',
+    '339014': 'Diárias — Civil',
+    '339030': 'Material de Consumo',
+    '339032': 'Material, Bem ou Serviço para Distribuição Gratuita',
+    '339033': 'Passagens e Despesas com Locomoção',
+    '339035': 'Serviços de Consultoria',
+    '339037': 'Locação de Mão-de-Obra',
+    '339039': 'Outros Serviços de Terceiros — Pessoa Jurídica',
+    '339040': 'Serviços de Tecnologia da Informação e Comunicação — PJ',
+    '339046': 'Auxílio-Alimentação ao Servidor',
+    '339047': 'Obrigações Tributárias e Contributivas',
+    '449040': 'Serviços de Tecnologia da Informação e Comunicação — PJ (Capital)',
+    '449051': 'Obras e Instalações',
+    '449052': 'Equipamentos e Material Permanente',
+  }
+};
+
+function buildNatureza() {
+  const cont = document.getElementById('natContainer');
+  cont.innerHTML = '';
+
+  const total = DATA.length;
+  const corrente = DATA.filter(d => d.nat === 'Corrente');
+  const capital  = DATA.filter(d => d.nat === 'Capital');
+
+  // ── Cards de resumo ───────────────────────────────────────────────
+  const summary = document.createElement('div');
+  summary.className = 'nat-summary-grid';
+  summary.innerHTML = `
+    <div class="nat-summary-card" style="--nc-color:#1B9E6E">
+      <div class="ns-label">Categoria 3 — Despesas Correntes</div>
+      <div class="ns-main">${corrente.length} itens</div>
+      <div class="ns-sub">Manutenção e custeio da atividade pública · ${((corrente.length/total)*100).toFixed(0)}% das despesas</div>
+      <div class="ns-pct">3</div>
+    </div>
+    <div class="nat-summary-card" style="--nc-color:#5b4db8">
+      <div class="ns-label">Categoria 4 — Despesas de Capital</div>
+      <div class="ns-main">${capital.length} itens</div>
+      <div class="ns-sub">Investimentos e aquisição de ativos permanentes · ${((capital.length/total)*100).toFixed(0)}% das despesas</div>
+      <div class="ns-pct">4</div>
+    </div>`;
+  cont.appendChild(summary);
+
+  // ── Árvore hierárquica: Categoria → Grupo → Modalidade → Elemento → Despesas ──
+  [
+    { catKey:'3', label:'Despesas Correntes', hdrCls:'nat-c-hdr', items: corrente },
+    { catKey:'4', label:'Despesas de Capital', hdrCls:'nat-k-hdr', items: capital },
+  ].forEach(catBloco => {
+    if (!catBloco.items.length) return;
+
+    const catInfo = CLASS_ECON.categoria[catBloco.catKey];
+
+    // Agrupa por grupo (2º dígito)
+    const byGrupo = {};
+    catBloco.items.forEach(d => {
+      const gk = d.cod.slice(0,2); // ex: "31", "33", "44"
+      if (!byGrupo[gk]) byGrupo[gk] = {};
+      // Agrupa por modalidade (3 dígitos)
+      const mk = d.cod.slice(0,3); // ex: "319", "339", "449"
+      if (!byGrupo[gk][mk]) byGrupo[gk][mk] = {};
+      // Agrupa por elemento (6 dígitos)
+      const ek = d.cod;
+      if (!byGrupo[gk][mk][ek]) byGrupo[gk][mk][ek] = [];
+      byGrupo[gk][mk][ek].push(d);
+    });
+
+    // Monta o HTML da árvore
+    let treeHtml = '';
+    Object.entries(byGrupo).sort().forEach(([gk, mods]) => {
+      const grpInfo = CLASS_ECON.grupo[gk] || { cod: gk.slice(1), label: 'Grupo '+gk.slice(1), desc:'' };
+      const grpTotal = Object.values(mods).flatMap(m => Object.values(m).flat()).length;
+
+      let modHtml = '';
+      Object.entries(mods).sort().forEach(([mk, elems]) => {
+        const modInfo = CLASS_ECON.modalidade[mk] || { cod:'90', label:'Aplicações Diretas', desc:'' };
+        const modTotal = Object.values(elems).flat().length;
+
+        let elemHtml = '';
+        Object.entries(elems).sort().forEach(([ek, despesas]) => {
+          const elemLabel = CLASS_ECON.elemento[ek] || ek;
+          const despHtml = despesas.map(d => {
+            const ac = ACAO_COLORS[d.acao];
+            return `<div class="nat-despesa-row">
+              <span class="acao-badge ${ac} nat-despesa-acao" style="font-size:9px;padding:1px 6px">${d.acao}</span>
+              <span style="flex:1;font-weight:600">${d.despesa}</span>
+              <span class="nat-despesa-sub" title="${d.subFull}">${d.subFull.replace(/10\d{3} - /,'')}</span>
+            </div>`;
+          }).join('');
+
+          elemHtml += `
+            <div class="hier-elem">
+              <div class="hier-elem-hdr">
+                <span class="hier-level-tag" style="background:#f1f5f9;color:#334155;border:1px solid #e2e8f0">ELEMENTO</span>
+                <span class="hier-cod" style="background:#0f172a;color:#fff">${ek}</span>
+                <span class="hier-label" style="font-weight:700;color:#1e293b">${elemLabel}</span>
+                <span class="hier-count">${despesas.length} item${despesas.length>1?'s':''}</span>
+              </div>
+              <div class="nat-despesas-cell">${despHtml}</div>
+            </div>`;
+        });
+
+        modHtml += `
+          <div class="hier-mod">
+            <div class="hier-mod-hdr">
+              <span class="hier-level-tag" style="background:#e0f2fe;color:#0369a1;border:1px solid #bae6fd">MODALIDADE</span>
+              <span class="hier-cod" style="background:#0369a1;color:#fff">${mk}0</span>
+              <span class="hier-label">${modInfo.cod} — ${modInfo.label}</span>
+              <span class="hier-desc">${modInfo.desc}</span>
+              <span class="hier-count">${modTotal} item${modTotal>1?'s':''}</span>
+            </div>
+            <div class="hier-mod-body">${elemHtml}</div>
+          </div>`;
+      });
+
+      treeHtml += `
+        <div class="hier-grupo">
+          <div class="hier-grupo-hdr">
+            <span class="hier-level-tag" style="background:#dcfce7;color:#15803d;border:1px solid #bbf7d0">GRUPO</span>
+            <span class="hier-cod" style="background:#15803d;color:#fff">${grpInfo.cod}</span>
+            <span class="hier-label">${grpInfo.label}</span>
+            <span class="hier-desc">${grpInfo.desc}</span>
+            <span class="hier-count">${grpTotal} item${grpTotal>1?'s':''}</span>
+          </div>
+          <div class="hier-grupo-body">${modHtml}</div>
+        </div>`;
+    });
+
+    const sec = document.createElement('div');
+    sec.className = 'nat-section';
+    sec.innerHTML = `
+      <div class="nat-section-hdr ${catBloco.hdrCls}">
+        <span class="nat-hdr-badge">${catBloco.catKey}</span>
+        <span style="font-size:16px">${catBloco.label}</span>
+        <span style="font-size:12px;opacity:.8;font-weight:400;margin-left:4px">— ${catInfo.desc}</span>
+        <span class="nat-hdr-count">${catBloco.items.length} item${catBloco.items.length>1?'s':''}</span>
+      </div>
+      <div class="hier-tree">${treeHtml}</div>`;
+    cont.appendChild(sec);
+  });
+}
+
+// ═══ TABS ══════════════════════════════════════════════════════════════
+function showTab(id, btn) {
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.getElementById('view-'+id).classList.add('active');
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+}
+
+// ═══ INIT ══════════════════════════════════════════════════════════════
+window.addEventListener('DOMContentLoaded', () => {
+  renderTable(DATA);
+  buildAcao();
+  buildFuncao();
+  buildElemento();
+  buildNatureza();
+});
+
+// ── SINCRONIZAÇÃO GOOGLE SHEETS ──────────────────────────────────────
+const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSYA6B6DpSzF0wVdYVJIhyeDNT3_iyCJnKmMbk9BYq9LODpbSQcA-3yOTfFbSRQce_2IWNGjrYs_G-n/pub?gid=0&single=true&output=csv';
+
+function setSyncUI(state, label, time) {
+  document.getElementById('syncDot').className   = 'sync-dot ' + state;
+  document.getElementById('syncLabel').textContent = label;
+  document.getElementById('syncTime').textContent  = time || '';
+  document.getElementById('syncIcon').className    = state === 'syncing' ? 'fas fa-rotate-right spin' : 'fas fa-rotate-right';
+  document.getElementById('syncBtn').disabled      = state === 'syncing';
+}
+
+function parseCSV(txt) {
+  const lines = txt.split(/\r?\n/);
+  const headers = [];
+  const rows = [];
+  let inQ = false, cur = '', cols = [];
+  for (let li = 0; li < lines.length; li++) {
+    const line = lines[li];
+    cols = []; cur = ''; inQ = false;
+    for (let i = 0; i < line.length; i++) {
+      const c = line[i];
+      if (c === '"') { inQ = !inQ; continue; }
+      if (c === ',' && !inQ) { cols.push(cur.trim()); cur = ''; continue; }
+      cur += c;
+    }
+    cols.push(cur.trim());
+    if (li === 0) { cols.forEach(c => headers.push(c.trim())); continue; }
+    if (cols.every(c => !c)) continue;
+    const obj = {};
+    headers.forEach((h, i) => obj[h] = (cols[i] || '').trim());
+    rows.push(obj);
+  }
+  return rows;
+}
+
+function csvRowToEntry(r) {
+  const g = (...ks) => { for (const k of ks) { const f = Object.keys(r).find(rk => rk.toLowerCase().replace(/[áàãâ]/g,'a').replace(/[çc]/g,'c').replace(/[õô]/g,'o') === k.toLowerCase().replace(/[áàãâ]/g,'a').replace(/[çc]/g,'c').replace(/[õô]/g,'o')); if (f && r[f]) return String(r[f]).trim(); } return ''; };
+  const acaoRaw = g('AÇÃO','ACAO'); const subRaw = g('SUBAÇÃO','SUBACAO');
+  const funcRaw = g('FUNÇÃO','FUNCAO'); const sfRaw = g('SUBFUNÇÃO','SUBFUNCAO');
+  const despesa = g('DESPESA'); const elem = g('NOME DO ELEMENTO (PORTARIA 163)','NOME ELEMENTO (P163)','ELEMENTO');
+  const codRaw  = g('CLASSIFICAÇÃO ECONÔMICA DA DESPESA','CLASSIFICACAO ECONOMICA DA DESPESA','CÓDIGO','COD');
+  const acao  = (acaoRaw.match(/^(\d{4})/) || ['',''])[1];
+  const sub   = (subRaw.match(/^(\d{5}[a-z]?)/) || ['',''])[1];
+  const func  = (funcRaw.match(/^(\d+)/) || ['',''])[1];
+  const sfunc = (sfRaw.match(/^(\d+)/) || ['',''])[1];
+  const cod   = String(codRaw).replace(/\.0$/,'').replace(/,0$/,'').trim().padStart(6,'0');
+  const nat   = cod.startsWith('4') ? 'Capital' : 'Corrente';
+  return {acao,acaoFull:acaoRaw,sub,subFull:subRaw,func,funcFull:funcRaw,sfunc,sfuncFull:sfRaw,despesa,elem,cod,nat};
+}
+
+async function doSync() {
+  setSyncUI('syncing', 'Sincronizando...', '');
+  try {
+    const res  = await fetch(CSV_URL, {cache:'no-cache'});
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const txt  = await res.text();
+    if (!txt || txt.length < 30) throw new Error('Resposta vazia');
+    if (txt.trim().startsWith('<')) throw new Error('Planilha não está publicada como CSV');
+    const rows = parseCSV(txt).map(csvRowToEntry).filter(e => e.despesa && e.acao);
+    if (!rows.length) throw new Error('Nenhum dado reconhecido');
+    DATA.length = 0; rows.forEach(e => DATA.push(e));
+    filtered = [...DATA];
+    renderTable(DATA); buildAcao(); buildFuncao(); buildElemento(); buildNatureza();
+    const now = new Date().toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
+    setSyncUI('ok', `Sincronizado — ${DATA.length} itens`, now);
+    setTimeout(() => doSync(), 5*60*1000); // auto-refresh 5 min
+  } catch(e) {
+    console.warn('[Sync]', e.message);
+    setSyncUI('error', 'Erro — usando dados locais: ' + e.message, '');
+  }
+}
+
+window.addEventListener('load', () => {
+  setTimeout(doSync, 800);
+});
+</script>
+</body>
+</html>
