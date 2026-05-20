@@ -547,7 +547,7 @@ tbody tr.data-row td { padding: 10px 16px; vertical-align: middle; }
       <div class="header-divider"></div>
       <div class="header-titles">
         <h1>ARQUITETURA ORÇAMENTÁRIA 2026</h1>
-        <p>Estrutura de Gestão Compartilhada &nbsp;·&nbsp; Governança e Gestão Compartilhada do IBS &nbsp;·&nbsp; Portaria SOF/SEPLAN 163</p>
+        <p>Estrutura de Gestão Compartilhada &nbsp;·&nbsp; <span id="hdrPrograma">Governança e Gestão Compartilhada do CGIBS</span> &nbsp;·&nbsp; Portaria SOF/SEPLAN 163</p>
       </div>
       <div class="header-total">
         <div class="lbl">Total do Programa</div>
@@ -592,9 +592,6 @@ tbody tr.data-row td { padding: 10px 16px; vertical-align: middle; }
     </div>
     <select class="filter-sel" id="filterAcao" onchange="applySearch()">
       <option value="">Todas as Ações</option>
-      <option value="2001">2001 — Remuneração de Pessoal</option>
-      <option value="2002">2002 — Apoio Administrativo</option>
-      <option value="2003">2003 — Plataformas Digitais IBS</option>
     </select>
     <select class="filter-sel" id="filterNat" onchange="applySearch()">
       <option value="">Corrente + Capital</option>
@@ -610,33 +607,33 @@ tbody tr.data-row td { padding: 10px 16px; vertical-align: middle; }
 
 <!-- ══ TABELA COMPLETA ════════════════════════════════════ -->
 <div class="view active" id="view-tabela">
-  <div class="kpi-grid">
+  <div class="kpi-grid" id="kpiGrid">
     <div class="kpi" style="--kpi-color:#1d5fa6">
       <div class="kpi-label">Total do Programa</div>
-      <div class="kpi-main">39</div>
-      <div class="kpi-sub">itens de despesa · 3 ações · 9 subações</div>
+      <div class="kpi-main" id="kpiTotalMain">—</div>
+      <div class="kpi-sub"  id="kpiTotalSub">—</div>
       <span class="kpi-tag">Portaria 163</span>
     </div>
-    <div class="kpi" style="--kpi-color:#5b4db8">
-      <div class="kpi-label">2001 — Pessoal e Encargos</div>
-      <div class="kpi-main">4 itens</div>
-      <div class="kpi-sub">12,8% das dotações · 3 subações</div>
+    <div class="kpi" data-acao="2001" style="--kpi-color:#5b4db8">
+      <div class="kpi-label" data-role="label">—</div>
+      <div class="kpi-main"  data-role="main">—</div>
+      <div class="kpi-sub"   data-role="sub">—</div>
     </div>
-    <div class="kpi" style="--kpi-color:#b45309">
-      <div class="kpi-label">2002 — Apoio Administrativo</div>
-      <div class="kpi-main">27 itens</div>
-      <div class="kpi-sub">17,5% das dotações · 4 subações</div>
+    <div class="kpi" data-acao="2002" style="--kpi-color:#b45309">
+      <div class="kpi-label" data-role="label">—</div>
+      <div class="kpi-main"  data-role="main">—</div>
+      <div class="kpi-sub"   data-role="sub">—</div>
     </div>
-    <div class="kpi" style="--kpi-color:#1b9e6e">
-      <div class="kpi-label">2003 — Plataformas Digitais IBS</div>
-      <div class="kpi-main">7 itens</div>
-      <div class="kpi-sub">69,6% das dotações · 4 subações</div>
+    <div class="kpi" data-acao="2003" style="--kpi-color:#1b9e6e">
+      <div class="kpi-label" data-role="label">—</div>
+      <div class="kpi-main"  data-role="main">—</div>
+      <div class="kpi-sub"   data-role="sub">—</div>
     </div>
   </div>
 
   <div class="card">
     <div class="card-header">
-      <div class="card-header-title"><i class="fas fa-list-check"></i> Detalhamento Integral — 38 Despesas</div>
+      <div class="card-header-title"><i class="fas fa-list-check"></i> Detalhamento Integral — <span id="hdrDetalhamentoCount">—</span> Despesas</div>
       <span class="portaria-badge">PORTARIA 163</span>
     </div>
     <div class="tbl-wrap">
@@ -684,249 +681,45 @@ tbody tr.data-row td { padding: 10px 16px; vertical-align: middle; }
 // ═══════════════════════════════════════════════════════════════════
 // DATA — extraído do Orcamento_CGIBS_2026_Completo_(2).xlsx
 // ═══════════════════════════════════════════════════════════════════
+window.PROGRAMA = 'Governança e Gestão Compartilhada do CGIBS';
 const DATA = [
- // ── AÇÃO 2001 ──────────────────────────────────────────────────────
- {acao:'2001',acaoFull:'2001 - Remuneração de Pessoal e Encargos Sociais',
-  sub:'10001',subFull:'10001 - Gestão da Folha de Pagamento Própria',
-  func:'04',funcFull:'04 - Administração',sfunc:'122',sfuncFull:'122 - Administração Geral',
-  despesa:'Vencimento de Pessoal Civil',
-  elem:'Vencimentos e Vantagens Fixas - Pessoal Civil',cod:'319011',nat:'Corrente'},
-
- {acao:'2001',acaoFull:'2001 - Remuneração de Pessoal e Encargos Sociais',
-  sub:'10001',subFull:'10001 - Gestão da Folha de Pagamento Própria',
-  func:'04',funcFull:'04 - Administração',sfunc:'122',sfuncFull:'122 - Administração Geral',
-  despesa:'Patronal',
-  elem:'Obrigações Patronais',cod:'319013',nat:'Corrente'},
-
- {acao:'2001',acaoFull:'2001 - Remuneração de Pessoal e Encargos Sociais',
-  sub:'10002a',subFull:'10002-A - Indenização de Servidores Cedidos pelos Estados',
-  func:'04',funcFull:'04 - Administração',sfunc:'122',sfuncFull:'122 - Administração Geral',
-  despesa:'Indenização de Servidores Cedidos — Estados',
-  elem:'Vencimentos e Vantagens Fixas - Pessoal Civil',cod:'319096',nat:'Corrente'},
-
- {acao:'2001',acaoFull:'2001 - Remuneração de Pessoal e Encargos Sociais',
-  sub:'10002b',subFull:'10002-B - Indenização de Servidores Cedidos pelos Municípios',
-  func:'04',funcFull:'04 - Administração',sfunc:'122',sfuncFull:'122 - Administração Geral',
-  despesa:'Indenização de Servidores Cedidos — Municípios',
-  elem:'Vencimentos e Vantagens Fixas - Pessoal Civil',cod:'319096',nat:'Corrente'},
-
- // ── AÇÃO 2002 ──────────────────────────────────────────────────────
- {acao:'2002',acaoFull:'2002 - Apoio Administrativo',
-  sub:'10003',subFull:'10003 - Manutenção de Infraestrutura Física e Logística',
-  func:'04',funcFull:'04 - Administração',sfunc:'122',sfuncFull:'122 - Administração Geral',
-  despesa:'Contrato de Aluguel de Imóvel',
-  elem:'Outros Serviços de Terceiros - Pessoa Jurídica',cod:'339039',nat:'Corrente'},
-
- {acao:'2002',acaoFull:'2002 - Apoio Administrativo',
-  sub:'10003',subFull:'10003 - Manutenção de Infraestrutura Física e Logística',
-  func:'04',funcFull:'04 - Administração',sfunc:'122',sfuncFull:'122 - Administração Geral',
-  despesa:'Obras e Instalações (reforma de prédio alugado)',
-  elem:'Obras e Instalações',cod:'449051',nat:'Capital'},
-
- {acao:'2002',acaoFull:'2002 - Apoio Administrativo',
-  sub:'10003',subFull:'10003 - Manutenção de Infraestrutura Física e Logística',
-  func:'04',funcFull:'04 - Administração',sfunc:'122',sfuncFull:'122 - Administração Geral',
-  despesa:'Contrato de Manutenção de Ar-Condicionado',
-  elem:'Outros Serviços de Terceiros - Pessoa Jurídica',cod:'339039',nat:'Corrente'},
-
- {acao:'2002',acaoFull:'2002 - Apoio Administrativo',
-  sub:'10003',subFull:'10003 - Manutenção de Infraestrutura Física e Logística',
-  func:'04',funcFull:'04 - Administração',sfunc:'122',sfuncFull:'122 - Administração Geral',
-  despesa:'Contrato de Conservação e Limpeza',
-  elem:'Locação de Mão-de-Obra',cod:'339037',nat:'Corrente'},
-
- {acao:'2002',acaoFull:'2002 - Apoio Administrativo',
-  sub:'10003',subFull:'10003 - Manutenção de Infraestrutura Física e Logística',
-  func:'04',funcFull:'04 - Administração',sfunc:'122',sfuncFull:'122 - Administração Geral',
-  despesa:'Contrato de Serviço de Vigilância',
-  elem:'Locação de Mão-de-Obra',cod:'339037',nat:'Corrente'},
-
- {acao:'2002',acaoFull:'2002 - Apoio Administrativo',
-  sub:'10003',subFull:'10003 - Manutenção de Infraestrutura Física e Logística',
-  func:'04',funcFull:'04 - Administração',sfunc:'122',sfuncFull:'122 - Administração Geral',
-  despesa:'Energia Elétrica',
-  elem:'Outros Serviços de Terceiros - Pessoa Jurídica',cod:'339039',nat:'Corrente'},
-
- {acao:'2002',acaoFull:'2002 - Apoio Administrativo',
-  sub:'10003',subFull:'10003 - Manutenção de Infraestrutura Física e Logística',
-  func:'04',funcFull:'04 - Administração',sfunc:'122',sfuncFull:'122 - Administração Geral',
-  despesa:'Água e Esgoto',
-  elem:'Outros Serviços de Terceiros - Pessoa Jurídica',cod:'339039',nat:'Corrente'},
-
- {acao:'2002',acaoFull:'2002 - Apoio Administrativo',
-  sub:'10003',subFull:'10003 - Manutenção de Infraestrutura Física e Logística',
-  func:'04',funcFull:'04 - Administração',sfunc:'122',sfuncFull:'122 - Administração Geral',
-  despesa:'Telefonia',
-  elem:'Outros Serviços de Terceiros - Pessoa Jurídica',cod:'339039',nat:'Corrente'},
-
- {acao:'2002',acaoFull:'2002 - Apoio Administrativo',
-  sub:'10003',subFull:'10003 - Manutenção de Infraestrutura Física e Logística',
-  func:'04',funcFull:'04 - Administração',sfunc:'122',sfuncFull:'122 - Administração Geral',
-  despesa:'Contrato de Locação de Veículos',
-  elem:'Outros Serviços de Terceiros - Pessoa Jurídica',cod:'339039',nat:'Corrente'},
-
- {acao:'2002',acaoFull:'2002 - Apoio Administrativo',
-  sub:'10004',subFull:'10004 - Comunicação, Formação e Mobilidade Institucional',
-  func:'04',funcFull:'04 - Administração',sfunc:'122',sfuncFull:'122 - Administração Geral',
-  despesa:'Diárias no País',
-  elem:'Diárias - Civil',cod:'339014',nat:'Corrente'},
-
- {acao:'2002',acaoFull:'2002 - Apoio Administrativo',
-  sub:'10004',subFull:'10004 - Comunicação, Formação e Mobilidade Institucional',
-  func:'04',funcFull:'04 - Administração',sfunc:'122',sfuncFull:'122 - Administração Geral',
-  despesa:'Contrato de Passagens e Despesas com Locomoção',
-  elem:'Passagens e Despesas com Locomoção',cod:'339033',nat:'Corrente'},
-
- {acao:'2002',acaoFull:'2002 - Apoio Administrativo',
-  sub:'10004',subFull:'10004 - Comunicação, Formação e Mobilidade Institucional',
-  func:'04',funcFull:'04 - Administração',sfunc:'128',sfuncFull:'128 - Formação de Recursos Humanos',
-  despesa:'Cursos e Capacitação',
-  elem:'Outros Serviços de Terceiros - Pessoa Jurídica',cod:'339039',nat:'Corrente'},
-
- {acao:'2002',acaoFull:'2002 - Apoio Administrativo',
-  sub:'10004',subFull:'10004 - Comunicação, Formação e Mobilidade Institucional',
-  func:'04',funcFull:'04 - Administração',sfunc:'131',sfuncFull:'131 - Comunicação Social',
-  despesa:'Contrato de Imprensa Oficial',
-  elem:'Outros Serviços de Terceiros - Pessoa Jurídica',cod:'339039',nat:'Corrente'},
-
- {acao:'2002',acaoFull:'2002 - Apoio Administrativo',
-  sub:'10004',subFull:'10004 - Comunicação, Formação e Mobilidade Institucional',
-  func:'04',funcFull:'04 - Administração',sfunc:'131',sfuncFull:'131 - Comunicação Social',
-  despesa:'Publicidade e Propaganda',
-  elem:'Outros Serviços de Terceiros - Pessoa Jurídica',cod:'339039',nat:'Corrente'},
-
- {acao:'2002',acaoFull:'2002 - Apoio Administrativo',
-  sub:'10004',subFull:'10004 - Comunicação, Formação e Mobilidade Institucional',
-  func:'04',funcFull:'04 - Administração',sfunc:'131',sfuncFull:'131 - Comunicação Social',
-  despesa:'Material, Bens ou Serviço para Distribuição Gratuita',
-  elem:'Material, Bem ou Serviço para Distribuição Gratuita',cod:'339032',nat:'Corrente'},
-
- {acao:'2002',acaoFull:'2002 - Apoio Administrativo',
-  sub:'10005',subFull:'10005 - Gestão de Serviços Operacionais e Encargos',
-  func:'04',funcFull:'04 - Administração',sfunc:'122',sfuncFull:'122 - Administração Geral',
-  despesa:'Materiais de Uso e Consumo',
-  elem:'Material de Consumo',cod:'339030',nat:'Corrente'},
-
- {acao:'2002',acaoFull:'2002 - Apoio Administrativo',
-  sub:'10005',subFull:'10005 - Gestão de Serviços Operacionais e Encargos',
-  func:'04',funcFull:'04 - Administração',sfunc:'122',sfuncFull:'122 - Administração Geral',
-  despesa:'Materiais de Escritório',
-  elem:'Material de Consumo',cod:'339030',nat:'Corrente'},
-
- {acao:'2002',acaoFull:'2002 - Apoio Administrativo',
-  sub:'10005',subFull:'10005 - Gestão de Serviços Operacionais e Encargos',
-  func:'04',funcFull:'04 - Administração',sfunc:'122',sfuncFull:'122 - Administração Geral',
-  despesa:'Combustíveis e Lubrificantes Automotivos',
-  elem:'Material de Consumo',cod:'339030',nat:'Corrente'},
-
- {acao:'2002',acaoFull:'2002 - Apoio Administrativo',
-  sub:'10005',subFull:'10005 - Gestão de Serviços Operacionais e Encargos',
-  func:'04',funcFull:'04 - Administração',sfunc:'122',sfuncFull:'122 - Administração Geral',
-  despesa:'Contrato de Serviços de Impressão',
-  elem:'Outros Serviços de Terceiros - Pessoa Jurídica',cod:'339039',nat:'Corrente'},
-
- {acao:'2002',acaoFull:'2002 - Apoio Administrativo',
-  sub:'10005',subFull:'10005 - Gestão de Serviços Operacionais e Encargos',
-  func:'04',funcFull:'04 - Administração',sfunc:'122',sfuncFull:'122 - Administração Geral',
-  despesa:'Contrato de Coffee Breaks',
-  elem:'Outros Serviços de Terceiros - Pessoa Jurídica',cod:'339039',nat:'Corrente'},
-
- {acao:'2002',acaoFull:'2002 - Apoio Administrativo',
-  sub:'10005',subFull:'10005 - Gestão de Serviços Operacionais e Encargos',
-  func:'04',funcFull:'04 - Administração',sfunc:'122',sfuncFull:'122 - Administração Geral',
-  despesa:'Contrato de Serviços Gráficos',
-  elem:'Outros Serviços de Terceiros - Pessoa Jurídica',cod:'339039',nat:'Corrente'},
-
- {acao:'2002',acaoFull:'2002 - Apoio Administrativo',
-  sub:'10005',subFull:'10005 - Gestão de Serviços Operacionais e Encargos',
-  func:'04',funcFull:'04 - Administração',sfunc:'121',sfuncFull:'121 - Planejamento e Orçamento',
-  despesa:'Contrato de Serviço de Consultoria',
-  elem:'Serviços de Consultoria',cod:'339035',nat:'Corrente'},
-
- {acao:'2002',acaoFull:'2002 - Apoio Administrativo',
-  sub:'10005',subFull:'10005 - Gestão de Serviços Operacionais e Encargos',
-  func:'04',funcFull:'04 - Administração',sfunc:'122',sfuncFull:'122 - Administração Geral',
-  despesa:'Contrato de Estagiários',
-  elem:'Outros Serviços de Terceiros - Pessoa Jurídica',cod:'339039',nat:'Corrente'},
-
- {acao:'2002',acaoFull:'2002 - Apoio Administrativo',
-  sub:'10005',subFull:'10005 - Gestão de Serviços Operacionais e Encargos',
-  func:'04',funcFull:'04 - Administração',sfunc:'122',sfuncFull:'122 - Administração Geral',
-  despesa:'Contrato de Serviço Terceirizado de Apoio Administrativo',
-  elem:'Locação de Mão-de-Obra',cod:'339037',nat:'Corrente'},
-
- {acao:'2002',acaoFull:'2002 - Apoio Administrativo',
-  sub:'10005',subFull:'10005 - Gestão de Serviços Operacionais e Encargos',
-  func:'04',funcFull:'04 - Administração',sfunc:'122',sfuncFull:'122 - Administração Geral',
-  despesa:'Auxílio-Alimentação',
-  elem:'Auxílio-Alimentação',cod:'339046',nat:'Corrente'},
-
- {acao:'2002',acaoFull:'2002 - Apoio Administrativo',
-  sub:'10005',subFull:'10005 - Gestão de Serviços Operacionais e Encargos',
-  func:'04',funcFull:'04 - Administração',sfunc:'122',sfuncFull:'122 - Administração Geral',
-  despesa:'Auxílio-Saúde',
-  elem:'Outros Benefícios Assistenciais',cod:'339008',nat:'Corrente'},
-
- {acao:'2002',acaoFull:'2002 - Apoio Administrativo',
-  sub:'10005',subFull:'10005 - Gestão de Serviços Operacionais e Encargos',
-  func:'28',funcFull:'28 - Encargos Especiais',sfunc:'846',sfuncFull:'846 - Outros Encargos Especiais',
-  despesa:'Obrigações Tributárias e Contributivas',
-  elem:'Obrigações Tributárias e Contributivas',cod:'339047',nat:'Corrente'},
-
- // ── AÇÃO 2003 ──────────────────────────────────────────────────────
- {acao:'2003',acaoFull:'2003 - Desenvolvimento, Implantação e Operação das Plataformas Digitais do IBS',
-  sub:'10006',subFull:'10006 - Desenvolvimento e Implantação do Sistema de Distribuição (SD-IBS)',
-  func:'04',funcFull:'04 - Administração',sfunc:'126',sfuncFull:'126 - Tecnologia da Informação',
-  despesa:'Fábrica de Software — Desenvolvimento do SD-IBS',
-  elem:'Serviços de Tecnologia da Informação e Comunicação - Pessoa Jurídica',cod:'339040',nat:'Corrente'},
-
- {acao:'2003',acaoFull:'2003 - Desenvolvimento, Implantação e Operação das Plataformas Digitais do IBS',
-  sub:'10006',subFull:'10006 - Desenvolvimento e Implantação do Sistema de Distribuição (SD-IBS)',
-  func:'04',funcFull:'04 - Administração',sfunc:'126',sfuncFull:'126 - Tecnologia da Informação',
-  despesa:'Contrato de Empresa Especializada em TI — SD-IBS',
-  elem:'Serviços de Tecnologia da Informação e Comunicação - Pessoa Jurídica',cod:'339040',nat:'Corrente'},
-
- {acao:'2003',acaoFull:'2003 - Desenvolvimento, Implantação e Operação das Plataformas Digitais do IBS',
-  sub:'10007',subFull:'10007 - Desenvolvimento e Implantação do Sistema de Gestão Fiscal (SIGEF-IBS)',
-  func:'04',funcFull:'04 - Administração',sfunc:'126',sfuncFull:'126 - Tecnologia da Informação',
-  despesa:'Fábrica de Software — Desenvolvimento do SIGEF-IBS',
-  elem:'Serviços de Tecnologia da Informação e Comunicação - Pessoa Jurídica',cod:'339040',nat:'Corrente'},
-
- {acao:'2003',acaoFull:'2003 - Desenvolvimento, Implantação e Operação das Plataformas Digitais do IBS',
-  sub:'10007',subFull:'10007 - Desenvolvimento e Implantação do Sistema de Gestão Fiscal (SIGEF-IBS)',
-  func:'04',funcFull:'04 - Administração',sfunc:'126',sfuncFull:'126 - Tecnologia da Informação',
-  despesa:'Modernização e Adequação da Infraestrutura do SIGEF-IBS',
-  elem:'Serviços de Tecnologia da Informação e Comunicação - Pessoa Jurídica',cod:'339040',nat:'Corrente'},
-
- {acao:'2003',acaoFull:'2003 - Desenvolvimento, Implantação e Operação das Plataformas Digitais do IBS',
-  sub:'10007',subFull:'10007 - Desenvolvimento e Implantação do Sistema de Gestão Fiscal (SIGEF-IBS)',
-  func:'04',funcFull:'04 - Administração',sfunc:'126',sfuncFull:'126 - Tecnologia da Informação',
-  despesa:'Locação de Estações de Trabalho — SIGEF-IBS',
-  elem:'Serviços de Tecnologia da Informação e Comunicação - Pessoa Jurídica',cod:'339040',nat:'Corrente'},
-
- {acao:'2003',acaoFull:'2003 - Desenvolvimento, Implantação e Operação das Plataformas Digitais do IBS',
-  sub:'10008',subFull:'10008 - Infraestrutura Tecnológica: Servidores, Nuvem e Banco de Dados',
-  func:'04',funcFull:'04 - Administração',sfunc:'126',sfuncFull:'126 - Tecnologia da Informação',
-  despesa:'Aquisição de Servidores, Storage e Equipamentos de Datacenter',
-  elem:'Equipamentos e Material Permanente',cod:'449052',nat:'Capital'},
-
- {acao:'2003',acaoFull:'2003 - Desenvolvimento, Implantação e Operação das Plataformas Digitais do IBS',
-  sub:'10008',subFull:'10008 - Infraestrutura Tecnológica: Servidores, Nuvem e Banco de Dados',
-  func:'04',funcFull:'04 - Administração',sfunc:'126',sfuncFull:'126 - Tecnologia da Informação',
-  despesa:'Licenças de Sistemas, Banco de Dados e Middleware',
-  elem:'Serviços de Tecnologia da Informação e Comunicação - Pessoa Jurídica',cod:'449040',nat:'Capital'},
-
- {acao:'2003',acaoFull:'2003 - Desenvolvimento, Implantação e Operação das Plataformas Digitais do IBS',
-  sub:'10009',subFull:'10009 - Manutenção, Suporte e Sustentação das Plataformas Digitais',
-  func:'04',funcFull:'04 - Administração',sfunc:'126',sfuncFull:'126 - Tecnologia da Informação',
-  despesa:'Contrato de Suporte e Manutenção Evolutiva das Plataformas',
-  elem:'Serviços de Tecnologia da Informação e Comunicação - Pessoa Jurídica',cod:'339040',nat:'Corrente'},
-
- {acao:'2003',acaoFull:'2003 - Desenvolvimento, Implantação e Operação das Plataformas Digitais do IBS',
-  sub:'10009',subFull:'10009 - Manutenção, Suporte e Sustentação das Plataformas Digitais',
-  func:'04',funcFull:'04 - Administração',sfunc:'126',sfuncFull:'126 - Tecnologia da Informação',
-  despesa:'Contrato Link de Internet e Conectividade Dedicada',
-  elem:'Serviços de Tecnologia da Informação e Comunicação - Pessoa Jurídica',cod:'339040',nat:'Corrente'},
+  {programa: "Governança e Gestão Compartilhada do CGIBS", acao: "2001", acaoFull: "2001 - Remuneração de Pessoal", sub: "10001", subFull: "10001 - Gestão da Folha de Pagamento Própria", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Vencimento de Pessoal Civil", elem: "Vencimentos e Vantagens Fixas - Pessoal Civil", cod: "319011", nat: "Corrente", valor: "R$ 15.265.131,23"},
+  {programa: "Governança e Gestão Compartilhada do CGIBS", acao: "2001", acaoFull: "2001 - Remuneração de Pessoal", sub: "10001", subFull: "10001 - Gestão da Folha de Pagamento Própria", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Patronal", elem: "Obrigações Patronais", cod: "319013", nat: "Corrente", valor: "R$ 5.088.377,08"},
+  {programa: "Governança e Gestão Compartilhada do CGIBS", acao: "2001", acaoFull: "2001 - Remuneração de Pessoal", sub: "10002", subFull: "10002 - Ressarcimento e Indenização de Servidores Requisitados", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Indenização de Servidores Cedidos", elem: "Vencimentos e Vantagens Fixas - Pessoal Civil", cod: "319011", nat: "Corrente", valor: "R$ 10.176.754,15"},
+  {programa: "Governança e Gestão Compartilhada do CGIBS", acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10003", subFull: "10003 - Manutenção de Infraestrutura Física e Logística", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Contrato de Aluguel de Imóvel", elem: "Outros Serviços de Terceiros - Pessoa Jurídica", cod: "339039", nat: "Corrente", valor: "R$ 12.212.104,98"},
+  {programa: "Governança e Gestão Compartilhada do CGIBS", acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10003", subFull: "10003 - Manutenção de Infraestrutura Física e Logística", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Obras e Instalações (reforma de prédio alugado)", elem: "Obras e Instalações", cod: "449051", nat: "Capital", valor: "R$ 20.353.508,30"},
+  {programa: "Governança e Gestão Compartilhada do CGIBS", acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10003", subFull: "10003 - Manutenção de Infraestrutura Física e Logística", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Contrato de Manutenção de Ar-Condicionado", elem: "Outros Serviços de Terceiros - Pessoa Jurídica", cod: "339039", nat: "Corrente", valor: "R$ 508.837,71"},
+  {programa: "Governança e Gestão Compartilhada do CGIBS", acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10003", subFull: "10003 - Manutenção de Infraestrutura Física e Logística", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Contrato de Conservação e Limpeza", elem: "Locação de Mão-de-Obra", cod: "339037", nat: "Corrente", valor: "R$ 3.053.026,25"},
+  {programa: "Governança e Gestão Compartilhada do CGIBS", acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10003", subFull: "10003 - Manutenção de Infraestrutura Física e Logística", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Contrato de Serviço de Vigilância", elem: "Locação de Mão-de-Obra", cod: "339037", nat: "Corrente", valor: "R$ 3.053.026,25"},
+  {programa: "Governança e Gestão Compartilhada do CGIBS", acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10003", subFull: "10003 - Manutenção de Infraestrutura Física e Logística", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Energia Elétrica", elem: "Outros Serviços de Terceiros - Pessoa Jurídica", cod: "339039", nat: "Corrente", valor: "R$ 3.053.026,25"},
+  {programa: "Governança e Gestão Compartilhada do CGIBS", acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10003", subFull: "10003 - Manutenção de Infraestrutura Física e Logística", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Água e Esgoto", elem: "Outros Serviços de Terceiros - Pessoa Jurídica", cod: "339039", nat: "Corrente", valor: "R$ 1.017.675,42"},
+  {programa: "Governança e Gestão Compartilhada do CGIBS", acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10003", subFull: "10003 - Manutenção de Infraestrutura Física e Logística", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Telefonia", elem: "Outros Serviços de Terceiros - Pessoa Jurídica", cod: "339039", nat: "Corrente", valor: "R$ 1.017.675,42"},
+  {programa: "Governança e Gestão Compartilhada do CGIBS", acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10003", subFull: "10003 - Manutenção de Infraestrutura Física e Logística", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Contrato de Locação de Veículos", elem: "Outros Serviços de Terceiros - Pessoa Jurídica", cod: "339039", nat: "Corrente", valor: "R$ 5.088.377,08"},
+  {programa: "Governança e Gestão Compartilhada do CGIBS", acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10004", subFull: "10004 - Comunicação Formação e Mobilidade Institucional", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Diárias no País", elem: "Diárias - Civil", cod: "339014", nat: "Corrente", valor: "R$ 25.441.885,38"},
+  {programa: "Governança e Gestão Compartilhada do CGIBS", acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10004", subFull: "10004 - Comunicação Formação e Mobilidade Institucional", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Contrato de Passagens e Despesas com Locomoção", elem: "Passagens e Despesas com Locomoção", cod: "339033", nat: "Corrente", valor: "R$ 20.353.508,30"},
+  {programa: "Governança e Gestão Compartilhada do CGIBS", acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10004", subFull: "10004 - Comunicação Formação e Mobilidade Institucional", func: "04", funcFull: "04 - Administração", sfunc: "128", sfuncFull: "128 - Formação de Recursos Humanos", despesa: "Cursos e Capacitação", elem: "Outros Serviços de Terceiros - Pessoa Jurídica", cod: "339039", nat: "Corrente", valor: "R$ 2.035.350,83"},
+  {programa: "Governança e Gestão Compartilhada do CGIBS", acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10004", subFull: "10004 - Comunicação Formação e Mobilidade Institucional", func: "04", funcFull: "04 - Administração", sfunc: "131", sfuncFull: "131 - Comunicação Social", despesa: "Contrato de Imprensa Oficial", elem: "Outros Serviços de Terceiros - Pessoa Jurídica", cod: "339039", nat: "Corrente", valor: "R$ 508.837,71"},
+  {programa: "Governança e Gestão Compartilhada do CGIBS", acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10004", subFull: "10004 - Comunicação Formação e Mobilidade Institucional", func: "04", funcFull: "04 - Administração", sfunc: "131", sfuncFull: "131 - Comunicação Social", despesa: "Publicidade e Propaganda", elem: "Outros Serviços de Terceiros - Pessoa Jurídica", cod: "339039", nat: "Corrente", valor: "R$ 1.017.675,42"},
+  {programa: "Governança e Gestão Compartilhada do CGIBS", acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10004", subFull: "10004 - Comunicação Formação e Mobilidade Institucional", func: "04", funcFull: "04 - Administração", sfunc: "131", sfuncFull: "131 - Comunicação Social", despesa: "Material Bens ou Serviço para Distribuição Gratuita", elem: "Material, Bem ou Serviço para Distribuição Gratuita", cod: "339032", nat: "Corrente", valor: "R$ 508.837,71"},
+  {programa: "Governança e Gestão Compartilhada do CGIBS", acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10005", subFull: "10005 - Gestão de Serviços Operacionais e Encargos", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Materiais de Uso e Consumo", elem: "Material de Consumo", cod: "339030", nat: "Corrente", valor: "R$ 508.837,71"},
+  {programa: "Governança e Gestão Compartilhada do CGIBS", acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10005", subFull: "10005 - Gestão de Serviços Operacionais e Encargos", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Materiais de Escritório", elem: "Material de Consumo", cod: "339030", nat: "Corrente", valor: "R$ 508.837,71"},
+  {programa: "Governança e Gestão Compartilhada do CGIBS", acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10005", subFull: "10005 - Gestão de Serviços Operacionais e Encargos", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Combustíveis e Lubrificantes Automotivos", elem: "Material de Consumo", cod: "339030", nat: "Corrente", valor: "R$ 508.837,71"},
+  {programa: "Governança e Gestão Compartilhada do CGIBS", acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10005", subFull: "10005 - Gestão de Serviços Operacionais e Encargos", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Contrato de Serviços de Impressão", elem: "Outros Serviços de Terceiros - Pessoa Jurídica", cod: "339039", nat: "Corrente", valor: "R$ 1.017.675,42"},
+  {programa: "Governança e Gestão Compartilhada do CGIBS", acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10005", subFull: "10005 - Gestão de Serviços Operacionais e Encargos", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Contrato de Coffee Breaks", elem: "Outros Serviços de Terceiros - Pessoa Jurídica", cod: "339039", nat: "Corrente", valor: "R$ 508.837,71"},
+  {programa: "Governança e Gestão Compartilhada do CGIBS", acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10005", subFull: "10005 - Gestão de Serviços Operacionais e Encargos", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Contrato de Serviços Gráficos", elem: "Outros Serviços de Terceiros - Pessoa Jurídica", cod: "339039", nat: "Corrente", valor: "R$ 508.837,71"},
+  {programa: "Governança e Gestão Compartilhada do CGIBS", acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10005", subFull: "10005 - Gestão de Serviços Operacionais e Encargos", func: "04", funcFull: "04 - Administração", sfunc: "121", sfuncFull: "121 - Planejamento e Orçamento", despesa: "Contrato de Serviço de Consultoria", elem: "Serviços de Consultoria", cod: "339035", nat: "Corrente", valor: "R$ 40.707.016,60"},
+  {programa: "Governança e Gestão Compartilhada do CGIBS", acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10005", subFull: "10005 - Gestão de Serviços Operacionais e Encargos", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Contrato de Estagiários", elem: "Outros Serviços de Terceiros - Pessoa Jurídica", cod: "339039", nat: "Corrente", valor: "R$ 508.837,71"},
+  {programa: "Governança e Gestão Compartilhada do CGIBS", acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10005", subFull: "10005 - Gestão de Serviços Operacionais e Encargos", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Contrato de Serviço Terceirizado de Apoio Administrativo", elem: "Locação de Mão-de-Obra", cod: "339037", nat: "Corrente", valor: "R$ 5.088.377,08"},
+  {programa: "Governança e Gestão Compartilhada do CGIBS", acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10005", subFull: "10005 - Gestão de Serviços Operacionais e Encargos", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Auxílio-Alimentação", elem: "Auxílio-Alimentação", cod: "339046", nat: "Corrente", valor: "R$ 10.176.754,15"},
+  {programa: "Governança e Gestão Compartilhada do CGIBS", acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10005", subFull: "10005 - Gestão de Serviços Operacionais e Encargos", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Auxílio-Saúde", elem: "Outros Benefícios Assistenciais", cod: "339008", nat: "Corrente", valor: "R$ 5.088.377,08"},
+  {programa: "Governança e Gestão Compartilhada do CGIBS", acao: "2002", acaoFull: "2002 - Apoio Administrativo", sub: "10005", subFull: "10005 - Gestão de Serviços Operacionais e Encargos", func: "28", funcFull: "28 - Encargos Especiais", sfunc: "846", sfuncFull: "846 - Outros Encargos Especiais", despesa: "Obrigações Tributárias e Contributivas", elem: "Obrigações Tributárias e Contributivas", cod: "339047", nat: "Corrente", valor: "R$ 2.035.350,83"},
+  {programa: "Governança e Gestão Compartilhada do CGIBS", acao: "2003", acaoFull: "2003 - Instalação e Manutenção da Infraestrutura Tecnológica da Informação e Comunicação", sub: "10006", subFull: "10006 - Manutenção de Sistemas e Serviços de TIC", func: "04", funcFull: "04 - Administração", sfunc: "126", sfuncFull: "126 - Tecnologia da Informação", despesa: "Serviço de TIC", elem: "Serviços de Tecnologia da Informação e Comunicação - Pessoa Jurídica", cod: "339040", nat: "Corrente", valor: "R$ 101.767.541,51"},
+  {programa: "Governança e Gestão Compartilhada do CGIBS", acao: "2003", acaoFull: "2003 - Instalação e Manutenção da Infraestrutura Tecnológica da Informação e Comunicação", sub: "10006", subFull: "10006 - Manutenção de Sistemas e Serviços de TIC", func: "04", funcFull: "04 - Administração", sfunc: "126", sfuncFull: "126 - Tecnologia da Informação", despesa: "Contrato Link de Internet", elem: "Serviços de Tecnologia da Informação e Comunicação - Pessoa Jurídica", cod: "339040", nat: "Corrente", valor: "R$ 10.176.754,15"},
+  {programa: "Governança e Gestão Compartilhada do CGIBS", acao: "2003", acaoFull: "2003 - Instalação e Manutenção da Infraestrutura Tecnológica da Informação e Comunicação", sub: "10006", subFull: "10006 - Manutenção de Sistemas e Serviços de TIC", func: "04", funcFull: "04 - Administração", sfunc: "126", sfuncFull: "126 - Tecnologia da Informação", despesa: "Modernização da Infraestrutura Tecnológica", elem: "Serviços de Tecnologia da Informação e Comunicação - Pessoa Jurídica", cod: "339040", nat: "Corrente", valor: "R$ 50.883.770,76"},
+  {programa: "Governança e Gestão Compartilhada do CGIBS", acao: "2003", acaoFull: "2003 - Instalação e Manutenção da Infraestrutura Tecnológica da Informação e Comunicação", sub: "10006", subFull: "10006 - Manutenção de Sistemas e Serviços de TIC", func: "04", funcFull: "04 - Administração", sfunc: "126", sfuncFull: "126 - Tecnologia da Informação", despesa: "Locação de Computadores", elem: "Serviços de Tecnologia da Informação e Comunicação - Pessoa Jurídica", cod: "339040", nat: "Corrente", valor: "R$ 10.176.754,15"},
+  {programa: "Governança e Gestão Compartilhada do CGIBS", acao: "2003", acaoFull: "2003 - Instalação e Manutenção da Infraestrutura Tecnológica da Informação e Comunicação", sub: "10006", subFull: "10006 - Manutenção de Sistemas e Serviços de TIC", func: "04", funcFull: "04 - Administração", sfunc: "126", sfuncFull: "126 - Tecnologia da Informação", despesa: "Contrato de Empresa de Tecnologia de Informação", elem: "Serviços de Tecnologia da Informação e Comunicação - Pessoa Jurídica", cod: "339040", nat: "Corrente", valor: "R$ 152.651.312,27"},
+  {programa: "Governança e Gestão Compartilhada do CGIBS", acao: "2003", acaoFull: "2003 - Instalação e Manutenção da Infraestrutura Tecnológica da Informação e Comunicação", sub: "10007", subFull: "10007 - Investimentos em Tecnologia e Ativos Intangíveis", func: "04", funcFull: "04 - Administração", sfunc: "126", sfuncFull: "126 - Tecnologia da Informação", despesa: "Aquisição de equipamentos (Computador Ar-Condicionado etc)", elem: "Equipamentos e Material Permanente", cod: "449052", nat: "Capital", valor: "R$ 30.530.262,45"},
+  {programa: "Governança e Gestão Compartilhada do CGIBS", acao: "2003", acaoFull: "2003 - Instalação e Manutenção da Infraestrutura Tecnológica da Informação e Comunicação", sub: "10007", subFull: "10007 - Investimentos em Tecnologia e Ativos Intangíveis", func: "04", funcFull: "04 - Administração", sfunc: "126", sfuncFull: "126 - Tecnologia da Informação", despesa: "Aquisição de Sistemas e Softwares", elem: "Serviços de Tecnologia da Informação e Comunicação - Pessoa Jurídica", cod: "449040", nat: "Capital", valor: "R$ 305.302.624,53"}
 ];
 
 // ═══ ESTADO ═══════════════════════════════════════════════════════════
@@ -1283,6 +1076,83 @@ function showTab(id, btn) {
   if(btn) btn.classList.add('active');
 }
 
+// ═══ KPIs DINÂMICOS DO CABEÇALHO ═══════════════════════════════════════
+// Lê todos os números diretamente de DATA — não há valores fixos a manter.
+function parseValor(v){
+  if(!v) return 0;
+  const s = String(v).replace(/[R$\s ]/g,'').replace(/\./g,'').replace(',','.');
+  const n = parseFloat(s);
+  return isNaN(n) ? 0 : n;
+}
+function fmtPct(p){
+  return (p*100).toLocaleString('pt-BR',{minimumFractionDigits:1, maximumFractionDigits:1}) + '%';
+}
+function fmtBRL(n){
+  return 'R$ ' + n.toLocaleString('pt-BR',{minimumFractionDigits:2, maximumFractionDigits:2});
+}
+function shortAcaoLabel(full, code){
+  if(!full) return code || '';
+  let txt = String(full).replace(/^\s*\d{4}\s*[-–—]\s*/,'').trim();
+  if(txt.length > 38) txt = txt.slice(0,36).trimEnd() + '…';
+  return (code || '') + ' — ' + txt;
+}
+function updateHeaderKPIs(){
+  const data = Array.isArray(DATA) ? DATA : [];
+  const programa = (typeof window.PROGRAMA === 'string' && window.PROGRAMA) ? window.PROGRAMA : '';
+  const hdrP = document.getElementById('hdrPrograma');
+  if(hdrP && programa) hdrP.textContent = programa;
+
+  const totalItens = data.length;
+  const totalSubs  = new Set(data.map(d => d.sub).filter(Boolean)).size;
+  const totalAcoes = new Set(data.map(d => d.acao).filter(Boolean)).size;
+  const valorTotal = data.reduce((s,d) => s + parseValor(d.valor), 0);
+
+  const elMain = document.getElementById('kpiTotalMain');
+  const elSub  = document.getElementById('kpiTotalSub');
+  if(elMain) elMain.textContent = String(totalItens);
+  if(elSub)  elSub.textContent  = `itens de despesa · ${totalAcoes} ações · ${totalSubs} subações`;
+
+  const elDet = document.getElementById('hdrDetalhamentoCount');
+  if(elDet) elDet.textContent = String(totalItens);
+
+  document.querySelectorAll('.kpi[data-acao]').forEach(card => {
+    const code = card.getAttribute('data-acao');
+    const items = data.filter(d => d.acao === code);
+    const subs  = new Set(items.map(d => d.sub).filter(Boolean)).size;
+    const valor = items.reduce((s,d) => s + parseValor(d.valor), 0);
+    const pct   = valorTotal > 0 ? (valor/valorTotal) : 0;
+    const full  = items.length ? items[0].acaoFull : '';
+    const lbl = card.querySelector('[data-role="label"]');
+    const main= card.querySelector('[data-role="main"]');
+    const sub = card.querySelector('[data-role="sub"]');
+    if(lbl) lbl.textContent = shortAcaoLabel(full, code);
+    if(main) main.textContent = `${items.length} ${items.length===1?'item':'itens'}`;
+    if(sub){
+      const pctTxt = valorTotal > 0 ? fmtPct(pct) + ' das dotações' : '—';
+      sub.textContent = `${pctTxt} · ${subs} ${subs===1?'subação':'subações'}`;
+    }
+  });
+
+  const elValTot = document.querySelector('.header-total .val');
+  if(elValTot && valorTotal > 0) elValTot.innerHTML = fmtBRL(valorTotal).replace(/ /g,'&nbsp;');
+
+  const selAcao = document.getElementById('filterAcao');
+  if(selAcao){
+    const current = selAcao.value;
+    while(selAcao.options.length > 1) selAcao.remove(1);
+    const acoes = [...new Set(data.map(d => d.acao).filter(Boolean))].sort();
+    acoes.forEach(code => {
+      const sample = data.find(d => d.acao === code);
+      const full = sample ? sample.acaoFull : code;
+      const opt = document.createElement('option');
+      opt.value = code;
+      opt.textContent = shortAcaoLabel(full, code);
+      selAcao.appendChild(opt);
+    });
+    if(current) selAcao.value = current;
+  }
+}
+
 // ═══ INIT ══════════════════════════════════════════════════════════════
 window.addEventListener('DOMContentLoaded', () => {
   renderTable(DATA);
@@ -1290,6 +1160,7 @@ window.addEventListener('DOMContentLoaded', () => {
   buildFuncao();
   buildElemento();
   buildNatureza();
+  updateHeaderKPIs();
 });
 
 // ── SINCRONIZAÇÃO GOOGLE SHEETS ──────────────────────────────────────
@@ -1329,17 +1200,19 @@ function parseCSV(txt) {
 
 function csvRowToEntry(r) {
   const g = (...ks) => { for (const k of ks) { const f = Object.keys(r).find(rk => rk.toLowerCase().replace(/[áàãâ]/g,'a').replace(/[çc]/g,'c').replace(/[õô]/g,'o') === k.toLowerCase().replace(/[áàãâ]/g,'a').replace(/[çc]/g,'c').replace(/[õô]/g,'o')); if (f && r[f]) return String(r[f]).trim(); } return ''; };
+  const prog    = g('PROGRAMA');
   const acaoRaw = g('AÇÃO','ACAO'); const subRaw = g('SUBAÇÃO','SUBACAO');
   const funcRaw = g('FUNÇÃO','FUNCAO'); const sfRaw = g('SUBFUNÇÃO','SUBFUNCAO');
   const despesa = g('DESPESA'); const elem = g('NOME DO ELEMENTO (PORTARIA 163)','NOME ELEMENTO (P163)','ELEMENTO');
   const codRaw  = g('CLASSIFICAÇÃO ECONÔMICA DA DESPESA','CLASSIFICACAO ECONOMICA DA DESPESA','CÓDIGO','COD');
+  const valor   = g('VALOR DA DESPESA','VALOR');
   const acao  = (acaoRaw.match(/^(\d{4})/) || ['',''])[1];
   const sub   = (subRaw.match(/^(\d{5}[a-z]?)/) || ['',''])[1];
   const func  = (funcRaw.match(/^(\d+)/) || ['',''])[1];
   const sfunc = (sfRaw.match(/^(\d+)/) || ['',''])[1];
   const cod   = String(codRaw).replace(/\.0$/,'').replace(/,0$/,'').trim().padStart(6,'0');
   const nat   = cod.startsWith('4') ? 'Capital' : 'Corrente';
-  return {acao,acaoFull:acaoRaw,sub,subFull:subRaw,func,funcFull:funcRaw,sfunc,sfuncFull:sfRaw,despesa,elem,cod,nat};
+  return {programa:prog,acao,acaoFull:acaoRaw,sub,subFull:subRaw,func,funcFull:funcRaw,sfunc,sfuncFull:sfRaw,despesa,elem,cod,nat,valor};
 }
 
 async function doSync() {
@@ -1354,7 +1227,10 @@ async function doSync() {
     if (!rows.length) throw new Error('Nenhum dado reconhecido');
     DATA.length = 0; rows.forEach(e => DATA.push(e));
     filtered = [...DATA];
+    const progFromCsv = (rows.find(r => r.programa) || {}).programa || '';
+    if(progFromCsv) window.PROGRAMA = progFromCsv;
     renderTable(DATA); buildAcao(); buildFuncao(); buildElemento(); buildNatureza();
+    updateHeaderKPIs();
     const now = new Date().toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
     setSyncUI('ok', `Sincronizado — ${DATA.length} itens`, now);
     setTimeout(() => doSync(), 5*60*1000); // auto-refresh 5 min
