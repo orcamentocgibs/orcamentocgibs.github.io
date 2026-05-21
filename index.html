@@ -380,11 +380,75 @@ tbody tr.data-row td { padding: 10px 16px; vertical-align: middle; }
   .kpi-grid { grid-template-columns: repeat(2,1fr); }
   .acao-cards { grid-template-columns: 1fr; }
 }
-@media (max-width: 700px) {
-  .header-inner { height: auto; padding: 12px 0; flex-wrap: wrap; }
-  .main, .search-bar { padding-left: 16px; padding-right: 16px; }
-  .nav-wrap, .header { padding-left: 16px; padding-right: 16px; }
-  .tab-btn { padding: 12px 12px; font-size: 12px; }
+
+/* ─── RESPONSIVO ≤ 900px (tablet / celular) ────────────────── */
+@media (max-width: 900px) {
+  /* Padding lateral mais enxuto */
+  .header-top, .header-main, .main, .search-bar, .sync-bar, .nav-wrap {
+    padding-left: 14px; padding-right: 14px;
+  }
+
+  /* HEADER-TOP: permite quebrar linha, badges menores */
+  .header-top-inner { height: auto; min-height: 40px; flex-wrap: wrap; gap: 6px 14px; padding: 8px 0; }
+  .hid-item { padding: 0; margin-right: 0; border-right: none; }
+  .hid-nome { font-size: 10px; }
+  .hid-tag { font-size: 8px; }
+  .header-top-year { margin-left: auto; font-size: 9px; padding: 2px 8px; }
+
+  /* HEADER-MAIN: stack logo / título / total verticalmente */
+  .header-main-inner {
+    height: auto; padding: 12px 0; gap: 10px;
+    flex-direction: column; align-items: stretch;
+  }
+  .header-divider { display: none; }
+  .logo-wrap { align-self: flex-start; height: 48px; padding: 8px 12px; }
+  .logo-wrap img { max-height: 32px; }
+  .header-titles h1 { font-size: 17px; line-height: 1.3; }
+  .header-titles p { font-size: 11px; }
+  .header-total {
+    padding-left: 0; border-left: none;
+    text-align: left; width: 100%;
+    display: flex; align-items: baseline; gap: 8px;
+    border-top: 1px solid var(--slate-200); padding-top: 8px;
+  }
+  .header-total .val { font-size: 17px; }
+
+  /* SYNC BAR: permite quebra de linha em telas estreitas */
+  .sync-bar-inner { height: auto; min-height: 38px; flex-wrap: wrap; padding: 6px 0; gap: 8px; }
+  .sync-btn, .sync-link { padding: 4px 10px; font-size: 11px; }
+
+  /* ABAS: rolagem horizontal */
+  .nav-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .nav-wrap::-webkit-scrollbar { height: 3px; }
+  .nav-inner { flex-wrap: nowrap; min-width: max-content; }
+  .tab-btn { padding: 12px 14px; font-size: 12px; flex-shrink: 0; }
+
+  /* CONTEÚDO principal */
+  .main { padding-top: 14px; padding-bottom: 40px; }
+
+  /* TABELA: scroll horizontal funcional */
+  .tbl-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  table { font-size: 12px; min-width: 720px; }
+  thead th { padding: 10px 12px; }
+
+  /* No mobile: deixa só as abas sticky (header rola fora) */
+  .header { position: static; }
+  .sync-bar { position: static; }
+  .nav-wrap { position: sticky; top: 0; z-index: 90; }
+}
+
+/* ─── RESPONSIVO ≤ 560px (celular estreito) ────────────────── */
+@media (max-width: 560px) {
+  .header-titles h1 { font-size: 15px; }
+  .header-titles p { font-size: 10px; }
+  .header-total .lbl { font-size: 9px; }
+  .header-total .val { font-size: 15px; }
+  .hid-item { font-size: 10px; }
+  .tab-btn { padding: 10px 12px; font-size: 11px; }
+  .tab-btn i { font-size: 11px; }
+  .search-input, .filter-sel { font-size: 12px; padding: 8px 12px 8px 32px; }
+  .filter-sel { padding-left: 10px; min-width: 130px; }
+  .kpi-grid { grid-template-columns: 1fr; }
 }
 ::-webkit-scrollbar { width: 5px; height: 5px; }
 ::-webkit-scrollbar-thumb { background: var(--slate-300); border-radius: 3px; }
@@ -1199,49 +1263,4 @@ function parseCSV(txt) {
 }
 
 function csvRowToEntry(r) {
-  const g = (...ks) => { for (const k of ks) { const f = Object.keys(r).find(rk => rk.toLowerCase().replace(/[áàãâ]/g,'a').replace(/[çc]/g,'c').replace(/[õô]/g,'o') === k.toLowerCase().replace(/[áàãâ]/g,'a').replace(/[çc]/g,'c').replace(/[õô]/g,'o')); if (f && r[f]) return String(r[f]).trim(); } return ''; };
-  const prog    = g('PROGRAMA');
-  const acaoRaw = g('AÇÃO','ACAO'); const subRaw = g('SUBAÇÃO','SUBACAO');
-  const funcRaw = g('FUNÇÃO','FUNCAO'); const sfRaw = g('SUBFUNÇÃO','SUBFUNCAO');
-  const despesa = g('DESPESA'); const elem = g('NOME DO ELEMENTO (PORTARIA 163)','NOME ELEMENTO (P163)','ELEMENTO');
-  const codRaw  = g('CLASSIFICAÇÃO ECONÔMICA DA DESPESA','CLASSIFICACAO ECONOMICA DA DESPESA','CÓDIGO','COD');
-  const valor   = g('VALOR DA DESPESA','VALOR');
-  const acao  = (acaoRaw.match(/^(\d{4})/) || ['',''])[1];
-  const sub   = (subRaw.match(/^(\d{5}[a-z]?)/) || ['',''])[1];
-  const func  = (funcRaw.match(/^(\d+)/) || ['',''])[1];
-  const sfunc = (sfRaw.match(/^(\d+)/) || ['',''])[1];
-  const cod   = String(codRaw).replace(/\.0$/,'').replace(/,0$/,'').trim().padStart(6,'0');
-  const nat   = cod.startsWith('4') ? 'Capital' : 'Corrente';
-  return {programa:prog,acao,acaoFull:acaoRaw,sub,subFull:subRaw,func,funcFull:funcRaw,sfunc,sfuncFull:sfRaw,despesa,elem,cod,nat,valor};
-}
-
-async function doSync() {
-  setSyncUI('syncing', 'Sincronizando...', '');
-  try {
-    const res  = await fetch(CSV_URL, {cache:'no-cache'});
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    const txt  = await res.text();
-    if (!txt || txt.length < 30) throw new Error('Resposta vazia');
-    if (txt.trim().startsWith('<')) throw new Error('Planilha não está publicada como CSV');
-    const rows = parseCSV(txt).map(csvRowToEntry).filter(e => e.despesa && e.acao);
-    if (!rows.length) throw new Error('Nenhum dado reconhecido');
-    DATA.length = 0; rows.forEach(e => DATA.push(e));
-    filtered = [...DATA];
-    const progFromCsv = (rows.find(r => r.programa) || {}).programa || '';
-    if(progFromCsv) window.PROGRAMA = progFromCsv;
-    renderTable(DATA); buildAcao(); buildFuncao(); buildElemento(); buildNatureza();
-    updateHeaderKPIs();
-    const now = new Date().toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
-    setSyncUI('ok', `Sincronizado — ${DATA.length} itens`, now);
-    setTimeout(() => doSync(), 5*60*1000); // auto-refresh 5 min
-  } catch(e) {
-    console.warn('[Sync]', e.message);
-    setSyncUI('error', 'Erro — usando dados locais: ' + e.message, '');
-  }
-}
-
-window.addEventListener('load', () => {
-  setTimeout(doSync, 800);
-});
-</script>
-<
+  const g = (...ks) => { for (c
