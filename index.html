@@ -659,7 +659,10 @@ tbody tr.data-row td { padding: 10px 16px; vertical-align: middle; }
     <span class="sync-label" id="syncLabel">Dados locais</span>
     <span class="sync-time" id="syncTime"></span>
     <a class="sync-link" href="https://docs.google.com/spreadsheets/d/1UTGEbJCL4nFtxmqGysadaJ4zZxcGRVKUz-utLE5qhFk/edit" target="_blank">
-      <i class="fas fa-table-cells"></i> Planilha
+      <i class="fas fa-table-cells"></i> Editar planilha
+    </a>
+    <a class="sync-link" href="https://docs.google.com/spreadsheets/d/1UTGEbJCL4nFtxmqGysadaJ4zZxcGRVKUz-utLE5qhFk/export?format=xlsx" target="_blank" download="BD_CGIBS_2026.xlsx" title="Baixa a versão mais recente do BD em Excel">
+      <i class="fas fa-file-excel"></i> Baixar XLSX
     </a>
     <button class="sync-btn" id="syncBtn" onclick="doSync()">
       <i class="fas fa-rotate-right" id="syncIcon"></i> Sincronizar
@@ -1712,17 +1715,4 @@ async function doSync() {
     renderTable(DATA); buildAcao(); buildFuncao(); buildElemento(); buildNatureza();
     updateHeaderKPIs();
     const now = new Date().toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
-    setSyncUI('ok', `Sincronizado — ${DATA.length} itens`, now);
-    setTimeout(() => doSync(), 5*60*1000);
-  } catch(e) {
-    console.warn('[Sync]', e.message);
-    setSyncUI('error', 'Erro — usando dados locais: ' + e.message, '');
-  }
-}
-
-window.addEventListener('load', () => {
-  setTimeout(doSync, 800);
-});
-</script>
-</body>
-</html>
+    setSyncUI('ok', `Sincronizado — ${
