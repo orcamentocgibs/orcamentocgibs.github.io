@@ -332,7 +332,7 @@ tbody tr.data-row td { padding: 10px 16px; vertical-align: middle; }
   font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 4px;
 }
 .subfuncao-hdr .sf-name { font-size: 12px; font-weight: 700; color: var(--slate-700); }
-.sfunc-count { margin-left: auto; font-size: 11px; color: var(--slate-500); }
+.sfunc-count { font-size: 11px; color: var(--slate-500); padding-left: 14px; font-weight: 600; }
 .chips-row { display: flex; flex-wrap: wrap; gap: 7px; padding: 12px 18px; }
 .chip {
   display: flex; align-items: center; gap: 5px;
@@ -491,9 +491,22 @@ tbody tr.data-row td { padding: 10px 16px; vertical-align: middle; }
 }
 .hier-label { font-size: 13px; font-weight: 700; color: var(--slate-800); }
 .hier-desc  { font-size: 11px; color: var(--slate-400); font-style: italic; }
-.hier-count { margin-left: auto; font-size: 11px; color: var(--slate-500); white-space: nowrap; }
+.hier-count { font-size: 11px; color: var(--slate-500); white-space: nowrap; }
+.hier-val { margin-left: auto; font-size: 13px; font-weight: 800; color: var(--slate-900); font-variant-numeric: tabular-nums; white-space: nowrap; padding-left: 12px; }
+.nat-hdr-val { margin-left: auto; font-size: 15px; font-weight: 900; color: #fff; font-variant-numeric: tabular-nums; white-space: nowrap; opacity: .95; padding-left: 12px; }
+.nat-hdr-count { font-size: 11px; color: rgba(255,255,255,.85); white-space: nowrap; padding-left: 14px; font-weight: 600; }
 
 .nat-despesas-cell { padding: 10px 18px 10px 64px; display: flex; flex-direction: column; gap: 5px; background: var(--white); }
+.nat-despesa-val { font-size: 12px; font-weight: 700; color: var(--blue-800); font-variant-numeric: tabular-nums; white-space: nowrap; margin: 0 8px; }
+
+/* — valores na visao por Funcao e Elemento — */
+.f-val    { margin-left: auto; font-size: 13px; font-weight: 800; color: var(--slate-900); font-variant-numeric: tabular-nums; white-space: nowrap; padding-left: 12px; }
+.f-count  { font-size: 11px; color: var(--slate-500); white-space: nowrap; padding-left: 14px; font-weight: 600; }
+.sfunc-val{ margin-left: auto; font-size: 12px; font-weight: 800; color: var(--slate-800); font-variant-numeric: tabular-nums; white-space: nowrap; padding-left: 12px; }
+.chip-val { font-size: 11px; font-weight: 700; color: var(--blue-800); font-variant-numeric: tabular-nums; white-space: nowrap; margin: 0 6px; padding: 1px 6px; background: var(--blue-50); border-radius: 4px; }
+/* tooltip discreto (icone i de info) */
+.just-icon { cursor: help; transition: color .15s, opacity .15s; }
+.data-row:hover .just-icon, .nat-despesa-row:hover .just-icon { color: var(--blue-600) !important; opacity: 1 !important; }
 
 
 
@@ -575,11 +588,11 @@ tbody tr.data-row td { padding: 10px 16px; vertical-align: middle; }
 <!-- TABS -->
 <nav class="nav-wrap">
   <div class="nav-inner">
-    <button class="tab-btn active" onclick="showTab('tabela',this)"><i class="fas fa-table-list"></i> Tabela Completa</button>
+    <button class="tab-btn active" onclick="showTab('natureza',this)"><i class="fas fa-scale-balanced"></i> Por Natureza</button>
     <button class="tab-btn" onclick="showTab('acao',this)"><i class="fas fa-layer-group"></i> Por Ação e Subação</button>
     <button class="tab-btn" onclick="showTab('funcao',this)"><i class="fas fa-sitemap"></i> Por Função / Subfunção</button>
     <button class="tab-btn" onclick="showTab('elemento',this)"><i class="fas fa-tags"></i> Por Elemento</button>
-    <button class="tab-btn" onclick="showTab('natureza',this)"><i class="fas fa-scale-balanced"></i> Por Natureza</button>
+    <button class="tab-btn" onclick="showTab('tabela',this)"><i class="fas fa-table-list"></i> Tabela Completa</button>
   </div>
 </nav>
 
@@ -605,32 +618,33 @@ tbody tr.data-row td { padding: 10px 16px; vertical-align: middle; }
 
 <div class="main">
 
-<!-- ══ TABELA COMPLETA ════════════════════════════════════ -->
-<div class="view active" id="view-tabela">
-  <div class="kpi-grid" id="kpiGrid">
-    <div class="kpi" style="--kpi-color:#1d5fa6">
-      <div class="kpi-label">Total do Programa</div>
-      <div class="kpi-main" id="kpiTotalMain">—</div>
-      <div class="kpi-sub"  id="kpiTotalSub">—</div>
-      <span class="kpi-tag">Portaria 163</span>
-    </div>
-    <div class="kpi" data-acao="2001" style="--kpi-color:#5b4db8">
-      <div class="kpi-label" data-role="label">—</div>
-      <div class="kpi-main"  data-role="main">—</div>
-      <div class="kpi-sub"   data-role="sub">—</div>
-    </div>
-    <div class="kpi" data-acao="2002" style="--kpi-color:#b45309">
-      <div class="kpi-label" data-role="label">—</div>
-      <div class="kpi-main"  data-role="main">—</div>
-      <div class="kpi-sub"   data-role="sub">—</div>
-    </div>
-    <div class="kpi" data-acao="2003" style="--kpi-color:#1b9e6e">
-      <div class="kpi-label" data-role="label">—</div>
-      <div class="kpi-main"  data-role="main">—</div>
-      <div class="kpi-sub"   data-role="sub">—</div>
-    </div>
+<!-- ══ KPIs (sempre visíveis, fora de qualquer view) ═══════ -->
+<div class="kpi-grid" id="kpiGrid">
+  <div class="kpi" style="--kpi-color:#1d5fa6">
+    <div class="kpi-label">Total do Programa</div>
+    <div class="kpi-main" id="kpiTotalMain">—</div>
+    <div class="kpi-sub"  id="kpiTotalSub">—</div>
+    <span class="kpi-tag">Portaria 163</span>
   </div>
+  <div class="kpi" data-acao="2001" style="--kpi-color:#5b4db8">
+    <div class="kpi-label" data-role="label">—</div>
+    <div class="kpi-main"  data-role="main">—</div>
+    <div class="kpi-sub"   data-role="sub">—</div>
+  </div>
+  <div class="kpi" data-acao="2002" style="--kpi-color:#b45309">
+    <div class="kpi-label" data-role="label">—</div>
+    <div class="kpi-main"  data-role="main">—</div>
+    <div class="kpi-sub"   data-role="sub">—</div>
+  </div>
+  <div class="kpi" data-acao="2003" style="--kpi-color:#1b9e6e">
+    <div class="kpi-label" data-role="label">—</div>
+    <div class="kpi-main"  data-role="main">—</div>
+    <div class="kpi-sub"   data-role="sub">—</div>
+  </div>
+</div>
 
+<!-- ══ TABELA COMPLETA ════════════════════════════════════ -->
+<div class="view" id="view-tabela">
   <div class="card">
     <div class="card-header">
       <div class="card-header-title"><i class="fas fa-list-check"></i> Detalhamento Integral — <span id="hdrDetalhamentoCount">—</span> Despesas</div>
@@ -674,7 +688,7 @@ tbody tr.data-row td { padding: 10px 16px; vertical-align: middle; }
 </div>
 
 <!-- ══ POR NATUREZA DA DESPESA ════════════════════════════ -->
-<div class="view" id="view-natureza">
+<div class="view active" id="view-natureza">
   <div id="natContainer"></div>
 </div>
 
@@ -962,26 +976,39 @@ function buildAcao() {
   ];
   const cont = document.getElementById('acaoCards');
   cont.innerHTML = '';
+  const valTotalGeral = DATA.reduce((s,d)=>s+parseValor(d.valor),0);
   acoes.forEach(a => {
     const rows = DATA.filter(d => d.acao===a.id);
     const subs = {};
-    rows.forEach(d => { if(!subs[d.sub]) subs[d.sub]={full:d.subFull,count:0}; subs[d.sub].count++; });
-    const maxC = Math.max(...Object.values(subs).map(s=>s.count));
-    let subHtml = Object.entries(subs).map(([k,s])=>`
-      <div class="sub-row">
-        <div style="flex:1;min-width:0">
-          <div class="sub-row-name">${s.full.replace(/10\d{3} - /,'')}</div>
-          <div class="sub-mini-bar"><div class="sub-mini-bar-fill" style="width:${(s.count/maxC*100).toFixed(0)}%"></div></div>
-        </div>
-        <div class="sub-row-ct">${s.count} item${s.count>1?'s':''}</div>
-      </div>`).join('');
+    rows.forEach(d => {
+      if(!subs[d.sub]) subs[d.sub]={full:d.subFull,count:0,valor:0};
+      subs[d.sub].count++;
+      subs[d.sub].valor += parseValor(d.valor);
+    });
+    const maxV = Math.max(1, ...Object.values(subs).map(s=>s.valor));
+    const acaoValor = rows.reduce((s,d)=>s+parseValor(d.valor),0);
+    const acaoPct = valTotalGeral>0 ? (acaoValor/valTotalGeral*100) : 0;
+    let subHtml = Object.entries(subs)
+      .sort((a,b)=>b[1].valor-a[1].valor)
+      .map(([k,s])=>`
+        <div class="sub-row">
+          <div style="flex:1;min-width:0">
+            <div class="sub-row-name">${s.full.replace(/10\d{3} - /,'')}</div>
+            <div class="sub-mini-bar"><div class="sub-mini-bar-fill" style="width:${(s.valor/maxV*100).toFixed(1)}%"></div></div>
+          </div>
+          <div class="sub-row-ct" style="text-align:right;min-width:120px">
+            <div style="font-weight:800;color:var(--slate-800);font-variant-numeric:tabular-nums">${fmtBRL(s.valor)}</div>
+            <div style="font-size:10px;color:var(--slate-500);font-weight:500">${s.count} item${s.count>1?'s':''}</div>
+          </div>
+        </div>`).join('');
     const card = document.createElement('div');
     card.className = `acao-card ${a.cls}`;
     card.innerHTML = `
       <div class="acao-card-hdr">
         <div class="acao-card-num">${a.id}</div>
         <div class="acao-card-title">${a.full}</div>
-        <div class="acao-card-meta">${rows.length} itens · ${Object.keys(subs).length} subações</div>
+        <div class="acao-card-meta" style="font-size:18px;font-weight:900;color:#fff;letter-spacing:.5px;margin-top:6px">${fmtBRL(acaoValor)}</div>
+        <div class="acao-card-meta" style="opacity:.85">${rows.length} itens · ${Object.keys(subs).length} subações · ${acaoPct.toFixed(1)}% do total</div>
       </div>
       <div class="sub-rows">${subHtml}</div>`;
     cont.appendChild(card);
@@ -1001,13 +1028,19 @@ function buildFuncao() {
   Object.entries(funcoes).sort().forEach(([fk,fv]) => {
     const block = document.createElement('div');
     block.className = 'funcao-block';
+    const funcItems = Object.values(fv.sfs).flatMap(sf=>sf.items);
+    const funcValor = funcItems.reduce((s,d)=>s+parseValor(d.valor),0);
     let sfHtml = '';
     Object.entries(fv.sfs).sort().forEach(([sfk,sfv]) => {
+      const sfValor = sfv.items.reduce((s,d)=>s+parseValor(d.valor),0);
       const chips = sfv.items.map(d => {
         const ac = ACAO_COLORS[d.acao];
-        return `<div class="chip" title="Ação: ${d.acaoFull}&#10;Elemento: ${d.elem}&#10;Código: ${d.cod}&#10;Natureza: ${d.nat}">
+        const justBit = d.justificativa ? '&#10;&#10;' + d.justificativa : '';
+        const valTxt = d.valor ? `<span class="chip-val">${d.valor}</span>` : '';
+        return `<div class="chip" title="Ação: ${escAttr(d.acaoFull)}&#10;Elemento: ${escAttr(d.elem)}&#10;Código: ${d.cod}&#10;Natureza: ${d.nat}${justBit?'&#10;'+escAttr(justBit):''}">
           <span class="acao-badge ${ac}" style="font-size:9px;padding:1px 5px">${d.acao}</span>
           ${d.despesa}
+          ${valTxt}
           <span class="cod-sm">${d.cod}</span>
         </div>`;
       }).join('');
@@ -1016,6 +1049,7 @@ function buildFuncao() {
           <div class="subfuncao-hdr">
             <span class="sf-code">${sfk}</span>
             <span class="sf-name">${sfv.label.replace(/^\d+ - /,'')}</span>
+            <span class="sfunc-val">${fmtBRL(sfValor)}</span>
             <span class="sfunc-count">${sfv.items.length} item${sfv.items.length>1?'s':''}</span>
           </div>
           <div class="chips-row">${chips}</div>
@@ -1025,6 +1059,8 @@ function buildFuncao() {
       <div class="funcao-hdr">
         <span class="f-code">${fk}</span>
         <span>${fv.label.replace(/^\d+ - /,'')}</span>
+        <span class="f-val">${fmtBRL(funcValor)}</span>
+        <span class="f-count">${funcItems.length} itens</span>
       </div>
       ${sfHtml}`;
     cont.appendChild(block);
@@ -1040,14 +1076,20 @@ function buildElemento() {
   });
   const cont = document.getElementById('elemContainer');
   cont.innerHTML = '';
-  Object.entries(elems).sort((a,b)=>b[1].items.length-a[1].items.length).forEach(([ek,ev]) => {
+  // ordenar por valor desc (em vez de por contagem)
+  Object.entries(elems)
+    .map(([ek,ev])=>({ek,ev,valor:ev.items.reduce((s,d)=>s+parseValor(d.valor),0)}))
+    .sort((a,b)=>b.valor-a.valor)
+    .forEach(({ek,ev,valor}) => {
     const block = document.createElement('div');
     block.className = 'funcao-block';
     const chips = ev.items.map(d => {
       const ac = ACAO_COLORS[d.acao];
-      return `<div class="chip" title="Ação: ${d.acaoFull}&#10;Subação: ${d.subFull}&#10;Código: ${d.cod}">
+      const valTxt = d.valor ? `<span class="chip-val">${d.valor}</span>` : '';
+      return `<div class="chip" title="Ação: ${escAttr(d.acaoFull)}&#10;Subação: ${escAttr(d.subFull)}&#10;Código: ${d.cod}">
         <span class="acao-badge ${ac}" style="font-size:9px;padding:1px 5px">${d.acao}</span>
         ${d.despesa}
+        ${valTxt}
         <span class="cod-sm">${d.cod}</span>
       </div>`;
     }).join('');
@@ -1056,7 +1098,8 @@ function buildElemento() {
       <div class="funcao-hdr">
         <span class="f-code" style="font-family:'JetBrains Mono',monospace">${codsUniq.join(', ')}</span>
         <span>${ek}</span>
-        <span style="margin-left:auto;font-size:12px;opacity:.7">${ev.items.length} item${ev.items.length>1?'s':''}</span>
+        <span class="f-val">${fmtBRL(valor)}</span>
+        <span class="f-count">${ev.items.length} itens</span>
       </div>
       <div class="subfuncao-block"><div class="chips-row">${chips}</div></div>`;
     cont.appendChild(block);
@@ -1108,6 +1151,11 @@ function buildNatureza() {
   const total = DATA.length;
   const corrente = DATA.filter(d => d.nat === 'Corrente');
   const capital  = DATA.filter(d => d.nat === 'Capital');
+  const valCorrente = corrente.reduce((s,d)=>s+parseValor(d.valor),0);
+  const valCapital  = capital .reduce((s,d)=>s+parseValor(d.valor),0);
+  const valTotal    = valCorrente + valCapital;
+  const pctCorrente = valTotal>0 ? (valCorrente/valTotal*100) : 0;
+  const pctCapital  = valTotal>0 ? (valCapital /valTotal*100) : 0;
 
   // ── Cards de resumo ───────────────────────────────────────────────
   const summary = document.createElement('div');
@@ -1115,17 +1163,27 @@ function buildNatureza() {
   summary.innerHTML = `
     <div class="nat-summary-card" style="--nc-color:#1B9E6E">
       <div class="ns-label">Categoria 3 — Despesas Correntes</div>
-      <div class="ns-main">${corrente.length} itens</div>
-      <div class="ns-sub">Manutenção e custeio da atividade pública · ${((corrente.length/total)*100).toFixed(0)}% das despesas</div>
+      <div class="ns-main">${fmtBRL(valCorrente)}</div>
+      <div class="ns-sub">Manutenção e custeio da atividade pública · <strong>${pctCorrente.toFixed(1)}%</strong> · ${corrente.length} itens</div>
       <div class="ns-pct">3</div>
     </div>
     <div class="nat-summary-card" style="--nc-color:#5b4db8">
       <div class="ns-label">Categoria 4 — Despesas de Capital</div>
-      <div class="ns-main">${capital.length} itens</div>
-      <div class="ns-sub">Investimentos e aquisição de ativos permanentes · ${((capital.length/total)*100).toFixed(0)}% das despesas</div>
+      <div class="ns-main">${fmtBRL(valCapital)}</div>
+      <div class="ns-sub">Investimentos e aquisição de ativos permanentes · <strong>${pctCapital.toFixed(1)}%</strong> · ${capital.length} itens</div>
       <div class="ns-pct">4</div>
     </div>`;
   cont.appendChild(summary);
+
+  // ── Barra proporcional 3 vs 4 ────────────────────────────────────
+  if (valTotal > 0) {
+    const bar = document.createElement('div');
+    bar.style.cssText = 'display:flex;height:14px;border-radius:8px;overflow:hidden;margin:18px 0 22px;box-shadow:0 1px 2px rgba(15,23,42,.08)';
+    bar.innerHTML = `
+      <div style="width:${pctCorrente}%;background:#1B9E6E" title="Correntes: ${fmtBRL(valCorrente)} (${pctCorrente.toFixed(1)}%)"></div>
+      <div style="width:${pctCapital}%;background:#5b4db8"  title="Capital: ${fmtBRL(valCapital)} (${pctCapital.toFixed(1)}%)"></div>`;
+    cont.appendChild(bar);
+  }
 
   // ── Árvore hierárquica: Categoria → Grupo → Modalidade → Elemento → Despesas ──
   [
@@ -1150,26 +1208,36 @@ function buildNatureza() {
       byGrupo[gk][mk][ek].push(d);
     });
 
+    const catValor = catBloco.items.reduce((s,d)=>s+parseValor(d.valor),0);
+
     // Monta o HTML da árvore
     let treeHtml = '';
     Object.entries(byGrupo).sort().forEach(([gk, mods]) => {
       const grpInfo = CLASS_ECON.grupo[gk] || { cod: gk.slice(1), label: 'Grupo '+gk.slice(1), desc:'' };
-      const grpTotal = Object.values(mods).flatMap(m => Object.values(m).flat()).length;
+      const grpItems = Object.values(mods).flatMap(m => Object.values(m).flat());
+      const grpTotal = grpItems.length;
+      const grpValor = grpItems.reduce((s,d)=>s+parseValor(d.valor),0);
 
       let modHtml = '';
       Object.entries(mods).sort().forEach(([mk, elems]) => {
         const modInfo = CLASS_ECON.modalidade[mk] || { cod:'90', label:'Aplicações Diretas', desc:'' };
-        const modTotal = Object.values(elems).flat().length;
+        const modItems = Object.values(elems).flat();
+        const modTotal = modItems.length;
+        const modValor = modItems.reduce((s,d)=>s+parseValor(d.valor),0);
 
         let elemHtml = '';
         Object.entries(elems).sort().forEach(([ek, despesas]) => {
           const elemLabel = CLASS_ECON.elemento[ek] || ek;
+          const elemValor = despesas.reduce((s,d)=>s+parseValor(d.valor),0);
           const despHtml = despesas.map(d => {
             const ac = ACAO_COLORS[d.acao];
-            return `<div class="nat-despesa-row">
+            const valTxt = d.valor ? `<span class="nat-despesa-val">${d.valor}</span>` : '';
+            const justAttr = d.justificativa ? ` title="${escAttr(d.justificativa)}"` : '';
+            return `<div class="nat-despesa-row"${justAttr}>
               <span class="acao-badge ${ac} nat-despesa-acao" style="font-size:9px;padding:1px 6px">${d.acao}</span>
               <span style="flex:1;font-weight:600">${d.despesa}</span>
-              <span class="nat-despesa-sub" title="${d.subFull}">${d.subFull.replace(/10\d{3} - /,'')}</span>
+              ${valTxt}
+              <span class="nat-despesa-sub" title="${escAttr(d.subFull)}">${d.subFull.replace(/10\d{3} - /,'')}</span>
             </div>`;
           }).join('');
 
@@ -1179,6 +1247,7 @@ function buildNatureza() {
                 <span class="hier-level-tag" style="background:#f1f5f9;color:#334155;border:1px solid #e2e8f0">ELEMENTO</span>
                 <span class="hier-cod" style="background:#0f172a;color:#fff">${ek}</span>
                 <span class="hier-label" style="font-weight:700;color:#1e293b">${elemLabel}</span>
+                <span class="hier-val">${fmtBRL(elemValor)}</span>
                 <span class="hier-count">${despesas.length} item${despesas.length>1?'s':''}</span>
               </div>
               <div class="nat-despesas-cell">${despHtml}</div>
@@ -1192,6 +1261,7 @@ function buildNatureza() {
               <span class="hier-cod" style="background:#0369a1;color:#fff">${mk}0</span>
               <span class="hier-label">${modInfo.cod} — ${modInfo.label}</span>
               <span class="hier-desc">${modInfo.desc}</span>
+              <span class="hier-val">${fmtBRL(modValor)}</span>
               <span class="hier-count">${modTotal} item${modTotal>1?'s':''}</span>
             </div>
             <div class="hier-mod-body">${elemHtml}</div>
@@ -1205,6 +1275,7 @@ function buildNatureza() {
             <span class="hier-cod" style="background:#15803d;color:#fff">${grpInfo.cod}</span>
             <span class="hier-label">${grpInfo.label}</span>
             <span class="hier-desc">${grpInfo.desc}</span>
+            <span class="hier-val">${fmtBRL(grpValor)}</span>
             <span class="hier-count">${grpTotal} item${grpTotal>1?'s':''}</span>
           </div>
           <div class="hier-grupo-body">${modHtml}</div>
@@ -1218,6 +1289,7 @@ function buildNatureza() {
         <span class="nat-hdr-badge">${catBloco.catKey}</span>
         <span style="font-size:16px">${catBloco.label}</span>
         <span style="font-size:12px;opacity:.8;font-weight:400;margin-left:4px">— ${catInfo.desc}</span>
+        <span class="nat-hdr-val">${fmtBRL(catValor)}</span>
         <span class="nat-hdr-count">${catBloco.items.length} item${catBloco.items.length>1?'s':''}</span>
       </div>
       <div class="hier-tree">${treeHtml}</div>`;
@@ -1266,8 +1338,8 @@ function updateHeaderKPIs(){
 
   const elMain = document.getElementById('kpiTotalMain');
   const elSub  = document.getElementById('kpiTotalSub');
-  if(elMain) elMain.textContent = String(totalItens);
-  if(elSub)  elSub.textContent  = `itens de despesa · ${totalAcoes} ações · ${totalSubs} subações`;
+  if(elMain) elMain.textContent = valorTotal > 0 ? fmtBRL(valorTotal) : '—';
+  if(elSub)  elSub.textContent  = `${totalItens} itens · ${totalAcoes} ações · ${totalSubs} subações`;
 
   const elDet = document.getElementById('hdrDetalhamentoCount');
   if(elDet) elDet.textContent = String(totalItens);
@@ -1283,10 +1355,10 @@ function updateHeaderKPIs(){
     const main= card.querySelector('[data-role="main"]');
     const sub = card.querySelector('[data-role="sub"]');
     if(lbl) lbl.textContent = shortAcaoLabel(full, code);
-    if(main) main.textContent = `${items.length} ${items.length===1?'item':'itens'}`;
+    if(main) main.textContent = valor > 0 ? fmtBRL(valor) : '—';
     if(sub){
       const pctTxt = valorTotal > 0 ? fmtPct(pct) + ' das dotações' : '—';
-      sub.textContent = `${pctTxt} · ${subs} ${subs===1?'subação':'subações'}`;
+      sub.textContent = `${items.length} itens · ${pctTxt} · ${subs} ${subs===1?'subação':'subações'}`;
     }
   });
 
@@ -1386,6 +1458,14 @@ async function doSync() {
     if (txt.trim().startsWith('<')) throw new Error('Planilha não está publicada como CSV');
     const rows = parseCSV(txt).map(csvRowToEntry).filter(e => e.despesa && e.acao);
     if (!rows.length) throw new Error('Nenhum dado reconhecido');
+
+    // Guarda: nao sobrescrever DATA "rico" (12 col) com CSV "pobre" (9 col antigo)
+    const localHasRich  = DATA .some(d => d.unidade || d.justificativa || (d.qtd!==undefined && d.qtd!==''));
+    const remoteHasRich = rows.some(d => d.unidade || d.justificativa || (d.qtd!==undefined && d.qtd!==''));
+    if (localHasRich && !remoteHasRich) {
+      throw new Error('planilha ainda no formato antigo (9 col) — mantendo dados locais');
+    }
+
     DATA.length = 0; rows.forEach(e => DATA.push(e));
     filtered = [...DATA];
     const progFromCsv = (rows.find(r => r.programa) || {}).programa || '';
