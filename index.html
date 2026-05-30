@@ -548,6 +548,47 @@ tbody tr.data-row td { padding: 10px 16px; vertical-align: middle; }
 @media (max-width: 1200px) { .ed-grid { grid-template-columns: 1fr 1fr; } .ed-panel-wide { grid-column: 1 / -1; } .ed-donut-panel { grid-column: 1 / -1; } }
 @media (max-width: 720px)  { .ed-grid { grid-template-columns: 1fr; } }
 
+/* ─── STRIP "POR GRUPO DE DESPESA" (no topo do Por Natureza) ─── */
+.ed-grp-strip { margin-bottom: 18px; }
+.ed-grp-strip-hdr { padding: 0 2px 10px; }
+.ed-grp-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+}
+.ed-grp-card {
+  background: var(--white); border: 1px solid var(--slate-200);
+  border-radius: 12px; padding: 16px 18px;
+  position: relative; overflow: hidden;
+  transition: transform .15s, box-shadow .15s;
+}
+.ed-grp-card:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(15,23,42,.08); }
+.ed-grp-card::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:3px;
+  background: var(--gc, var(--blue-600));
+}
+.ed-grp-head { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+.ed-grp-cod  {
+  font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 800;
+  color: #fff; padding: 3px 8px; border-radius: 5px; flex-shrink: 0;
+  background: var(--gc);
+}
+.ed-grp-name {
+  font-size: 12px; font-weight: 700; color: var(--slate-700);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  text-transform: uppercase; letter-spacing: .03em;
+}
+.ed-grp-val  {
+  font-size: 22px; font-weight: 900; color: var(--slate-900);
+  font-variant-numeric: tabular-nums; letter-spacing: -0.02em;
+  line-height: 1.1; margin-bottom: 6px; white-space: nowrap;
+}
+.ed-grp-meta { display: flex; justify-content: space-between; align-items: baseline; font-size: 11px; color: var(--slate-500); margin-bottom: 8px; }
+.ed-grp-pct strong { color: var(--slate-900); font-weight: 800; }
+.ed-grp-n    { font-weight: 600; }
+.ed-grp-bar  { height: 6px; background: var(--slate-100); border-radius: 4px; overflow: hidden; }
+.ed-grp-bar-fill { height: 100%; border-radius: 4px; transition: width .4s ease; }
+
 
 
 /* ─── SYNC BAR ───────────────────────────────────────────────── */
@@ -1252,7 +1293,42 @@ function buildExecDashHTML(valC, valK, valT, pctC, pctK){
       </div>`;
   }).join('');
 
+  // ── Strip por Grupo de Despesa (Portaria 163: 31, 33, 44, etc) ──
+  const GRP_COLORS = {'31':'#0369a1','32':'#0891b2','33':'#1B9E6E','44':'#5b4db8','45':'#7c3aed','46':'#9333ea'};
+  const grupos = {};
+  DATA.forEach(d => {
+    const gk = (d.cod || '').slice(0,2);
+    if (!gk) return;
+    if (!grupos[gk]) grupos[gk] = {v:0,n:0,label:''};
+    grupos[gk].v += parseValor(d.valor);
+    grupos[gk].n += 1;
+    const info = (typeof CLASS_ECON !== 'undefined') ? CLASS_ECON.grupo[gk] : null;
+    grupos[gk].label = info ? info.label : ('Grupo '+gk);
+  });
+  const grpEntries = Object.entries(grupos).sort((a,b)=>b[1].v-a[1].v);
+  const grpStrip = grpEntries.map(([gk,g])=>{
+    const pct = valT>0 ? (g.v/valT*100) : 0;
+    const color = GRP_COLORS[gk] || '#475569';
+    return `
+      <div class="ed-grp-card" style="--gc:${color}">
+        <div class="ed-grp-head">
+          <span class="ed-grp-cod" style="background:${color}">${gk}</span>
+          <span class="ed-grp-name">${g.label}</span>
+        </div>
+        <div class="ed-grp-val" title="${fmtBRL(g.v)}">${fmtBRLcompact(g.v)}</div>
+        <div class="ed-grp-meta">
+          <span class="ed-grp-pct"><strong>${pct.toFixed(1)}%</strong> do total</span>
+          <span class="ed-grp-n">${g.n} ${g.n===1?'item':'itens'}</span>
+        </div>
+        <div class="ed-grp-bar"><div class="ed-grp-bar-fill" style="width:${pct.toFixed(1)}%;background:${color}"></div></div>
+      </div>`;
+  }).join('');
+
   return `
+    <div class="ed-grp-strip">
+      <div class="ed-panel-hdr ed-grp-strip-hdr"><i class="fas fa-cubes"></i> Por Grupo de Despesa <span style="font-weight:600;color:var(--slate-400);text-transform:none;letter-spacing:0">— Classificação Econômica · Portaria 163</span></div>
+      <div class="ed-grp-grid">${grpStrip}</div>
+    </div>
     <div class="ed-grid">
       <div class="ed-panel ed-donut-panel">
         <div class="ed-panel-hdr"><i class="fas fa-chart-pie"></i> Composição da Despesa</div>
@@ -1448,8 +1524,7 @@ function showTab(id, btn) {
   if(btn) btn.classList.add('active');
 }
 
-// ═══ KPIs DINÂMICOS DO CABEÇALHO ═══════════════════════════════════════
-// Lê todos os números diretamente de DATA — não há valores fixos a manter.
+// ═══ HELPERS DE FORMATACAO ═══════════════════════════════════════════
 function parseValor(v){
   if(!v) return 0;
   const s = String(v).replace(/[R$\s ]/g,'').replace(/\./g,'').replace(',','.');
@@ -1477,15 +1552,75 @@ function shortAcaoLabel(full, code){
   return (code || '') + ' — ' + txt;
 }
 
-// ═══ TABS ═══
-function showTab(id, btn) {
-  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
-  document.getElementById('view-'+id).classList.add('active');
-  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
-  if(btn) btn.classList.add('active');
+// ═══ KPIs DO TOPO ════════════════════════════════════════════════════
+function updateHeaderKPIs(){
+  const data = Array.isArray(DATA) ? DATA : [];
+  const programa = (typeof window.PROGRAMA === 'string' && window.PROGRAMA) ? window.PROGRAMA : '';
+  const hdrP = document.getElementById('hdrPrograma');
+  if(hdrP && programa) hdrP.textContent = programa;
+
+  const totalItens = data.length;
+  const totalSubs  = new Set(data.map(d => d.sub).filter(Boolean)).size;
+  const totalAcoes = new Set(data.map(d => d.acao).filter(Boolean)).size;
+  const valorTotal = data.reduce((s,d) => s + parseValor(d.valor), 0);
+
+  const elMain = document.getElementById('kpiTotalMain');
+  const elSub  = document.getElementById('kpiTotalSub');
+  if(elMain) {
+    elMain.textContent = valorTotal > 0 ? fmtBRLcompact(valorTotal) : '—';
+    elMain.title = valorTotal > 0 ? fmtBRL(valorTotal) : '';
+  }
+  if(elSub)  elSub.textContent  = `${totalItens} itens · ${totalAcoes} ações · ${totalSubs} subações`;
+
+  const elDet = document.getElementById('hdrDetalhamentoCount');
+  if(elDet) elDet.textContent = String(totalItens);
+
+  document.querySelectorAll('.kpi[data-acao]').forEach(card => {
+    const code = card.getAttribute('data-acao');
+    const items = data.filter(d => d.acao === code);
+    const subs  = new Set(items.map(d => d.sub).filter(Boolean)).size;
+    const valor = items.reduce((s,d) => s + parseValor(d.valor), 0);
+    const pct   = valorTotal > 0 ? (valor/valorTotal) : 0;
+    const full  = items.length ? items[0].acaoFull : '';
+    const lbl = card.querySelector('[data-role="label"]');
+    const main= card.querySelector('[data-role="main"]');
+    const sub = card.querySelector('[data-role="sub"]');
+    if(lbl) lbl.textContent = shortAcaoLabel(full, code);
+    if(main) {
+      main.textContent = valor > 0 ? fmtBRLcompact(valor) : '—';
+      main.title = valor > 0 ? fmtBRL(valor) : '';
+    }
+    if(sub){
+      const pctTxt = valorTotal > 0 ? fmtPct(pct) + ' das dotações' : '—';
+      sub.textContent = `${items.length} itens · ${pctTxt} · ${subs} ${subs===1?'subação':'subações'}`;
+    }
+  });
+
+  const elValTot = document.querySelector('.header-total .val');
+  if(elValTot && valorTotal > 0) {
+    elValTot.innerHTML = fmtBRLcompact(valorTotal).replace(/ /g,'&nbsp;');
+    elValTot.title = fmtBRL(valorTotal);
+    elValTot.style.whiteSpace = 'nowrap';
+  }
+
+  const selAcao = document.getElementById('filterAcao');
+  if(selAcao){
+    const current = selAcao.value;
+    while(selAcao.options.length > 1) selAcao.remove(1);
+    const acoes = [...new Set(data.map(d => d.acao).filter(Boolean))].sort();
+    acoes.forEach(code => {
+      const sample = data.find(d => d.acao === code);
+      const full = sample ? sample.acaoFull : code;
+      const opt = document.createElement('option');
+      opt.value = code;
+      opt.textContent = shortAcaoLabel(full, code);
+      selAcao.appendChild(opt);
+    });
+    if(current) selAcao.value = current;
+  }
 }
 
-// ═══ INIT ═══
+// ═══ INIT ════════════════════════════════════════════════════════════
 window.addEventListener('DOMContentLoaded', () => {
   renderTable(DATA);
   buildAcao();
@@ -1496,6 +1631,8 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 // ═══ SINCRONIZACAO GOOGLE SHEETS ═══
+const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSYA6B6DpSzF0wVdYVJIhyeDNT3_iyCJnKmMbk9BYq9LODpbSQcA-3yOTfFbSRQce_2IWNGjrYs_G-n/pub?gid=0&single=true&output=csv';
+
 function setSyncUI(state, label, time) {
   document.getElementById('syncDot').className   = 'sync-dot ' + state;
   document.getElementById('syncLabel').textContent = label;
@@ -1556,15 +1693,14 @@ async function doSync() {
     if (!res.ok) throw new Error('HTTP ' + res.status);
     const txt  = await res.text();
     if (!txt || txt.length < 30) throw new Error('Resposta vazia');
-    if (txt.trim().startsWith('<')) throw new Error('Planilha não está publicada como CSV');
+    if (txt.trim().startsWith('<')) throw new Error('Planilha nao publicada como CSV');
     const rows = parseCSV(txt).map(csvRowToEntry).filter(e => e.despesa && e.acao);
     if (!rows.length) throw new Error('Nenhum dado reconhecido');
 
-    // Guarda: nao sobrescrever DATA "rico" (12 col) com CSV "pobre" (9 col antigo)
     const localHasRich  = DATA .some(d => d.unidade || d.justificativa || (d.qtd!==undefined && d.qtd!==''));
     const remoteHasRich = rows.some(d => d.unidade || d.justificativa || (d.qtd!==undefined && d.qtd!==''));
     if (localHasRich && !remoteHasRich) {
-      setSyncUI('', `Dados locais — ${DATA.length} itens`, 'planilha em atualização');
+      setSyncUI('', `Dados locais — ${DATA.length} itens`, 'planilha em atualizacao');
       setTimeout(() => doSync(), 5*60*1000);
       return;
     }
@@ -1577,7 +1713,7 @@ async function doSync() {
     updateHeaderKPIs();
     const now = new Date().toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
     setSyncUI('ok', `Sincronizado — ${DATA.length} itens`, now);
-    setTimeout(() => doSync(), 5*60*1000); // auto-refresh 5 min
+    setTimeout(() => doSync(), 5*60*1000);
   } catch(e) {
     console.warn('[Sync]', e.message);
     setSyncUI('error', 'Erro — usando dados locais: ' + e.message, '');
