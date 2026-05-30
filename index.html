@@ -1794,4 +1794,10 @@ async function doSync() {
   }
 }
 
-windo
+
+window.addEventListener('load', () => {
+  setTimeout(doSync, 800);
+});
+</script>
+</body>
+</html>
