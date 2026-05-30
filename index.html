@@ -1715,4 +1715,17 @@ async function doSync() {
     renderTable(DATA); buildAcao(); buildFuncao(); buildElemento(); buildNatureza();
     updateHeaderKPIs();
     const now = new Date().toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
-    setSyncUI('ok', `Sincronizado — ${
+    setSyncUI('ok', `Sincronizado — ${DATA.length} itens`, now);
+    setTimeout(() => doSync(), 5*60*1000);
+  } catch(e) {
+    console.warn('[Sync]', e.message);
+    setSyncUI('error', 'Erro — usando dados locais: ' + e.message, '');
+  }
+}
+
+window.addEventListener('load', () => {
+  setTimeout(doSync, 800);
+});
+</script>
+</body>
+</html>
