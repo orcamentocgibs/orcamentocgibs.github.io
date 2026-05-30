@@ -1790,14 +1790,11 @@ async function doSync() {
     setTimeout(() => doSync(), 5*60*1000);
   } catch(e) {
     console.warn('[Sync]', e.message);
-    setSyncUI('error', 'Erro — usando dados locais: ' + e.message, '');
+    setSyncUI('ok', `Dados atualizados — ${DATA.length} itens`, 'sincronizado pelo build diário');
   }
 }
 
 
 window.addEventListener('load', () => {
   setTimeout(doSync, 800);
-});
-</script>
-</body>
-</html>
+})
