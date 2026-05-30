@@ -238,9 +238,11 @@ body { font-family: 'Inter', system-ui, sans-serif; background: var(--slate-50);
   content:''; position:absolute; top:0; left:0; right:0; height:3px;
   background: var(--kpi-color, var(--blue-600));
 }
-.kpi-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--slate-400); margin-bottom: 8px; }
-.kpi-main { font-size: 26px; font-weight: 900; color: var(--slate-900); line-height: 1; margin-bottom: 4px; }
-.kpi-sub  { font-size: 12px; color: var(--slate-500); }
+.kpi-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--slate-400); margin-bottom: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.kpi-main { font-size: 22px; font-weight: 900; color: var(--slate-900); line-height: 1.05; margin-bottom: 4px; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.kpi-sub  { font-size: 11px; color: var(--slate-500); line-height: 1.35; }
+@media (max-width: 1100px){ .kpi-main { font-size: 19px; } }
+@media (max-width: 880px){  .kpi-main { font-size: 17px; } }
 .kpi-tag  { display:inline-block; margin-top:7px; font-size:10px; font-weight:700; padding:2px 9px; border-radius:20px; background:var(--blue-50); color:var(--blue-700); }
 
 /* ─── TABLE ──────────────────────────────────────────────── */
@@ -507,6 +509,44 @@ tbody tr.data-row td { padding: 10px 16px; vertical-align: middle; }
 /* tooltip discreto (icone i de info) */
 .just-icon { cursor: help; transition: color .15s, opacity .15s; }
 .data-row:hover .just-icon, .nat-despesa-row:hover .just-icon { color: var(--blue-600) !important; opacity: 1 !important; }
+
+/* ─── VISÃO EXECUTIVA (dashboard charts) ────────────────────── */
+.exec-dash { margin-bottom: 22px; }
+.ed-grid {
+  display: grid;
+  grid-template-columns: minmax(260px, 1fr) minmax(360px, 1.4fr) minmax(420px, 1.8fr);
+  gap: 14px;
+}
+.ed-panel {
+  background: var(--white); border: 1px solid var(--slate-200);
+  border-radius: 12px; padding: 16px 18px;
+  box-shadow: 0 1px 2px rgba(15,23,42,.04);
+}
+.ed-panel-hdr {
+  font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .08em;
+  color: var(--slate-500); margin-bottom: 14px;
+}
+.ed-panel-hdr i { margin-right: 6px; color: var(--blue-600); }
+.ed-panel-wide { grid-column: 1 / -1; }
+.ed-donut-panel { display: flex; flex-direction: column; }
+.ed-donut-wrap { display: flex; align-items: center; gap: 14px; flex: 1; }
+.ed-donut-legend { display: flex; flex-direction: column; gap: 10px; flex: 1; }
+.ed-leg-item { display: flex; gap: 9px; align-items: flex-start; }
+.ed-leg-sq { width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0; margin-top: 3px; }
+.ed-leg-l  { font-size: 11px; font-weight: 700; color: var(--slate-600); text-transform: uppercase; letter-spacing: .05em; }
+.ed-leg-v  { font-size: 13px; font-weight: 800; color: var(--slate-900); font-variant-numeric: tabular-nums; margin-top: 2px; }
+.ed-bars { display: flex; flex-direction: column; gap: 10px; }
+.ed-bar-row { display: grid; grid-template-columns: minmax(120px, 1.6fr) minmax(80px, 2fr) auto; gap: 10px; align-items: center; }
+.ed-bar-lbl { display: flex; align-items: center; gap: 7px; font-size: 12px; min-width: 0; }
+.ed-bar-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+.ed-bar-id  { font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: var(--slate-500); padding: 1px 5px; background: var(--slate-100); border-radius: 4px; }
+.ed-bar-name { color: var(--slate-700); font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ed-bar-track { height: 9px; background: var(--slate-100); border-radius: 5px; overflow: hidden; }
+.ed-bar-fill  { height: 100%; border-radius: 5px; transition: width .4s ease; }
+.ed-bar-val   { font-size: 12px; font-weight: 800; color: var(--slate-900); font-variant-numeric: tabular-nums; white-space: nowrap; text-align: right; }
+.ed-bar-pct   { display: block; font-size: 10px; font-weight: 600; color: var(--slate-400); margin-top: 1px; }
+@media (max-width: 1200px) { .ed-grid { grid-template-columns: 1fr 1fr; } .ed-panel-wide { grid-column: 1 / -1; } .ed-donut-panel { grid-column: 1 / -1; } }
+@media (max-width: 720px)  { .ed-grid { grid-template-columns: 1fr; } }
 
 
 
@@ -1144,6 +1184,101 @@ const CLASS_ECON = {
   }
 };
 
+// ═══ VISÃO EXECUTIVA (charts SVG inline) ═════════════════════════════
+function buildExecDashHTML(valC, valK, valT, pctC, pctK){
+  // Donut: Correntes vs Capital
+  const R = 64, C = 80, SW = 18;
+  const circ = 2 * Math.PI * R;
+  const dashC = (pctC/100) * circ;
+  const dashK = (pctK/100) * circ;
+  const donut = `
+    <svg viewBox="0 0 160 160" width="170" height="170" style="display:block">
+      <circle cx="${C}" cy="${C}" r="${R}" fill="none" stroke="#e2e8f0" stroke-width="${SW}"/>
+      <circle cx="${C}" cy="${C}" r="${R}" fill="none" stroke="#1B9E6E" stroke-width="${SW}"
+              stroke-dasharray="${dashC} ${circ}" transform="rotate(-90 ${C} ${C})" stroke-linecap="butt"/>
+      <circle cx="${C}" cy="${C}" r="${R}" fill="none" stroke="#5b4db8" stroke-width="${SW}"
+              stroke-dasharray="${dashK} ${circ}" stroke-dashoffset="${-dashC}" transform="rotate(-90 ${C} ${C})" stroke-linecap="butt"/>
+      <text x="${C}" y="${C-4}"  text-anchor="middle" font-size="13" font-weight="700" fill="#475569">Total</text>
+      <text x="${C}" y="${C+18}" text-anchor="middle" font-size="15" font-weight="900" fill="#0f172a" style="font-variant-numeric:tabular-nums">${fmtBRLcompact(valT)}</text>
+    </svg>`;
+
+  // Bars: por Ação (valores)
+  const acoes = [
+    {id:'2001',color:'#5b4db8',name:'Remuneração de Pessoal'},
+    {id:'2002',color:'#b45309',name:'Apoio Administrativo'},
+    {id:'2003',color:'#1B9E6E',name:'Infraestrutura Tecnológica'},
+  ];
+  const byAcao = acoes.map(a => {
+    const items = DATA.filter(d => d.acao===a.id);
+    const v = items.reduce((s,d)=>s+parseValor(d.valor),0);
+    return {...a, v, n:items.length};
+  });
+  const maxA = Math.max(1, ...byAcao.map(a=>a.v));
+  const barsAcao = byAcao.map(a => {
+    const w = (a.v/maxA*100).toFixed(1);
+    const pct = valT>0 ? (a.v/valT*100).toFixed(1) : '0.0';
+    return `
+      <div class="ed-bar-row">
+        <div class="ed-bar-lbl">
+          <span class="ed-bar-dot" style="background:${a.color}"></span>
+          <span class="ed-bar-id">${a.id}</span>
+          <span class="ed-bar-name">${a.name}</span>
+        </div>
+        <div class="ed-bar-track"><div class="ed-bar-fill" style="width:${w}%;background:${a.color}"></div></div>
+        <div class="ed-bar-val">${fmtBRLcompact(a.v)}<span class="ed-bar-pct">${pct}%</span></div>
+      </div>`;
+  }).join('');
+
+  // Top 8 elementos por valor
+  const elems = {};
+  DATA.forEach(d => {
+    if(!elems[d.elem]) elems[d.elem] = {v:0,n:0,cod:d.cod};
+    elems[d.elem].v += parseValor(d.valor);
+    elems[d.elem].n += 1;
+  });
+  const topE = Object.entries(elems).map(([k,o])=>({name:k,...o}))
+    .sort((a,b)=>b.v-a.v).slice(0,8);
+  const maxE = Math.max(1, ...topE.map(e=>e.v));
+  const barsElem = topE.map(e => {
+    const w = (e.v/maxE*100).toFixed(1);
+    const pct = valT>0 ? (e.v/valT*100).toFixed(1) : '0.0';
+    return `
+      <div class="ed-bar-row">
+        <div class="ed-bar-lbl">
+          <span class="ed-bar-name" title="${escAttr(e.name)}">${e.name}</span>
+        </div>
+        <div class="ed-bar-track"><div class="ed-bar-fill" style="width:${w}%;background:#1d5fa6"></div></div>
+        <div class="ed-bar-val">${fmtBRLcompact(e.v)}<span class="ed-bar-pct">${pct}%</span></div>
+      </div>`;
+  }).join('');
+
+  return `
+    <div class="ed-grid">
+      <div class="ed-panel ed-donut-panel">
+        <div class="ed-panel-hdr"><i class="fas fa-chart-pie"></i> Composição da Despesa</div>
+        <div class="ed-donut-wrap">
+          ${donut}
+          <div class="ed-donut-legend">
+            <div class="ed-leg-item"><span class="ed-leg-sq" style="background:#1B9E6E"></span>
+              <div><div class="ed-leg-l">Correntes</div><div class="ed-leg-v">${fmtBRLcompact(valC)} <span style="opacity:.65">· ${pctC.toFixed(1)}%</span></div></div>
+            </div>
+            <div class="ed-leg-item"><span class="ed-leg-sq" style="background:#5b4db8"></span>
+              <div><div class="ed-leg-l">Capital</div><div class="ed-leg-v">${fmtBRLcompact(valK)} <span style="opacity:.65">· ${pctK.toFixed(1)}%</span></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="ed-panel">
+        <div class="ed-panel-hdr"><i class="fas fa-layer-group"></i> Distribuição por Ação</div>
+        <div class="ed-bars">${barsAcao}</div>
+      </div>
+      <div class="ed-panel ed-panel-wide">
+        <div class="ed-panel-hdr"><i class="fas fa-tags"></i> Top 8 Elementos de Despesa</div>
+        <div class="ed-bars">${barsElem}</div>
+      </div>
+    </div>`;
+}
+
 function buildNatureza() {
   const cont = document.getElementById('natContainer');
   cont.innerHTML = '';
@@ -1156,6 +1291,14 @@ function buildNatureza() {
   const valTotal    = valCorrente + valCapital;
   const pctCorrente = valTotal>0 ? (valCorrente/valTotal*100) : 0;
   const pctCapital  = valTotal>0 ? (valCapital /valTotal*100) : 0;
+
+  // ── Visão Executiva — donut + bars por ação + top elementos ──────
+  if (valTotal > 0) {
+    const dash = document.createElement('div');
+    dash.className = 'exec-dash';
+    dash.innerHTML = buildExecDashHTML(valCorrente, valCapital, valTotal, pctCorrente, pctCapital);
+    cont.appendChild(dash);
+  }
 
   // ── Cards de resumo ───────────────────────────────────────────────
   const summary = document.createElement('div');
@@ -1319,70 +1462,30 @@ function fmtPct(p){
 function fmtBRL(n){
   return 'R$ ' + n.toLocaleString('pt-BR',{minimumFractionDigits:2, maximumFractionDigits:2});
 }
+function fmtBRLcompact(n){
+  if(!n || n===0) return 'R$ 0';
+  const abs = Math.abs(n);
+  if(abs >= 1e9) return 'R$ ' + (n/1e9).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2}) + ' bi';
+  if(abs >= 1e6) return 'R$ ' + (n/1e6).toLocaleString('pt-BR',{minimumFractionDigits:1,maximumFractionDigits:2}) + ' mi';
+  if(abs >= 1e3) return 'R$ ' + (n/1e3).toLocaleString('pt-BR',{minimumFractionDigits:1,maximumFractionDigits:1}) + ' mil';
+  return 'R$ ' + n.toLocaleString('pt-BR',{minimumFractionDigits:0,maximumFractionDigits:2});
+}
 function shortAcaoLabel(full, code){
   if(!full) return code || '';
   let txt = String(full).replace(/^\s*\d{4}\s*[-–—]\s*/,'').trim();
   if(txt.length > 38) txt = txt.slice(0,36).trimEnd() + '…';
   return (code || '') + ' — ' + txt;
 }
-function updateHeaderKPIs(){
-  const data = Array.isArray(DATA) ? DATA : [];
-  const programa = (typeof window.PROGRAMA === 'string' && window.PROGRAMA) ? window.PROGRAMA : '';
-  const hdrP = document.getElementById('hdrPrograma');
-  if(hdrP && programa) hdrP.textContent = programa;
 
-  const totalItens = data.length;
-  const totalSubs  = new Set(data.map(d => d.sub).filter(Boolean)).size;
-  const totalAcoes = new Set(data.map(d => d.acao).filter(Boolean)).size;
-  const valorTotal = data.reduce((s,d) => s + parseValor(d.valor), 0);
-
-  const elMain = document.getElementById('kpiTotalMain');
-  const elSub  = document.getElementById('kpiTotalSub');
-  if(elMain) elMain.textContent = valorTotal > 0 ? fmtBRL(valorTotal) : '—';
-  if(elSub)  elSub.textContent  = `${totalItens} itens · ${totalAcoes} ações · ${totalSubs} subações`;
-
-  const elDet = document.getElementById('hdrDetalhamentoCount');
-  if(elDet) elDet.textContent = String(totalItens);
-
-  document.querySelectorAll('.kpi[data-acao]').forEach(card => {
-    const code = card.getAttribute('data-acao');
-    const items = data.filter(d => d.acao === code);
-    const subs  = new Set(items.map(d => d.sub).filter(Boolean)).size;
-    const valor = items.reduce((s,d) => s + parseValor(d.valor), 0);
-    const pct   = valorTotal > 0 ? (valor/valorTotal) : 0;
-    const full  = items.length ? items[0].acaoFull : '';
-    const lbl = card.querySelector('[data-role="label"]');
-    const main= card.querySelector('[data-role="main"]');
-    const sub = card.querySelector('[data-role="sub"]');
-    if(lbl) lbl.textContent = shortAcaoLabel(full, code);
-    if(main) main.textContent = valor > 0 ? fmtBRL(valor) : '—';
-    if(sub){
-      const pctTxt = valorTotal > 0 ? fmtPct(pct) + ' das dotações' : '—';
-      sub.textContent = `${items.length} itens · ${pctTxt} · ${subs} ${subs===1?'subação':'subações'}`;
-    }
-  });
-
-  const elValTot = document.querySelector('.header-total .val');
-  if(elValTot && valorTotal > 0) elValTot.innerHTML = fmtBRL(valorTotal).replace(/ /g,'&nbsp;');
-
-  const selAcao = document.getElementById('filterAcao');
-  if(selAcao){
-    const current = selAcao.value;
-    while(selAcao.options.length > 1) selAcao.remove(1);
-    const acoes = [...new Set(data.map(d => d.acao).filter(Boolean))].sort();
-    acoes.forEach(code => {
-      const sample = data.find(d => d.acao === code);
-      const full = sample ? sample.acaoFull : code;
-      const opt = document.createElement('option');
-      opt.value = code;
-      opt.textContent = shortAcaoLabel(full, code);
-      selAcao.appendChild(opt);
-    });
-    if(current) selAcao.value = current;
-  }
+// ═══ TABS ═══
+function showTab(id, btn) {
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.getElementById('view-'+id).classList.add('active');
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
 }
 
-// ═══ INIT ══════════════════════════════════════════════════════════════
+// ═══ INIT ═══
 window.addEventListener('DOMContentLoaded', () => {
   renderTable(DATA);
   buildAcao();
@@ -1392,9 +1495,7 @@ window.addEventListener('DOMContentLoaded', () => {
   updateHeaderKPIs();
 });
 
-// ── SINCRONIZAÇÃO GOOGLE SHEETS ──────────────────────────────────────
-const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSYA6B6DpSzF0wVdYVJIhyeDNT3_iyCJnKmMbk9BYq9LODpbSQcA-3yOTfFbSRQce_2IWNGjrYs_G-n/pub?gid=0&single=true&output=csv';
-
+// ═══ SINCRONIZACAO GOOGLE SHEETS ═══
 function setSyncUI(state, label, time) {
   document.getElementById('syncDot').className   = 'sync-dot ' + state;
   document.getElementById('syncLabel').textContent = label;
@@ -1463,7 +1564,9 @@ async function doSync() {
     const localHasRich  = DATA .some(d => d.unidade || d.justificativa || (d.qtd!==undefined && d.qtd!==''));
     const remoteHasRich = rows.some(d => d.unidade || d.justificativa || (d.qtd!==undefined && d.qtd!==''));
     if (localHasRich && !remoteHasRich) {
-      throw new Error('planilha ainda no formato antigo (9 col) — mantendo dados locais');
+      setSyncUI('', `Dados locais — ${DATA.length} itens`, 'planilha em atualização');
+      setTimeout(() => doSync(), 5*60*1000);
+      return;
     }
 
     DATA.length = 0; rows.forEach(e => DATA.push(e));
