@@ -657,7 +657,7 @@ tbody tr.data-row td { padding: 10px 10px; vertical-align: middle; }
   <div class="sync-bar-inner">
     <span class="sync-dot" id="syncDot"></span>
     <span class="sync-label" id="syncLabel">Dados atualizados</span>
-    <span class="sync-time" id="syncTime">atualizado em 02/06/2026 16:40</span>
+    <span class="sync-time" id="syncTime">atualizado em 02/06/2026 17:48</span>
     <a class="sync-link" href="https://docs.google.com/spreadsheets/d/1UTGEbJCL4nFtxmqGysadaJ4zZxcGRVKUz-utLE5qhFk/edit" target="_blank" title="Abre a planilha no Google Sheets. Lá você pode editar online, ou Arquivo → Fazer download → Excel (.xlsx) para editar offline e Arquivo → Importar para subir de volta.">
       <i class="fas fa-table-cells"></i> Editar planilha
     </a>
@@ -746,12 +746,12 @@ tbody tr.data-row td { padding: 10px 10px; vertical-align: middle; }
           <th onclick="sortTbl(2)">Função <span class="sort-icon">⇅</span></th>
           <th onclick="sortTbl(3)">Subfunção <span class="sort-icon">⇅</span></th>
           <th onclick="sortTbl(4)">Despesa <span class="sort-icon">⇅</span></th>
-          <th onclick="sortTbl(5)">Elemento (P163) <span class="sort-icon">⇅</span></th>
-          <th onclick="sortTbl(6)" style="text-align:center">Código <span class="sort-icon">⇅</span></th>
-          <th onclick="sortTbl(7)">Natureza <span class="sort-icon">⇅</span></th>
-          <th onclick="sortTbl(8)" style="text-align:right">Valor <span class="sort-icon">⇅</span></th>
-          <th onclick="sortTbl(9)">Demandante <span class="sort-icon">⇅</span></th>
-          <th onclick="sortTbl(10)" style="text-align:center">Qtd <span class="sort-icon">⇅</span></th>
+          <th onclick="sortTbl(5)" style="text-align:center">Qtd <span class="sort-icon">⇅</span></th>
+          <th onclick="sortTbl(6)">Elemento (P163) <span class="sort-icon">⇅</span></th>
+          <th onclick="sortTbl(7)" style="text-align:center">Código <span class="sort-icon">⇅</span></th>
+          <th onclick="sortTbl(8)">Natureza <span class="sort-icon">⇅</span></th>
+          <th onclick="sortTbl(9)" style="text-align:right">Valor <span class="sort-icon">⇅</span></th>
+          <th onclick="sortTbl(10)">Demandante <span class="sort-icon">⇅</span></th>
         </tr></thead>
         <tbody id="tblBody"></tbody>
       </table>
@@ -969,7 +969,7 @@ let filtered = [...DATA];
 let sortCol = 0, sortAsc = true;
 
 // ═══ TABELA ═══════════════════════════════════════════════════════════
-const KEYS = ['acaoFull','subFull','funcFull','sfuncFull','despesa','elem','cod','nat','valor','unidade','qtd'];
+const KEYS = ['acaoFull','subFull','funcFull','sfuncFull','despesa','qtd','elem','cod','nat','valor','unidade'];
 const NUMERIC_KEYS = new Set(['valor','qtd']);
 // Helper p/ parsear "R$ 12.345,67" → 12345.67  (e numero/texto vazio → 0)
 function parseBR(v) {
@@ -1009,12 +1009,12 @@ function renderTable(data) {
       <td class="td-muted">${d.funcFull}</td>
       <td class="td-muted">${d.sfuncFull}</td>
       <td class="td-despesa">${d.despesa}${hasJust}</td>
+      <td style="text-align:center;font-variant-numeric:tabular-nums">${qtdTxt}</td>
       <td class="td-elem">${d.elem}</td>
       <td style="text-align:center"><span class="cod-badge">${d.cod}</span></td>
       <td><span class="nat-badge ${natCls}">${d.nat}</span></td>
       <td style="text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap">${d.valor||''}</td>
       <td class="td-muted">${d.unidade||''}</td>
-      <td style="text-align:center;font-variant-numeric:tabular-nums">${qtdTxt}</td>
     </tr>`;
   });
   body.innerHTML = html;
@@ -1812,7 +1812,7 @@ window.addEventListener('DOMContentLoaded', () => {
 // ═══ SINCRONIZACAO GOOGLE SHEETS ═══
 const CSV_URL = 'https://docs.google.com/spreadsheets/d/1UTGEbJCL4nFtxmqGysadaJ4zZxcGRVKUz-utLE5qhFk/gviz/tq?tqx=out:csv&gid=0';
 // Data/hora da última geração (build diário a partir da planilha) — America/Sao_Paulo
-const BUILD_TS = '02/06/2026 16:40';
+const BUILD_TS = '02/06/2026 17:48';
 
 function setSyncUI(state, label, time) {
   document.getElementById('syncDot').className   = 'sync-dot ' + state;
