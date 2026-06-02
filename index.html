@@ -102,14 +102,14 @@ body { font-family: 'Inter', system-ui, sans-serif; background: var(--slate-50);
   height: 72px;
 }
 .logo-wrap {
-  background: var(--blue-50);
-  border: 1px solid var(--blue-100);
+  background: #fff;
+  border: 1px solid var(--slate-200);
   border-radius: 10px;
-  padding: 10px 16px;
+  padding: 6px 18px;
   display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0; height: 56px;
+  flex-shrink: 0; height: 66px;
 }
-.logo-wrap img { height: 36px; display: block; }
+.logo-wrap img { height: 52px; display: block; }
 .header-divider {
   width: 1px; height: 36px; background: var(--slate-200); flex-shrink: 0;
 }
@@ -656,8 +656,8 @@ tbody tr.data-row td { padding: 10px 16px; vertical-align: middle; }
 <div class="sync-bar">
   <div class="sync-bar-inner">
     <span class="sync-dot" id="syncDot"></span>
-    <span class="sync-label" id="syncLabel">Dados locais</span>
-    <span class="sync-time" id="syncTime"></span>
+    <span class="sync-label" id="syncLabel">Dados atualizados</span>
+    <span class="sync-time" id="syncTime">atualizado em 02/06/2026 15:55</span>
     <a class="sync-link" href="https://docs.google.com/spreadsheets/d/1UTGEbJCL4nFtxmqGysadaJ4zZxcGRVKUz-utLE5qhFk/edit" target="_blank" title="Abre a planilha no Google Sheets. Lá você pode editar online, ou Arquivo → Fazer download → Excel (.xlsx) para editar offline e Arquivo → Importar para subir de volta.">
       <i class="fas fa-table-cells"></i> Editar planilha
     </a>
@@ -669,9 +669,10 @@ tbody tr.data-row td { padding: 10px 16px; vertical-align: middle; }
 <!-- TABS -->
 <nav class="nav-wrap">
   <div class="nav-inner">
-    <button class="tab-btn active" onclick="showTab('natureza',this)"><i class="fas fa-scale-balanced"></i> Por Natureza</button>
-    <button class="tab-btn" onclick="showTab('acao',this)"><i class="fas fa-layer-group"></i> Por Ação e Subação</button>
-    <button class="tab-btn" onclick="showTab('funcao',this)"><i class="fas fa-sitemap"></i> Por Função / Subfunção</button>
+    <button class="tab-btn active" onclick="showTab('natureza',this)"><i class="fas fa-scale-balanced"></i> Natureza</button>
+    <button class="tab-btn" onclick="showTab('acao',this)"><i class="fas fa-layer-group"></i> Programática</button>
+    <button class="tab-btn" onclick="showTab('funcao',this)"><i class="fas fa-sitemap"></i> Funcional</button>
+    <button class="tab-btn" onclick="showTab('gerencial',this)"><i class="fas fa-chart-column"></i> Gerencial</button>
     <button class="tab-btn" onclick="showTab('elemento',this)"><i class="fas fa-tags"></i> Por Elemento</button>
     <button class="tab-btn" onclick="showTab('tabela',this)"><i class="fas fa-table-list"></i> Tabela Completa</button>
   </div>
@@ -699,7 +700,13 @@ tbody tr.data-row td { padding: 10px 16px; vertical-align: middle; }
 
 <div class="main">
 
-<!-- ══ KPIs (sempre visíveis, fora de qualquer view) ═══════ -->
+<!-- ══ NOME DO PROGRAMA (somente aba Programática) ═══════ -->
+<div id="programaBanner" style="display:none;max-width:1400px;margin:0 auto 4px;padding:2px 2px 0">
+  <div style="font-size:10px;font-weight:700;color:var(--slate-400);text-transform:uppercase;letter-spacing:.08em">Programa</div>
+  <div id="programaBannerName" style="font-size:16px;font-weight:900;color:var(--blue-800);letter-spacing:-0.01em;line-height:1.2">—</div>
+</div>
+
+<!-- ══ KPIs (visibilidade controlada por aba) ═══════ -->
 <div class="kpi-grid" id="kpiGrid">
   <div class="kpi" style="--kpi-color:#1d5fa6">
     <div class="kpi-label">Total do Programa</div>
@@ -766,6 +773,11 @@ tbody tr.data-row td { padding: 10px 16px; vertical-align: middle; }
 <!-- ══ POR ELEMENTO ═══════════════════════════════════════ -->
 <div class="view" id="view-elemento">
   <div id="elemContainer"></div>
+</div>
+
+<!-- ══ GERENCIAL (por subfunção) ══════════════════════════ -->
+<div class="view" id="view-gerencial">
+  <div id="gerencialContainer"></div>
 </div>
 
 <!-- ══ POR NATUREZA DA DESPESA ════════════════════════════ -->
@@ -1008,6 +1020,16 @@ function renderTable(data) {
   body.innerHTML = html;
 }
 
+// Re-renderiza TODAS as abas a partir do conjunto filtrado
+function renderAll(data) {
+  renderTable(data);
+  buildAcao(data);
+  buildFuncao(data);
+  buildElemento(data);
+  buildNatureza(data);
+  buildGerencial(data);
+}
+
 function applySearch() {
   const q = document.getElementById('searchInput').value.toLowerCase();
   const acao = document.getElementById('filterAcao').value;
@@ -1021,7 +1043,7 @@ function applySearch() {
     }
     return true;
   });
-  renderTable(filtered);
+  renderAll(filtered);
 }
 
 function clearFilters() {
@@ -1029,7 +1051,7 @@ function clearFilters() {
   document.getElementById('filterAcao').value = '';
   document.getElementById('filterNat').value = '';
   filtered = [...DATA];
-  renderTable(filtered);
+  renderAll(filtered);
 }
 
 function sortTbl(col) {
@@ -1049,7 +1071,7 @@ function sortTbl(col) {
 }
 
 // ═══ POR AÇÃO ═════════════════════════════════════════════════════════
-function buildAcao() {
+function buildAcao(data = filtered) {
   const acoes = [
     {id:'2001',cls:'ac-2001',full:'Remuneração de Pessoal e Encargos Sociais'},
     {id:'2002',cls:'ac-2002',full:'Apoio Administrativo'},
@@ -1057,9 +1079,9 @@ function buildAcao() {
   ];
   const cont = document.getElementById('acaoCards');
   cont.innerHTML = '';
-  const valTotalGeral = DATA.reduce((s,d)=>s+parseValor(d.valor),0);
+  const valTotalGeral = data.reduce((s,d)=>s+parseValor(d.valor),0);
   acoes.forEach(a => {
-    const rows = DATA.filter(d => d.acao===a.id);
+    const rows = data.filter(d => d.acao===a.id);
     const subs = {};
     rows.forEach(d => {
       if(!subs[d.sub]) subs[d.sub]={full:d.subFull,count:0,valor:0};
@@ -1097,12 +1119,12 @@ function buildAcao() {
 }
 
 // ═══ POR FUNÇÃO ═══════════════════════════════════════════════════════
-function buildFuncaoExecDashHTML() {
+function buildFuncaoExecDashHTML(data = filtered) {
   // Agrupa por funcao e por subfuncao com valores
   const byFunc = {};
   const bySf = {};
   let total = 0;
-  DATA.forEach(d => {
+  data.forEach(d => {
     const v = parseValor(d.valor);
     total += v;
     const fk = d.func || '—';
@@ -1171,15 +1193,15 @@ function buildFuncaoExecDashHTML() {
     </div>`;
 }
 
-function buildFuncao() {
+function buildFuncao(data = filtered) {
   const funcoes = {};
-  DATA.forEach(d => {
+  data.forEach(d => {
     if(!funcoes[d.func]) funcoes[d.func]={label:d.funcFull, sfs:{}};
     if(!funcoes[d.func].sfs[d.sfunc]) funcoes[d.func].sfs[d.sfunc]={label:d.sfuncFull, items:[]};
     funcoes[d.func].sfs[d.sfunc].items.push(d);
   });
   const cont = document.getElementById('funcaoContainer');
-  cont.innerHTML = buildFuncaoExecDashHTML();
+  cont.innerHTML = buildFuncaoExecDashHTML(data);
   Object.entries(funcoes).sort().forEach(([fk,fv]) => {
     const block = document.createElement('div');
     block.className = 'funcao-block';
@@ -1223,9 +1245,9 @@ function buildFuncao() {
 }
 
 // ═══ POR ELEMENTO ═════════════════════════════════════════════════════
-function buildElemento() {
+function buildElemento(data = filtered) {
   const elems = {};
-  DATA.forEach(d => {
+  data.forEach(d => {
     if(!elems[d.elem]) elems[d.elem]={items:[]};
     elems[d.elem].items.push(d);
   });
@@ -1300,7 +1322,7 @@ const CLASS_ECON = {
 };
 
 // ═══ VISÃO EXECUTIVA (charts SVG inline) ═════════════════════════════
-function buildExecDashHTML(valC, valK, valT, pctC, pctK){
+function buildExecDashHTML(valC, valK, valT, pctC, pctK, data = filtered){
   // Donut: Correntes vs Capital
   const R = 64, C = 80, SW = 18;
   const circ = 2 * Math.PI * R;
@@ -1324,7 +1346,7 @@ function buildExecDashHTML(valC, valK, valT, pctC, pctK){
     {id:'2003',color:'#1B9E6E',name:'Infraestrutura Tecnológica'},
   ];
   const byAcao = acoes.map(a => {
-    const items = DATA.filter(d => d.acao===a.id);
+    const items = data.filter(d => d.acao===a.id);
     const v = items.reduce((s,d)=>s+parseValor(d.valor),0);
     return {...a, v, n:items.length};
   });
@@ -1346,7 +1368,7 @@ function buildExecDashHTML(valC, valK, valT, pctC, pctK){
 
   // Top 8 elementos por valor
   const elems = {};
-  DATA.forEach(d => {
+  data.forEach(d => {
     if(!elems[d.elem]) elems[d.elem] = {v:0,n:0,cod:d.cod};
     elems[d.elem].v += parseValor(d.valor);
     elems[d.elem].n += 1;
@@ -1370,7 +1392,7 @@ function buildExecDashHTML(valC, valK, valT, pctC, pctK){
   // ── Strip por Grupo de Despesa (Portaria 163: 31, 33, 44, etc) ──
   const GRP_COLORS = {'31':'#0369a1','32':'#0891b2','33':'#1B9E6E','44':'#5b4db8','45':'#7c3aed','46':'#9333ea'};
   const grupos = {};
-  DATA.forEach(d => {
+  data.forEach(d => {
     const gk = (d.cod || '').slice(0,2);
     if (!gk) return;
     if (!grupos[gk]) grupos[gk] = {v:0,n:0,label:''};
@@ -1429,13 +1451,13 @@ function buildExecDashHTML(valC, valK, valT, pctC, pctK){
     </div>`;
 }
 
-function buildNatureza() {
+function buildNatureza(data = filtered) {
   const cont = document.getElementById('natContainer');
   cont.innerHTML = '';
 
-  const total = DATA.length;
-  const corrente = DATA.filter(d => d.nat === 'Corrente');
-  const capital  = DATA.filter(d => d.nat === 'Capital');
+  const total = data.length;
+  const corrente = data.filter(d => d.nat === 'Corrente');
+  const capital  = data.filter(d => d.nat === 'Capital');
   const valCorrente = corrente.reduce((s,d)=>s+parseValor(d.valor),0);
   const valCapital  = capital .reduce((s,d)=>s+parseValor(d.valor),0);
   const valTotal    = valCorrente + valCapital;
@@ -1446,7 +1468,7 @@ function buildNatureza() {
   if (valTotal > 0) {
     const dash = document.createElement('div');
     dash.className = 'exec-dash';
-    dash.innerHTML = buildExecDashHTML(valCorrente, valCapital, valTotal, pctCorrente, pctCapital);
+    dash.innerHTML = buildExecDashHTML(valCorrente, valCapital, valTotal, pctCorrente, pctCapital, data);
     cont.appendChild(dash);
   }
 
@@ -1590,12 +1612,91 @@ function buildNatureza() {
   });
 }
 
+// ═══ GERENCIAL (por subfunção) ════════════════════════════════════════
+function buildGerencial(data = filtered) {
+  const cont = document.getElementById('gerencialContainer');
+  cont.innerHTML = '';
+  const bySf = {};
+  let total = 0;
+  data.forEach(d => {
+    const v = parseValor(d.valor);
+    total += v;
+    const sfk = d.sfunc || '—';
+    if (!bySf[sfk]) bySf[sfk] = { label: d.sfuncFull || sfk, v:0, n:0 };
+    bySf[sfk].v += v; bySf[sfk].n += 1;
+  });
+  const entries = Object.entries(bySf).sort((a,b)=>b[1].v-a[1].v);
+  if (!entries.length) { cont.innerHTML = '<div class="no-res" style="display:block"><i class="fas fa-search" style="font-size:24px;margin-bottom:8px;display:block"></i>Nenhuma despesa encontrada com esses filtros.</div>'; return; }
+  const maxV = Math.max(1, ...entries.map(([,o])=>o.v));
+  const SFCOL = {'121':'#5b4db8','122':'#0369a1','123':'#0891b2','124':'#15803d','125':'#1B9E6E','126':'#1d5fa6','128':'#7c3aed','129':'#b45309','131':'#db2777','846':'#dc2626'};
+
+  // Ranking — 3 maiores subfunções
+  const rankCards = entries.slice(0,3).map(([sfk,o],i)=>{
+    const pct = total>0?(o.v/total*100):0;
+    const color = SFCOL[sfk]||'#475569';
+    return `<div class="ed-grp-card" style="--gc:${color}">
+      <div class="ed-grp-head">
+        <span class="ed-grp-cod" style="background:${color}">${i+1}º</span>
+        <span class="ed-grp-name">${sfk} — ${String(o.label).replace(/^\d+ - /,'')}</span>
+      </div>
+      <div class="ed-grp-val" title="${fmtBRL(o.v)}">${fmtBRLcompact(o.v)}</div>
+      <div class="ed-grp-meta">
+        <span class="ed-grp-pct"><strong>${pct.toFixed(1)}%</strong> do total</span>
+        <span class="ed-grp-n">${o.n} ${o.n===1?'item':'itens'}</span>
+      </div>
+      <div class="ed-grp-bar"><div class="ed-grp-bar-fill" style="width:${pct.toFixed(1)}%;background:${color}"></div></div>
+    </div>`;
+  }).join('');
+
+  // Barras — todas as subfunções por valor
+  const bars = entries.map(([sfk,o])=>{
+    const w = (o.v/maxV*100).toFixed(1);
+    const pct = total>0?(o.v/total*100).toFixed(1):'0.0';
+    const color = SFCOL[sfk]||'#475569';
+    const label = String(o.label).replace(/^\d+ - /,'');
+    return `<div class="ed-bar-row">
+      <div class="ed-bar-lbl">
+        <span class="ed-bar-id" style="background:${color};color:#fff;font-weight:800">${sfk}</span>
+        <span class="ed-bar-name" title="${escAttr(o.label)}">${label}</span>
+      </div>
+      <div class="ed-bar-track"><div class="ed-bar-fill" style="width:${w}%;background:${color}"></div></div>
+      <div class="ed-bar-val">${fmtBRLcompact(o.v)}<span class="ed-bar-pct">${pct}% · ${o.n} ${o.n===1?'item':'itens'}</span></div>
+    </div>`;
+  }).join('');
+
+  cont.innerHTML = `
+    <div class="exec-dash">
+      <div class="ed-grp-strip">
+        <div class="ed-panel-hdr ed-grp-strip-hdr"><i class="fas fa-ranking-star"></i> Destaques — Maiores Subfunções</div>
+        <div class="ed-grp-grid">${rankCards}</div>
+      </div>
+      <div class="ed-panel" style="margin-top:16px">
+        <div class="ed-panel-hdr"><i class="fas fa-chart-column"></i> Despesa por Subfunção <span style="font-weight:600;color:var(--slate-400);text-transform:none;letter-spacing:0">— Classificação Funcional · Portaria SOF 42/1999</span></div>
+        <div class="ed-bars">${bars}</div>
+      </div>
+      <div class="card" style="margin-top:16px;padding:16px 18px">
+        <div style="font-size:13px;line-height:1.65;color:var(--slate-600)">
+          <strong style="color:var(--slate-800)">Como ler esta visão.</strong> A aba <strong>Gerencial</strong> apresenta a despesa do programa agrupada exclusivamente por <strong>subfunção</strong> — a menor divisão da classificação funcional (Portaria SOF/SEPLAN 42/1999). Diferentemente das demais abas, abstrai ação, natureza e elemento e oferece a gestores e conselheiros uma leitura direta de <strong>onde o orçamento se concentra por área de atuação</strong>. As barras estão ordenadas da maior para a menor dotação e os percentuais referem-se ao total${total>0?' de '+fmtBRL(total):''}.
+        </div>
+      </div>
+    </div>`;
+}
+
 // ═══ TABS ══════════════════════════════════════════════════════════════
+// Abas que exibem o bloco de KPIs do topo (Total do Programa + Ações)
+const TABS_WITH_KPI = new Set(['acao','elemento','tabela']);
+function updateChrome(id){
+  const kpi = document.getElementById('kpiGrid');
+  if(kpi) kpi.style.display = TABS_WITH_KPI.has(id) ? '' : 'none';
+  const banner = document.getElementById('programaBanner');
+  if(banner) banner.style.display = (id === 'acao') ? '' : 'none';
+}
 function showTab(id, btn) {
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
   document.getElementById('view-'+id).classList.add('active');
   document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
   if(btn) btn.classList.add('active');
+  updateChrome(id);
 }
 
 // ═══ HELPERS DE FORMATACAO ═══════════════════════════════════════════
@@ -1632,6 +1733,8 @@ function updateHeaderKPIs(){
   const programa = (typeof window.PROGRAMA === 'string' && window.PROGRAMA) ? window.PROGRAMA : '';
   const hdrP = document.getElementById('hdrPrograma');
   if(hdrP && programa) hdrP.textContent = programa;
+  const bannerP = document.getElementById('programaBannerName');
+  if(bannerP) bannerP.textContent = programa || '—';
 
   const totalItens = data.length;
   const totalSubs  = new Set(data.map(d => d.sub).filter(Boolean)).size;
@@ -1701,11 +1804,15 @@ window.addEventListener('DOMContentLoaded', () => {
   buildFuncao();
   buildElemento();
   buildNatureza();
+  buildGerencial();
   updateHeaderKPIs();
+  updateChrome('natureza'); // aba inicial: oculta KPIs do topo
 });
 
 // ═══ SINCRONIZACAO GOOGLE SHEETS ═══
 const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSYA6B6DpSzF0wVdYVJIhyeDNT3_iyCJnKmMbk9BYq9LODpbSQcA-3yOTfFbSRQce_2IWNGjrYs_G-n/pub?gid=0&single=true&output=csv';
+// Data/hora da última geração (build diário a partir da planilha) — America/Sao_Paulo
+const BUILD_TS = '02/06/2026 15:55';
 
 function setSyncUI(state, label, time) {
   document.getElementById('syncDot').className   = 'sync-dot ' + state;
@@ -1783,14 +1890,14 @@ async function doSync() {
     filtered = [...DATA];
     const progFromCsv = (rows.find(r => r.programa) || {}).programa || '';
     if(progFromCsv) window.PROGRAMA = progFromCsv;
-    renderTable(DATA); buildAcao(); buildFuncao(); buildElemento(); buildNatureza();
+    renderAll(DATA);
     updateHeaderKPIs();
     const now = new Date().toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
-    setSyncUI('ok', `Sincronizado — ${DATA.length} itens`, now);
+    setSyncUI('ok', `Sincronizado — ${DATA.length} itens`, `atualizado em ${now}`);
     setTimeout(() => doSync(), 5*60*1000);
   } catch(e) {
     console.warn('[Sync]', e.message);
-    setSyncUI('ok', `Dados atualizados — ${DATA.length} itens`, 'sincronizado pelo build diário');
+    setSyncUI('ok', `Dados atualizados — ${DATA.length} itens`, BUILD_TS ? `atualizado em ${BUILD_TS}` : 'atualizado pelo build diário');
   }
 }
 
