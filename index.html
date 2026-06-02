@@ -250,7 +250,7 @@ body { font-family: 'Inter', system-ui, sans-serif; background: var(--slate-50);
 table { width: 100%; border-collapse: collapse; font-size: 13px; }
 thead th {
   background: var(--slate-900); color: var(--white);
-  padding: 12px 16px; text-align: left;
+  padding: 11px 10px; text-align: left;
   font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .07em;
   white-space: nowrap; cursor: pointer; user-select: none;
   position: sticky; top: 0;
@@ -266,7 +266,7 @@ thead th.sorted .sort-icon { opacity: 1; }
   border-left: 4px solid var(--blue-600);
 }
 .tbl-section td {
-  padding: 10px 16px;
+  padding: 10px 10px;
   font-size: 13px; font-weight: 900;
   color: var(--blue-900);
   letter-spacing: 0.02em;
@@ -280,11 +280,11 @@ tbody tr.data-row {
   transition: background 0.1s;
 }
 tbody tr.data-row:hover { background: #f0f6ff; }
-tbody tr.data-row td { padding: 10px 16px; vertical-align: middle; }
+tbody tr.data-row td { padding: 10px 10px; vertical-align: middle; }
 .td-despesa { font-weight: 700; color: var(--slate-900); }
 .td-sub { color: var(--slate-600); font-weight: 600; font-size: 12px; }
-.td-muted { color: var(--slate-500); font-size: 12px; }
-.td-elem { color: var(--slate-700); font-style: italic; font-size: 12px; }
+.td-muted { color: var(--slate-500); font-size: 12px; white-space: normal; }
+.td-elem { color: var(--slate-700); font-style: italic; font-size: 12px; white-space: normal; }
 .cod-badge {
   font-family: 'JetBrains Mono', monospace;
   background: var(--slate-900); color: var(--white);
@@ -657,7 +657,7 @@ tbody tr.data-row td { padding: 10px 16px; vertical-align: middle; }
   <div class="sync-bar-inner">
     <span class="sync-dot" id="syncDot"></span>
     <span class="sync-label" id="syncLabel">Dados atualizados</span>
-    <span class="sync-time" id="syncTime">atualizado em 02/06/2026 16:19</span>
+    <span class="sync-time" id="syncTime">atualizado em 02/06/2026 16:40</span>
     <a class="sync-link" href="https://docs.google.com/spreadsheets/d/1UTGEbJCL4nFtxmqGysadaJ4zZxcGRVKUz-utLE5qhFk/edit" target="_blank" title="Abre a planilha no Google Sheets. Lá você pode editar online, ou Arquivo → Fazer download → Excel (.xlsx) para editar offline e Arquivo → Importar para subir de volta.">
       <i class="fas fa-table-cells"></i> Editar planilha
     </a>
@@ -745,12 +745,12 @@ tbody tr.data-row td { padding: 10px 16px; vertical-align: middle; }
           <th onclick="sortTbl(1)">Subação <span class="sort-icon">⇅</span></th>
           <th onclick="sortTbl(2)">Função <span class="sort-icon">⇅</span></th>
           <th onclick="sortTbl(3)">Subfunção <span class="sort-icon">⇅</span></th>
-          <th onclick="sortTbl(4)">Despesa (Item) <span class="sort-icon">⇅</span></th>
-          <th onclick="sortTbl(5)">Elemento de Despesa (Portaria 163) <span class="sort-icon">⇅</span></th>
+          <th onclick="sortTbl(4)">Despesa <span class="sort-icon">⇅</span></th>
+          <th onclick="sortTbl(5)">Elemento (P163) <span class="sort-icon">⇅</span></th>
           <th onclick="sortTbl(6)" style="text-align:center">Código <span class="sort-icon">⇅</span></th>
           <th onclick="sortTbl(7)">Natureza <span class="sort-icon">⇅</span></th>
           <th onclick="sortTbl(8)" style="text-align:right">Valor <span class="sort-icon">⇅</span></th>
-          <th onclick="sortTbl(9)">Unidade Demandante <span class="sort-icon">⇅</span></th>
+          <th onclick="sortTbl(9)">Demandante <span class="sort-icon">⇅</span></th>
           <th onclick="sortTbl(10)" style="text-align:center">Qtd <span class="sort-icon">⇅</span></th>
         </tr></thead>
         <tbody id="tblBody"></tbody>
@@ -1812,7 +1812,7 @@ window.addEventListener('DOMContentLoaded', () => {
 // ═══ SINCRONIZACAO GOOGLE SHEETS ═══
 const CSV_URL = 'https://docs.google.com/spreadsheets/d/1UTGEbJCL4nFtxmqGysadaJ4zZxcGRVKUz-utLE5qhFk/gviz/tq?tqx=out:csv&gid=0';
 // Data/hora da última geração (build diário a partir da planilha) — America/Sao_Paulo
-const BUILD_TS = '02/06/2026 16:19';
+const BUILD_TS = '02/06/2026 16:40';
 
 function setSyncUI(state, label, time) {
   document.getElementById('syncDot').className   = 'sync-dot ' + state;
