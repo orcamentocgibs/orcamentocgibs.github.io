@@ -657,7 +657,7 @@ tbody tr.data-row td { padding: 10px 10px; vertical-align: middle; }
   <div class="sync-bar-inner">
     <span class="sync-dot" id="syncDot"></span>
     <span class="sync-label" id="syncLabel">Dados atualizados</span>
-    <span class="sync-time" id="syncTime">atualizado em 02/06/2026 17:48</span>
+    <span class="sync-time" id="syncTime">atualizado em 02/06/2026 18:35</span>
     <a class="sync-link" href="https://docs.google.com/spreadsheets/d/1UTGEbJCL4nFtxmqGysadaJ4zZxcGRVKUz-utLE5qhFk/edit" target="_blank" title="Abre a planilha no Google Sheets. Lá você pode editar online, ou Arquivo → Fazer download → Excel (.xlsx) para editar offline e Arquivo → Importar para subir de volta.">
       <i class="fas fa-table-cells"></i> Editar planilha
     </a>
@@ -675,6 +675,7 @@ tbody tr.data-row td { padding: 10px 10px; vertical-align: middle; }
     <button class="tab-btn" onclick="showTab('gerencial',this)"><i class="fas fa-chart-column"></i> Gerencial</button>
     <button class="tab-btn" onclick="showTab('elemento',this)"><i class="fas fa-tags"></i> Por Elemento</button>
     <button class="tab-btn" onclick="showTab('tabela',this)"><i class="fas fa-table-list"></i> Tabela Completa</button>
+    <button class="tab-btn" onclick="showTab('dotacao',this)"><i class="fas fa-file-invoice-dollar"></i> Dotação Orçamentária</button>
   </div>
 </nav>
 
@@ -778,6 +779,11 @@ tbody tr.data-row td { padding: 10px 10px; vertical-align: middle; }
 <!-- ══ GERENCIAL (por subfunção) ══════════════════════════ -->
 <div class="view" id="view-gerencial">
   <div id="gerencialContainer"></div>
+</div>
+
+<!-- ══ DOTAÇÃO ORÇAMENTÁRIA (célula SIGEF) ════════════════ -->
+<div class="view" id="view-dotacao">
+  <div id="dotacaoContainer"></div>
 </div>
 
 <!-- ══ POR NATUREZA DA DESPESA ════════════════════════════ -->
@@ -1028,6 +1034,7 @@ function renderAll(data) {
   buildElemento(data);
   buildNatureza(data);
   buildGerencial(data);
+  buildDotacao(data);
 }
 
 function applySearch() {
@@ -1682,6 +1689,97 @@ function buildGerencial(data = filtered) {
     </div>`;
 }
 
+// ═══ DOTAÇÃO ORÇAMENTÁRIA (célula SIGEF) ══════════════════════════════
+// Célula Orçamentária = UO + Subação + Fonte de Recurso + Natureza Despesa
+const DOT_UO = '10001';                 // Unidade Orçamentária (fixa)
+const DOT_FONTE = '1.754.000.000';      // Fonte de Recurso (fixa)
+function natSigef(cod){
+  const c = String(cod || '').replace(/\D/g,'').padStart(6,'0');
+  return c.slice(0,2) + '.' + c.slice(2,4) + '.' + c.slice(4,6);
+}
+function celulaDe(d){
+  const sub = d.sub || (d.subFull ? (String(d.subFull).match(/\d{4,6}/)||[''])[0] : '') || '';
+  return `${DOT_UO} ${sub} ${DOT_FONTE} ${natSigef(d.cod)}`;
+}
+function brNum(n){ return Number(n||0).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+function dotacaoMatrix(){
+  const head = ['Despesa','Qtd','Célula Orçamentária','Valor'];
+  const rows = filtered.map(d => {
+    const qtd = (d.qtd === '' || d.qtd == null) ? '' : d.qtd;
+    return [d.despesa, qtd, celulaDe(d), brNum(parseValor(d.valor))];
+  });
+  return {head, rows};
+}
+function exportDotacaoCSV(){
+  const {head, rows} = dotacaoMatrix();
+  const esc = v => { v = String(v); return /[";\n]/.test(v) ? '"'+v.replace(/"/g,'""')+'"' : v; };
+  const csv = '﻿' + [head, ...rows].map(r => r.map(esc).join(';')).join('\r\n');
+  const blob = new Blob([csv], {type:'text/csv;charset=utf-8'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'dotacao_orcamentaria_cgibs.csv';
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+}
+async function copiarDotacao(btn){
+  const {head, rows} = dotacaoMatrix();
+  const tsv = [head, ...rows].map(r => r.join('\t')).join('\n');
+  try {
+    await navigator.clipboard.writeText(tsv);
+    const o = btn.innerHTML; btn.innerHTML = '<i class="fas fa-check"></i> Copiado';
+    setTimeout(() => { btn.innerHTML = o; }, 1500);
+  } catch(e) { alert('Não foi possível copiar. Use Exportar CSV.'); }
+}
+function buildDotacao(data = filtered) {
+  const cont = document.getElementById('dotacaoContainer');
+  if (!data.length) {
+    cont.innerHTML = '<div class="card"><div class="no-res" style="display:block"><i class="fas fa-search" style="font-size:24px;margin-bottom:8px;display:block"></i>Nenhuma despesa encontrada com esses filtros.</div></div>';
+    return;
+  }
+  let total = 0;
+  const linhas = data.map(d => {
+    total += parseValor(d.valor);
+    const qtdTxt = (d.qtd === '' || d.qtd == null) ? '' : d.qtd;
+    const justAttr = d.justificativa ? ` title="${escAttr(d.justificativa)}"` : '';
+    return `<tr class="data-row"${justAttr}>
+      <td class="td-despesa">${d.despesa}</td>
+      <td style="text-align:center;font-variant-numeric:tabular-nums">${qtdTxt}</td>
+      <td style="font-family:'JetBrains Mono',monospace;white-space:nowrap;font-weight:700;color:var(--blue-800)">${celulaDe(d)}</td>
+      <td style="text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap">${d.valor||''}</td>
+    </tr>`;
+  }).join('');
+  const btnStyle = "font-family:inherit;font-size:12px;font-weight:700;color:var(--blue-700);background:var(--blue-50);border:1px solid var(--blue-100);border-radius:6px;padding:6px 11px;cursor:pointer;display:inline-flex;align-items:center;gap:6px";
+  cont.innerHTML = `
+    <div class="card">
+      <div class="card-header">
+        <div class="card-header-title"><i class="fas fa-file-invoice-dollar"></i> Dotação Orçamentária — <span>${data.length}</span> despesas</div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <button style="${btnStyle}" onclick="copiarDotacao(this)" title="Copia a tabela (com cabeçalho) para colar no Sheets/Excel"><i class="fas fa-copy"></i> Copiar</button>
+          <button style="${btnStyle}" onclick="exportDotacaoCSV()" title="Baixa um arquivo .csv com as linhas filtradas"><i class="fas fa-file-csv"></i> Exportar CSV</button>
+          <span class="portaria-badge">FONTE ${DOT_FONTE}</span>
+        </div>
+      </div>
+      <div style="font-size:12px;color:var(--slate-500);padding:0 4px 12px;line-height:1.5">
+        Célula no padrão SIGEF: <strong>UO ${DOT_UO}</strong> · <strong>Subação</strong> · <strong>Fonte ${DOT_FONTE}</strong> · <strong>Natureza</strong> (classificação econômica em NN.NN.NN). Uma linha por despesa. Os botões exportam o que estiver filtrado.
+      </div>
+      <div class="tbl-wrap">
+        <table id="dotacaoTable">
+          <thead><tr>
+            <th>Despesa</th>
+            <th style="text-align:center">Qtd</th>
+            <th>Célula Orçamentária</th>
+            <th style="text-align:right">Valor</th>
+          </tr></thead>
+          <tbody>${linhas}</tbody>
+          <tfoot><tr style="background:var(--slate-50);border-top:2px solid var(--slate-200)">
+            <td colspan="3" style="text-align:right;font-weight:800;padding:10px 10px">Total</td>
+            <td style="text-align:right;font-weight:900;font-variant-numeric:tabular-nums;white-space:nowrap;padding:10px 10px;color:var(--blue-800)">${fmtBRL(total)}</td>
+          </tr></tfoot>
+        </table>
+      </div>
+    </div>`;
+}
+
 // ═══ TABS ══════════════════════════════════════════════════════════════
 // Abas que exibem o bloco de KPIs do topo (Total do Programa + Ações)
 const TABS_WITH_KPI = new Set(['acao','elemento','tabela']);
@@ -1805,6 +1903,7 @@ window.addEventListener('DOMContentLoaded', () => {
   buildElemento();
   buildNatureza();
   buildGerencial();
+  buildDotacao();
   updateHeaderKPIs();
   updateChrome('natureza'); // aba inicial: oculta KPIs do topo
 });
@@ -1812,7 +1911,7 @@ window.addEventListener('DOMContentLoaded', () => {
 // ═══ SINCRONIZACAO GOOGLE SHEETS ═══
 const CSV_URL = 'https://docs.google.com/spreadsheets/d/1UTGEbJCL4nFtxmqGysadaJ4zZxcGRVKUz-utLE5qhFk/gviz/tq?tqx=out:csv&gid=0';
 // Data/hora da última geração (build diário a partir da planilha) — America/Sao_Paulo
-const BUILD_TS = '02/06/2026 17:48';
+const BUILD_TS = '02/06/2026 18:35';
 
 function setSyncUI(state, label, time) {
   document.getElementById('syncDot').className   = 'sync-dot ' + state;
