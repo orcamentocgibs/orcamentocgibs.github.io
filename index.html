@@ -657,7 +657,7 @@ tbody tr.data-row td { padding: 10px 10px; vertical-align: middle; }
   <div class="sync-bar-inner">
     <span class="sync-dot" id="syncDot"></span>
     <span class="sync-label" id="syncLabel">Dados atualizados</span>
-    <span class="sync-time" id="syncTime">atualizado em 03/06/2026 06:06</span>
+    <span class="sync-time" id="syncTime">atualizado em 03/06/2026 08:38</span>
     <a class="sync-link" href="https://docs.google.com/spreadsheets/d/1UTGEbJCL4nFtxmqGysadaJ4zZxcGRVKUz-utLE5qhFk/edit" target="_blank" title="Abre a planilha no Google Sheets. Lá você pode editar online, ou Arquivo → Fazer download → Excel (.xlsx) para editar offline e Arquivo → Importar para subir de volta.">
       <i class="fas fa-table-cells"></i> Editar planilha
     </a>
@@ -1885,4 +1885,129 @@ function updateHeaderKPIs(){
   if(selAcao){
     const current = selAcao.value;
     while(selAcao.options.length > 1) selAcao.remove(1);
-    const acoes = [...new Set(data.map(
+    const acoes = [...new Set(data.map(d => d.acao).filter(Boolean))].sort();
+    acoes.forEach(code => {
+      const sample = data.find(d => d.acao === code);
+      const full = sample ? sample.acaoFull : code;
+      const opt = document.createElement('option');
+      opt.value = code;
+      opt.textContent = shortAcaoLabel(full, code);
+      selAcao.appendChild(opt);
+    });
+    if(current) selAcao.value = current;
+  }
+}
+
+// ═══ INIT ════════════════════════════════════════════════════════════
+window.addEventListener('DOMContentLoaded', () => {
+  renderTable(DATA);
+  buildAcao();
+  buildFuncao();
+  buildElemento();
+  buildNatureza();
+  buildGerencial();
+  buildDotacao();
+  updateHeaderKPIs();
+  updateChrome('natureza'); // aba inicial: oculta KPIs do topo
+});
+
+// ═══ SINCRONIZACAO GOOGLE SHEETS ═══
+const CSV_URL = 'https://docs.google.com/spreadsheets/d/1UTGEbJCL4nFtxmqGysadaJ4zZxcGRVKUz-utLE5qhFk/gviz/tq?tqx=out:csv&gid=0';
+// Data/hora da última geração (build diário a partir da planilha) — America/Sao_Paulo
+const BUILD_TS = '03/06/2026 08:38';
+
+function setSyncUI(state, label, time) {
+  document.getElementById('syncDot').className   = 'sync-dot ' + state;
+  document.getElementById('syncLabel').textContent = label;
+  document.getElementById('syncTime').textContent  = time || '';
+  document.getElementById('syncIcon').className    = state === 'syncing' ? 'fas fa-rotate-right spin' : 'fas fa-rotate-right';
+  document.getElementById('syncBtn').disabled      = state === 'syncing';
+}
+
+function parseCSV(txt) {
+  const lines = txt.split(/\r?\n/);
+  const headers = [];
+  const rows = [];
+  let inQ = false, cur = '', cols = [];
+  for (let li = 0; li < lines.length; li++) {
+    const line = lines[li];
+    cols = []; cur = ''; inQ = false;
+    for (let i = 0; i < line.length; i++) {
+      const c = line[i];
+      if (c === '"') { inQ = !inQ; continue; }
+      if (c === ',' && !inQ) { cols.push(cur.trim()); cur = ''; continue; }
+      cur += c;
+    }
+    cols.push(cur.trim());
+    if (li === 0) { cols.forEach(c => headers.push(c.trim())); continue; }
+    if (cols.every(c => !c)) continue;
+    const obj = {};
+    headers.forEach((h, i) => obj[h] = (cols[i] || '').trim());
+    rows.push(obj);
+  }
+  return rows;
+}
+
+function csvRowToEntry(r) {
+  const g = (...ks) => { for (const k of ks) { const f = Object.keys(r).find(rk => rk.toLowerCase().replace(/[áàãâ]/g,'a').replace(/[çc]/g,'c').replace(/[õô]/g,'o') === k.toLowerCase().replace(/[áàãâ]/g,'a').replace(/[çc]/g,'c').replace(/[õô]/g,'o')); if (f && r[f]) return String(r[f]).trim(); } return ''; };
+  const prog    = g('PROGRAMA');
+  const acaoRaw = g('AÇÃO','ACAO'); const subRaw = g('SUBAÇÃO','SUBACAO');
+  const funcRaw = g('FUNÇÃO','FUNCAO'); const sfRaw = g('SUBFUNÇÃO','SUBFUNCAO');
+  const despesa = g('DESPESA'); const elem = g('NOME DO ELEMENTO (PORTARIA 163)','NOME ELEMENTO (P163)','ELEMENTO');
+  const codRaw  = g('CLASSIFICAÇÃO ECONÔMICA DA DESPESA','CLASSIFICACAO ECONOMICA DA DESPESA','CÓDIGO','COD');
+  const valor   = g('VALOR DA DESPESA','VALOR');
+  const justif  = g('JUSTIFICATIVA','JUSTIFICACAO','JUSTIFICAÇÃO');
+  const unidade = g('UNIDADE DEMANDANTE','UNIDADE','DEMANDANTE');
+  const qtdRaw  = g('QTD','QUANTIDADE','QTDE');
+  const celula  = g('CÉLULA ORÇAMENTÁRIA','CELULA ORCAMENTARIA','CÉLULA','CELULA');
+  const acao  = (acaoRaw.match(/^(\d{4})/) || ['',''])[1];
+  const sub   = (subRaw.match(/^(\d{5}[a-z]?)/) || ['',''])[1];
+  const func  = (funcRaw.match(/^(\d+)/) || ['',''])[1];
+  const sfunc = (sfRaw.match(/^(\d+)/) || ['',''])[1];
+  const cod   = String(codRaw).replace(/\.0$/,'').replace(/,0$/,'').trim().padStart(6,'0');
+  const nat   = cod.startsWith('4') ? 'Capital' : 'Corrente';
+  const qtd   = qtdRaw === '' ? '' : (Number(String(qtdRaw).replace(',','.')) || qtdRaw);
+  return {programa:prog,acao,acaoFull:acaoRaw,sub,subFull:subRaw,func,funcFull:funcRaw,sfunc,sfuncFull:sfRaw,despesa,elem,cod,nat,valor,justificativa:justif,unidade,qtd,celula};
+}
+
+async function doSync() {
+  setSyncUI('syncing', 'Sincronizando...', '');
+  try {
+    const res  = await fetch(CSV_URL, {cache:'no-cache'});
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const txt  = await res.text();
+    if (!txt || txt.length < 30) throw new Error('Resposta vazia');
+    if (txt.trim().startsWith('<')) throw new Error('Planilha nao publicada como CSV');
+    const rows = parseCSV(txt).map(csvRowToEntry).filter(e => e.despesa && e.acao);
+    if (!rows.length) throw new Error('Nenhum dado reconhecido');
+
+    const localHasRich  = DATA .some(d => d.unidade || d.justificativa || (d.qtd!==undefined && d.qtd!==''));
+    const remoteHasRich = rows.some(d => d.unidade || d.justificativa || (d.qtd!==undefined && d.qtd!==''));
+    if (localHasRich && !remoteHasRich) {
+      setSyncUI('', `Dados locais — ${DATA.length} itens`, 'planilha em atualizacao');
+      setTimeout(() => doSync(), 5*60*1000);
+      return;
+    }
+
+    DATA.length = 0; rows.forEach(e => DATA.push(e));
+    filtered = [...DATA];
+    const progFromCsv = (rows.find(r => r.programa) || {}).programa || '';
+    if(progFromCsv) window.PROGRAMA = progFromCsv;
+    renderAll(DATA);
+    updateHeaderKPIs();
+    const now = new Date().toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
+    setSyncUI('ok', `Sincronizado — ${DATA.length} itens`, `atualizado em ${now}`);
+    setTimeout(() => doSync(), 5*60*1000);
+  } catch(e) {
+    console.warn('[Sync]', e.message);
+    setSyncUI('ok', `Dados atualizados — ${DATA.length} itens`, BUILD_TS ? `atualizado em ${BUILD_TS}` : 'atualizado pelo build diário');
+  }
+}
+
+
+window.addEventListener('load', () => {
+  setTimeout(doSync, 800);
+});
+</script>
+</body>
+</html>
