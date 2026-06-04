@@ -657,7 +657,7 @@ tbody tr.data-row td { padding: 10px 10px; vertical-align: middle; }
   <div class="sync-bar-inner">
     <span class="sync-dot" id="syncDot"></span>
     <span class="sync-label" id="syncLabel">Dados atualizados</span>
-    <span class="sync-time" id="syncTime">atualizado em 04/06/2026 17:28</span>
+    <span class="sync-time" id="syncTime">atualizado em 04/06/2026 17:47</span>
     <a class="sync-link" href="https://docs.google.com/spreadsheets/d/1UTGEbJCL4nFtxmqGysadaJ4zZxcGRVKUz-utLE5qhFk/edit" target="_blank" title="Abre a planilha no Google Sheets. Lá você pode editar online, ou Arquivo → Fazer download → Excel (.xlsx) para editar offline e Arquivo → Importar para subir de volta.">
       <i class="fas fa-table-cells"></i> Editar planilha
     </a>
@@ -690,9 +690,10 @@ tbody tr.data-row td { padding: 10px 10px; vertical-align: middle; }
       <option value="">Todas as Ações</option>
     </select>
     <select class="filter-sel" id="filterNat" onchange="applySearch()">
-      <option value="">Corrente + Capital</option>
+      <option value="">Todas as Categorias</option>
       <option value="Corrente">Despesas Correntes</option>
       <option value="Capital">Despesas de Capital</option>
+      <option value="Reserva">Reserva de Contingência</option>
     </select>
     <span class="results-count" id="resultsCount"></span>
     <button class="btn-clear" onclick="clearFilters()"><i class="fas fa-rotate-left"></i> Limpar</button>
@@ -1022,7 +1023,8 @@ const DATA = [
   {programa: "Governança e Gestão Compartilhada do CGIBS", acao: "2003", acaoFull: "2003 - Instalação e Manutenção da Infraestrutura Tecnológica", sub: "10007", subFull: "10007 - Investimentos em Tecnologia e Ativos Intangíveis", func: "28", funcFull: "28 - Encargos Especiais", sfunc: "846", sfuncFull: "846 - Outros Encargos Especiais", despesa: "Sentenças judiciais", elem: "Sentenças Judiciais", cod: "449091", nat: "Capital", valor: "R$ 1,00", unidade: "DIRETORIA-EXECUTIVA", qtd: 1, justificativa: "Reserva de rubrica para eventual pagamento de sentenças judiciais vinculadas a investimento.", celula: "10001 10007 1.754.000.000 44.90.91"},
   {programa: "Governança e Gestão Compartilhada do CGIBS", acao: "2003", acaoFull: "2003 - Instalação e Manutenção da Infraestrutura Tecnológica", sub: "10007", subFull: "10007 - Investimentos em Tecnologia e Ativos Intangíveis", func: "28", funcFull: "28 - Encargos Especiais", sfunc: "846", sfuncFull: "846 - Outros Encargos Especiais", despesa: "Indenizações e restituições", elem: "Indenizações e Restituições", cod: "449093", nat: "Capital", valor: "R$ 1,00", unidade: "DIRETORIA-EXECUTIVA", qtd: 1, justificativa: "Reserva de rubrica para eventual pagamento de indenizações e restituições vinculadas a investimento.", celula: "10001 10007 1.754.000.000 44.90.93"},
   {programa: "Governança e Gestão Compartilhada do CGIBS", acao: "2003", acaoFull: "2003 - Instalação e Manutenção da Infraestrutura Tecnológica", sub: "10007", subFull: "10007 - Investimentos em Tecnologia e Ativos Intangíveis", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Aquisição de imóveis", elem: "Aquisição de Imóveis", cod: "459061", nat: "Capital", valor: "R$ 1,00", unidade: "DIRETORIA-EXECUTIVA", qtd: 1, justificativa: "Reserva de rubrica para eventual aquisição de imóveis classificada como inversão financeira.", celula: "10001 10007 1.754.000.000 45.90.61"},
-  {programa: "Governança e Gestão Compartilhada do CGIBS", acao: "2003", acaoFull: "2003 - Instalação e Manutenção da Infraestrutura Tecnológica", sub: "10007", subFull: "10007 - Investimentos em Tecnologia e Ativos Intangíveis", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Material de consumo", elem: "Material de Consumo", cod: "449030", nat: "Capital", valor: "R$ 1,00", unidade: "DIRETORIA-EXECUTIVA", qtd: 1, justificativa: "Reserva de rubrica para eventual aquisição de material de consumo vinculada a investimento.", celula: "10001 10007 1.754.000.000 44.90.30"}
+  {programa: "Governança e Gestão Compartilhada do CGIBS", acao: "2003", acaoFull: "2003 - Instalação e Manutenção da Infraestrutura Tecnológica", sub: "10007", subFull: "10007 - Investimentos em Tecnologia e Ativos Intangíveis", func: "04", funcFull: "04 - Administração", sfunc: "122", sfuncFull: "122 - Administração Geral", despesa: "Material de consumo", elem: "Material de Consumo", cod: "449030", nat: "Capital", valor: "R$ 1,00", unidade: "DIRETORIA-EXECUTIVA", qtd: 1, justificativa: "Reserva de rubrica para eventual aquisição de material de consumo vinculada a investimento.", celula: "10001 10007 1.754.000.000 44.90.30"},
+  {programa: "Governança e Gestão Compartilhada do CGIBS", acao: "9999", acaoFull: "9999 - Reserva de Contingência", sub: "99999", subFull: "99999 - Reserva de Contingência", func: "99", funcFull: "99 - Reserva de Contingência", sfunc: "999", sfuncFull: "999 - Reserva de Contingência", despesa: "RESERVA DE CONTINGÊNCIA", elem: "Reserva de Contingência", cod: "999999", nat: "Reserva", valor: "R$ 100.000.000,00", unidade: "", qtd: "", justificativa: "Reserva de contingência (art. 5º, III, da LC 101/2000 - LRF) — referência Luciane e Valéria", celula: "10001 99999 1.754.000.000 99.99.99"}
 ];
 
 // ═══ ESTADO ═══════════════════════════════════════════════════════════
@@ -1057,7 +1059,7 @@ function renderTable(data) {
     if (d.acao !== lastAcao) {
       lastAcao = d.acao;
       const acaoNames = {'2001':'AÇÃO 2001 - REMUNERAÇÃO DE PESSOAL E ENCARGOS SOCIAIS','2002':'AÇÃO 2002 - APOIO ADMINISTRATIVO','2003':'AÇÃO 2003 - DESENVOLVIMENTO, IMPLANTAÇÃO E OPERAÇÃO DAS PLATAFORMAS DIGITAIS DO IBS'};
-      html += `<tr class="tbl-section"><td colspan="11">${acaoNames[d.acao]}</td></tr>`;
+      html += `<tr class="tbl-section"><td colspan="11">${acaoNames[d.acao]||(d.acaoFull||'').toUpperCase()}</td></tr>`;
     }
     const natCls = d.nat === 'Capital' ? 'nat-k' : 'nat-c';
     const acaoCls = ACAO_COLORS[d.acao];
@@ -1351,16 +1353,22 @@ const CLASS_ECON = {
   categoria: {
     '3': { cod:'3', label:'Despesas Correntes', desc:'Despesas que não contribuem diretamente para a formação de capital' },
     '4': { cod:'4', label:'Despesas de Capital', desc:'Despesas que contribuem para a formação de capital ou aquisição de ativos' },
+    '9': { cod:'9', label:'Reserva de Contingência', desc:'Dotação global sem destinação específica (art. 5º, III, da LRF)' },
   },
   grupo: {
     '31': { cod:'1', label:'Pessoal e Encargos Sociais', desc:'Vencimentos, salários, encargos sociais e ressarcimentos de pessoal' },
     '33': { cod:'3', label:'Outras Despesas Correntes', desc:'Aquisição de material, prestação de serviços e outras despesas de custeio' },
     '44': { cod:'4', label:'Investimentos', desc:'Obras, aquisição de equipamentos e formação de capital' },
+    '45': { cod:'5', label:'Inversões Financeiras', desc:'Aquisição de imóveis e bens já em utilização' },
+    '99': { cod:'9', label:'Reserva de Contingência', desc:'Dotação global não vinculada a despesa específica' },
   },
   modalidade: {
     '319': { cod:'90', label:'Aplicações Diretas', desc:'Gastos realizados diretamente pelo órgão ou entidade' },
     '339': { cod:'90', label:'Aplicações Diretas', desc:'Gastos realizados diretamente pelo órgão ou entidade' },
     '449': { cod:'90', label:'Aplicações Diretas', desc:'Gastos realizados diretamente pelo órgão ou entidade' },
+    '333': { cod:'30', label:'Transferências a Estados e ao Distrito Federal', desc:'' },
+    '334': { cod:'40', label:'Transferências a Municípios', desc:'' },
+    '999': { cod:'99', label:'Reserva de Contingência', desc:'' },
   },
   elemento: {
     '319011': 'Vencimentos e Vantagens Fixas — Pessoal Civil',
@@ -1380,16 +1388,18 @@ const CLASS_ECON = {
     '449040': 'Serviços de Tecnologia da Informação e Comunicação — PJ (Capital)',
     '449051': 'Obras e Instalações',
     '449052': 'Equipamentos e Material Permanente',
+    '999999': 'Reserva de Contingência',
   }
 };
 
 // ═══ VISÃO EXECUTIVA (charts SVG inline) ═════════════════════════════
-function buildExecDashHTML(valC, valK, valT, pctC, pctK, data = filtered){
-  // Donut: Correntes vs Capital
+function buildExecDashHTML(valC, valK, valT, pctC, pctK, data = filtered, valR = 0, pctR = 0){
+  // Donut: Correntes vs Capital vs Reserva
   const R = 64, C = 80, SW = 18;
   const circ = 2 * Math.PI * R;
   const dashC = (pctC/100) * circ;
   const dashK = (pctK/100) * circ;
+  const dashR = (pctR/100) * circ;
   const donut = `
     <svg viewBox="0 0 160 160" width="170" height="170" style="display:block">
       <circle cx="${C}" cy="${C}" r="${R}" fill="none" stroke="#e2e8f0" stroke-width="${SW}"/>
@@ -1397,16 +1407,20 @@ function buildExecDashHTML(valC, valK, valT, pctC, pctK, data = filtered){
               stroke-dasharray="${dashC} ${circ}" transform="rotate(-90 ${C} ${C})" stroke-linecap="butt"/>
       <circle cx="${C}" cy="${C}" r="${R}" fill="none" stroke="#5b4db8" stroke-width="${SW}"
               stroke-dasharray="${dashK} ${circ}" stroke-dashoffset="${-dashC}" transform="rotate(-90 ${C} ${C})" stroke-linecap="butt"/>
+      ${valR>0?`<circle cx="${C}" cy="${C}" r="${R}" fill="none" stroke="#64748b" stroke-width="${SW}"
+              stroke-dasharray="${dashR} ${circ}" stroke-dashoffset="${-(dashC+dashK)}" transform="rotate(-90 ${C} ${C})" stroke-linecap="butt"/>`:''}
       <text x="${C}" y="${C-4}"  text-anchor="middle" font-size="13" font-weight="700" fill="#475569">Total</text>
       <text x="${C}" y="${C+18}" text-anchor="middle" font-size="15" font-weight="900" fill="#0f172a" style="font-variant-numeric:tabular-nums">${fmtBRLcompact(valT)}</text>
     </svg>`;
 
-  // Bars: por Ação (valores)
-  const acoes = [
-    {id:'2001',color:'#5b4db8',name:'Remuneração de Pessoal'},
-    {id:'2002',color:'#b45309',name:'Apoio Administrativo'},
-    {id:'2003',color:'#1B9E6E',name:'Infraestrutura Tecnológica'},
-  ];
+  // Bars: por Ação (valores) — dinâmico a partir dos dados
+  const ACOLOR = {'2001':'#5b4db8','2002':'#b45309','2003':'#1B9E6E','9999':'#64748b'};
+  const acoes = [...new Set(data.map(d=>d.acao).filter(Boolean))].sort().map(id => {
+    const full = (data.find(d=>d.acao===id)||{}).acaoFull || id;
+    let name = String(full).replace(/^\s*\d{4}\s*[-–—]\s*/,'').trim();
+    if(name.length > 34) name = name.slice(0,32).trimEnd()+'…';
+    return {id, color: ACOLOR[id]||'#64748b', name};
+  });
   const byAcao = acoes.map(a => {
     const items = data.filter(d => d.acao===a.id);
     const v = items.reduce((s,d)=>s+parseValor(d.valor),0);
@@ -1452,7 +1466,7 @@ function buildExecDashHTML(valC, valK, valT, pctC, pctK, data = filtered){
   }).join('');
 
   // ── Strip por Grupo de Despesa (Portaria 163: 31, 33, 44, etc) ──
-  const GRP_COLORS = {'31':'#0369a1','32':'#0891b2','33':'#1B9E6E','44':'#5b4db8','45':'#7c3aed','46':'#9333ea'};
+  const GRP_COLORS = {'31':'#0369a1','32':'#0891b2','33':'#1B9E6E','44':'#5b4db8','45':'#7c3aed','46':'#9333ea','99':'#64748b'};
   const grupos = {};
   data.forEach(d => {
     const gk = (d.cod || '').slice(0,2);
@@ -1499,6 +1513,9 @@ function buildExecDashHTML(valC, valK, valT, pctC, pctK, data = filtered){
             <div class="ed-leg-item"><span class="ed-leg-sq" style="background:#5b4db8"></span>
               <div><div class="ed-leg-l">Capital</div><div class="ed-leg-v">${fmtBRLcompact(valK)} <span style="opacity:.65">· ${pctK.toFixed(1)}%</span></div></div>
             </div>
+            ${valR>0?`<div class="ed-leg-item"><span class="ed-leg-sq" style="background:#64748b"></span>
+              <div><div class="ed-leg-l">Reserva</div><div class="ed-leg-v">${fmtBRLcompact(valR)} <span style="opacity:.65">· ${pctR.toFixed(1)}%</span></div></div>
+            </div>`:''}
           </div>
         </div>
       </div>
@@ -1520,17 +1537,20 @@ function buildNatureza(data = filtered) {
   const total = data.length;
   const corrente = data.filter(d => d.nat === 'Corrente');
   const capital  = data.filter(d => d.nat === 'Capital');
+  const reserva  = data.filter(d => d.nat === 'Reserva');
   const valCorrente = corrente.reduce((s,d)=>s+parseValor(d.valor),0);
   const valCapital  = capital .reduce((s,d)=>s+parseValor(d.valor),0);
-  const valTotal    = valCorrente + valCapital;
+  const valReserva  = reserva .reduce((s,d)=>s+parseValor(d.valor),0);
+  const valTotal    = valCorrente + valCapital + valReserva;
   const pctCorrente = valTotal>0 ? (valCorrente/valTotal*100) : 0;
   const pctCapital  = valTotal>0 ? (valCapital /valTotal*100) : 0;
+  const pctReserva  = valTotal>0 ? (valReserva /valTotal*100) : 0;
 
   // ── Visão Executiva — donut + bars por ação + top elementos ──────
   if (valTotal > 0) {
     const dash = document.createElement('div');
     dash.className = 'exec-dash';
-    dash.innerHTML = buildExecDashHTML(valCorrente, valCapital, valTotal, pctCorrente, pctCapital, data);
+    dash.innerHTML = buildExecDashHTML(valCorrente, valCapital, valTotal, pctCorrente, pctCapital, data, valReserva, pctReserva);
     cont.appendChild(dash);
   }
 
@@ -1549,7 +1569,13 @@ function buildNatureza(data = filtered) {
       <div class="ns-main">${fmtBRL(valCapital)}</div>
       <div class="ns-sub">Investimentos e aquisição de ativos permanentes · <strong>${pctCapital.toFixed(1)}%</strong> · ${capital.length} itens</div>
       <div class="ns-pct">4</div>
-    </div>`;
+    </div>
+    ${valReserva>0?`<div class="nat-summary-card" style="--nc-color:#64748b">
+      <div class="ns-label">Categoria 9 — Reserva de Contingência</div>
+      <div class="ns-main">${fmtBRL(valReserva)}</div>
+      <div class="ns-sub">Dotação global — art. 5º, III, da LRF · <strong>${pctReserva.toFixed(1)}%</strong> · ${reserva.length} ite${reserva.length>1?'ns':'m'}</div>
+      <div class="ns-pct">9</div>
+    </div>`:''}`;
   cont.appendChild(summary);
 
   // ── Barra proporcional 3 vs 4 ────────────────────────────────────
@@ -1558,7 +1584,8 @@ function buildNatureza(data = filtered) {
     bar.style.cssText = 'display:flex;height:14px;border-radius:8px;overflow:hidden;margin:18px 0 22px;box-shadow:0 1px 2px rgba(15,23,42,.08)';
     bar.innerHTML = `
       <div style="width:${pctCorrente}%;background:#1B9E6E" title="Correntes: ${fmtBRL(valCorrente)} (${pctCorrente.toFixed(1)}%)"></div>
-      <div style="width:${pctCapital}%;background:#5b4db8"  title="Capital: ${fmtBRL(valCapital)} (${pctCapital.toFixed(1)}%)"></div>`;
+      <div style="width:${pctCapital}%;background:#5b4db8"  title="Capital: ${fmtBRL(valCapital)} (${pctCapital.toFixed(1)}%)"></div>
+      ${valReserva>0?`<div style="width:${pctReserva}%;background:#64748b" title="Reserva: ${fmtBRL(valReserva)} (${pctReserva.toFixed(1)}%)"></div>`:''}`;
     cont.appendChild(bar);
   }
 
@@ -1566,6 +1593,7 @@ function buildNatureza(data = filtered) {
   [
     { catKey:'3', label:'Despesas Correntes', hdrCls:'nat-c-hdr', items: corrente },
     { catKey:'4', label:'Despesas de Capital', hdrCls:'nat-k-hdr', items: capital },
+    { catKey:'9', label:'Reserva de Contingência', hdrCls:'nat-k-hdr', items: reserva },
   ].forEach(catBloco => {
     if (!catBloco.items.length) return;
 
@@ -1969,7 +1997,7 @@ window.addEventListener('DOMContentLoaded', () => {
 // ═══ SINCRONIZACAO GOOGLE SHEETS ═══
 const CSV_URL = 'https://docs.google.com/spreadsheets/d/1UTGEbJCL4nFtxmqGysadaJ4zZxcGRVKUz-utLE5qhFk/gviz/tq?tqx=out:csv&gid=0';
 // Data/hora da última geração (build diário a partir da planilha) — America/Sao_Paulo
-const BUILD_TS = '04/06/2026 17:28';
+const BUILD_TS = '04/06/2026 17:47';
 
 function setSyncUI(state, label, time) {
   document.getElementById('syncDot').className   = 'sync-dot ' + state;
@@ -2020,7 +2048,7 @@ function csvRowToEntry(r) {
   const func  = (funcRaw.match(/^(\d+)/) || ['',''])[1];
   const sfunc = (sfRaw.match(/^(\d+)/) || ['',''])[1];
   const cod   = String(codRaw).replace(/\.0$/,'').replace(/,0$/,'').trim().padStart(6,'0');
-  const nat   = cod.startsWith('4') ? 'Capital' : 'Corrente';
+  const nat   = cod.startsWith('9') ? 'Reserva' : (cod.startsWith('4') ? 'Capital' : 'Corrente');
   const qtd   = qtdRaw === '' ? '' : (Number(String(qtdRaw).replace(',','.')) || qtdRaw);
   return {programa:prog,acao,acaoFull:acaoRaw,sub,subFull:subRaw,func,funcFull:funcRaw,sfunc,sfuncFull:sfRaw,despesa,elem,cod,nat,valor,justificativa:justif,unidade,qtd,celula};
 }
