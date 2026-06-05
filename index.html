@@ -657,7 +657,7 @@ tbody tr.data-row td { padding: 9px 8px; vertical-align: middle; }
   <div class="sync-bar-inner">
     <span class="sync-dot" id="syncDot"></span>
     <span class="sync-label" id="syncLabel">Dados atualizados</span>
-    <span class="sync-time" id="syncTime">atualizado em 05/06/2026 01:38</span>
+    <span class="sync-time" id="syncTime">atualizado em 05/06/2026 01:54</span>
     <a class="sync-link" href="https://docs.google.com/spreadsheets/d/1UTGEbJCL4nFtxmqGysadaJ4zZxcGRVKUz-utLE5qhFk/edit" target="_blank" title="Abre a planilha no Google Sheets. Lá você pode editar online, ou Arquivo → Fazer download → Excel (.xlsx) para editar offline e Arquivo → Importar para subir de volta.">
       <i class="fas fa-table-cells"></i> Editar planilha
     </a>
@@ -1096,51 +1096,81 @@ function sortTbl(col) {
   renderTable(filtered);
 }
 
-// ═══ POR AÇÃO ═════════════════════════════════════════════════════════
+// ═══ POR AÇÃO (árvore programática: Ação → Subação → Elemento → Itens) ═
 function buildAcao(data = filtered) {
-  const acoes = [
-    {id:'2001',cls:'ac-2001',full:'Remuneração de Pessoal e Encargos Sociais'},
-    {id:'2002',cls:'ac-2002',full:'Apoio Administrativo'},
-    {id:'2003',cls:'ac-2003',full:'Desenvolvimento, Implantação e Operação das Plataformas Digitais do IBS'},
-  ];
   const cont = document.getElementById('acaoCards');
   cont.innerHTML = '';
-  const valTotalGeral = data.reduce((s,d)=>s+parseValor(d.valor),0);
-  acoes.forEach(a => {
-    const rows = data.filter(d => d.acao===a.id);
-    const subs = {};
-    rows.forEach(d => {
-      if(!subs[d.sub]) subs[d.sub]={full:d.subFull,count:0,valor:0};
-      subs[d.sub].count++;
-      subs[d.sub].valor += parseValor(d.valor);
+  cont.style.display = 'block';
+  if(!data.length){ cont.innerHTML='<div class="card"><div class="no-res" style="display:block"><i class="fas fa-search" style="font-size:24px;margin-bottom:8px;display:block"></i>Nenhuma despesa encontrada com esses filtros.</div></div>'; return; }
+  const ACL={'2001':'#1d5fa6','2002':'#b45309','2003':'#1B9E6E','9999':'#64748b'};
+  const tree={};
+  data.forEach(d=>{
+    const a=d.acao||'—';
+    if(!tree[a]) tree[a]={full:d.acaoFull,subs:{}};
+    const s=d.sub||'—';
+    if(!tree[a].subs[s]) tree[a].subs[s]={full:d.subFull,elems:{}};
+    const e=d.cod||'—';
+    if(!tree[a].subs[s].elems[e]) tree[a].subs[s].elems[e]={nome:d.elem,items:[]};
+    tree[a].subs[s].elems[e].items.push(d);
+  });
+  Object.keys(tree).sort().forEach(a=>{
+    const A=tree[a];
+    const aItems=Object.values(A.subs).flatMap(s=>Object.values(s.elems).flatMap(e=>e.items));
+    const aVal=aItems.reduce((s,d)=>s+parseValor(d.valor),0);
+    const color=ACL[a]||'#475569';
+    let subHtml='';
+    Object.keys(A.subs).sort().forEach(sk=>{
+      const S=A.subs[sk];
+      const sItems=Object.values(S.elems).flatMap(e=>e.items);
+      const sVal=sItems.reduce((s,d)=>s+parseValor(d.valor),0);
+      let elemHtml='';
+      Object.keys(S.elems).sort().forEach(ek=>{
+        const E=S.elems[ek];
+        const eVal=E.items.reduce((s,d)=>s+parseValor(d.valor),0);
+        const rows=E.items.slice().sort((x,y)=>parseValor(y.valor)-parseValor(x.valor)).map(d=>{
+          const qtdTxt=(d.qtd===''||d.qtd==null)?'':` · ${d.qtd} un`;
+          const justAttr=d.justificativa?` title="${escAttr(d.justificativa)}"`:'';
+          return `<div class="nat-despesa-row"${justAttr}>
+            <span style="flex:1;font-weight:600">${d.despesa}</span>
+            <span class="nat-despesa-val">${d.valor||''}</span>
+            <span class="nat-despesa-sub">${(d.unidade||'')}${qtdTxt}</span>
+          </div>`;
+        }).join('');
+        elemHtml+=`
+          <div class="hier-elem">
+            <div class="hier-elem-hdr">
+              <span class="hier-level-tag" style="background:#f1f5f9;color:#334155;border:1px solid #e2e8f0">ELEMENTO</span>
+              <span class="hier-cod" style="background:#0f172a;color:#fff">${ek}</span>
+              <span class="hier-label" style="font-weight:700;color:#1e293b">${E.nome||ek}</span>
+              <span class="hier-val">${fmtBRL(eVal)}</span>
+              <span class="hier-count">${E.items.length} ite${E.items.length>1?'ns':'m'}</span>
+            </div>
+            <div class="nat-despesas-cell">${rows}</div>
+          </div>`;
+      });
+      subHtml+=`
+        <div class="hier-grupo">
+          <div class="hier-grupo-hdr">
+            <span class="hier-level-tag" style="background:#e0f2fe;color:#0369a1;border:1px solid #bae6fd">SUBAÇÃO</span>
+            <span class="hier-cod" style="background:#0369a1;color:#fff">${sk}</span>
+            <span class="hier-label">${String(S.full||sk).replace(/^\d{4,6}\s*[-–—]\s*/,'')}</span>
+            <span class="hier-val">${fmtBRL(sVal)}</span>
+            <span class="hier-count">${sItems.length} itens</span>
+          </div>
+          <div class="hier-grupo-body">${elemHtml}</div>
+        </div>`;
     });
-    const maxV = Math.max(1, ...Object.values(subs).map(s=>s.valor));
-    const acaoValor = rows.reduce((s,d)=>s+parseValor(d.valor),0);
-    const acaoPct = valTotalGeral>0 ? (acaoValor/valTotalGeral*100) : 0;
-    let subHtml = Object.entries(subs)
-      .sort((a,b)=>b[1].valor-a[1].valor)
-      .map(([k,s])=>`
-        <div class="sub-row">
-          <div style="flex:1;min-width:0">
-            <div class="sub-row-name">${s.full.replace(/10\d{3} - /,'')}</div>
-            <div class="sub-mini-bar"><div class="sub-mini-bar-fill" style="width:${(s.valor/maxV*100).toFixed(1)}%"></div></div>
-          </div>
-          <div class="sub-row-ct" style="text-align:right;min-width:120px">
-            <div style="font-weight:800;color:var(--slate-800);font-variant-numeric:tabular-nums">${fmtBRL(s.valor)}</div>
-            <div style="font-size:10px;color:var(--slate-500);font-weight:500">${s.count} item${s.count>1?'s':''}</div>
-          </div>
-        </div>`).join('');
-    const card = document.createElement('div');
-    card.className = `acao-card ${a.cls}`;
-    card.innerHTML = `
-      <div class="acao-card-hdr">
-        <div class="acao-card-num">${a.id}</div>
-        <div class="acao-card-title">${a.full}</div>
-        <div class="acao-card-meta" style="font-size:18px;font-weight:900;color:#fff;letter-spacing:.5px;margin-top:6px">${fmtBRL(acaoValor)}</div>
-        <div class="acao-card-meta" style="opacity:.85">${rows.length} itens · ${Object.keys(subs).length} subações · ${acaoPct.toFixed(1)}% do total</div>
+    const sec=document.createElement('div');
+    sec.className='nat-section';
+    sec.innerHTML=`
+      <div class="nat-section-hdr nat-c-hdr" style="background:${color}">
+        <span class="nat-hdr-badge">${a}</span>
+        <span style="font-size:16px">${String(A.full||a).replace(/^\s*\d{4}\s*[-–—]\s*/,'')}</span>
+        <span class="nat-hdr-val">${fmtBRL(aVal)}</span>
+        <span class="nat-hdr-count">${aItems.length} ite${aItems.length>1?'ns':'m'}</span>
       </div>
-      <div class="sub-rows">${subHtml}</div>`;
-    cont.appendChild(card);
+      <div class="hier-tree">${subHtml}</div>`;
+    cont.appendChild(sec);
   });
 }
 
@@ -2169,7 +2199,7 @@ window.addEventListener('DOMContentLoaded', () => {
 // ═══ SINCRONIZACAO GOOGLE SHEETS ═══
 const CSV_URL = 'https://docs.google.com/spreadsheets/d/1UTGEbJCL4nFtxmqGysadaJ4zZxcGRVKUz-utLE5qhFk/gviz/tq?tqx=out:csv&gid=0';
 // Data/hora da última geração (build diário a partir da planilha) — America/Sao_Paulo
-const BUILD_TS = '05/06/2026 01:38';
+const BUILD_TS = '05/06/2026 01:54';
 
 function setSyncUI(state, label, time) {
   document.getElementById('syncDot').className   = 'sync-dot ' + state;
