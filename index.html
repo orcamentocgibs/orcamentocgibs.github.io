@@ -657,7 +657,7 @@ tbody tr.data-row td { padding: 9px 8px; vertical-align: middle; }
   <div class="sync-bar-inner">
     <span class="sync-dot" id="syncDot"></span>
     <span class="sync-label" id="syncLabel">Dados atualizados</span>
-    <span class="sync-time" id="syncTime">atualizado em 05/06/2026 01:59</span>
+    <span class="sync-time" id="syncTime">atualizado em 05/06/2026 02:08</span>
     <a class="sync-link" href="https://docs.google.com/spreadsheets/d/1UTGEbJCL4nFtxmqGysadaJ4zZxcGRVKUz-utLE5qhFk/edit" target="_blank" title="Abre a planilha no Google Sheets. Lá você pode editar online, ou Arquivo → Fazer download → Excel (.xlsx) para editar offline e Arquivo → Importar para subir de volta.">
       <i class="fas fa-table-cells"></i> Editar planilha
     </a>
@@ -1920,22 +1920,22 @@ function buildFolha(data = filtered) {
     </tr>`;
   }).join('');
   cont.innerHTML=`
-    <div class="nat-summary-grid">
+    <div class="nat-summary-grid" style="grid-template-columns:repeat(3,minmax(0,1fr))">
       <div class="nat-summary-card" style="--nc-color:#0f2d5a">
         <div class="ns-label">Total da Folha de Pagamento</div>
-        <div class="ns-main">${fmtBRL(tot)}</div>
+        <div class="ns-main" style="font-size:21px">${fmtBRL(tot)}</div>
         <div class="ns-sub"><strong>${totGeral>0?(tot/totGeral*100).toFixed(1):'0'}%</strong> do orçamento exibido · ${rows.length} rubricas</div>
         <div class="ns-pct"><i class="fas fa-wallet"></i></div>
       </div>
       <div class="nat-summary-card" style="--nc-color:#1d5fa6">
         <div class="ns-label">Pessoal e Encargos — GND 31</div>
-        <div class="ns-main">${fmtBRL(v31)}</div>
+        <div class="ns-main" style="font-size:21px">${fmtBRL(v31)}</div>
         <div class="ns-sub">Remuneração, jetons de servidores e ressarcimentos · <strong>${tot>0?(v31/tot*100).toFixed(1):'0'}%</strong> da folha</div>
         <div class="ns-pct">31</div>
       </div>
       <div class="nat-summary-card" style="--nc-color:#1B9E6E">
         <div class="ns-label">Custeio da Folha — GND 33</div>
-        <div class="ns-main">${fmtBRL(v33)}</div>
+        <div class="ns-main" style="font-size:21px">${fmtBRL(v33)}</div>
         <div class="ns-sub">Jetons de conselheiros, benefícios, deslocamentos e indenizações · <strong>${tot>0?(v33/tot*100).toFixed(1):'0'}%</strong></div>
         <div class="ns-pct">33</div>
       </div>
@@ -2021,22 +2021,22 @@ function buildPCA(data = filtered) {
     </div>`;
   }).join('');
   cont.innerHTML=`
-    <div class="nat-summary-grid">
+    <div class="nat-summary-grid" style="grid-template-columns:repeat(3,minmax(0,1fr))">
       <div class="nat-summary-card" style="--nc-color:#0f2d5a">
         <div class="ns-label">Valor Total do PCA</div>
-        <div class="ns-main">${fmtBRL(tot)}</div>
+        <div class="ns-main" style="font-size:21px">${fmtBRL(tot)}</div>
         <div class="ns-sub"><strong>${totGeral>0?(tot/totGeral*100).toFixed(1):'0'}%</strong> do orçamento exibido · Plano de Contratações Anual</div>
         <div class="ns-pct"><i class="fas fa-file-signature"></i></div>
       </div>
       <div class="nat-summary-card" style="--nc-color:#1d5fa6">
         <div class="ns-label">Contratações Planejadas</div>
-        <div class="ns-main">${rows.length}</div>
+        <div class="ns-main" style="font-size:21px">${rows.length}</div>
         <div class="ns-sub">Ticket médio de <strong>${fmtBRLcompact(ticket)}</strong> por item</div>
         <div class="ns-pct"><i class="fas fa-cart-shopping"></i></div>
       </div>
       <div class="nat-summary-card" style="--nc-color:#5b4db8">
         <div class="ns-label">Investimento × Custeio</div>
-        <div class="ns-main">${tot>0?(v44/tot*100).toFixed(1):'0'}% / ${tot>0?(v33/tot*100).toFixed(1):'0'}%</div>
+        <div class="ns-main" style="font-size:21px">${tot>0?(v44/tot*100).toFixed(1):'0'}% / ${tot>0?(v33/tot*100).toFixed(1):'0'}%</div>
         <div class="ns-sub">Capital: <strong>${fmtBRLcompact(v44)}</strong> · Custeio: <strong>${fmtBRLcompact(v33)}</strong></div>
         <div class="ns-pct">4|3</div>
       </div>
@@ -2199,7 +2199,7 @@ window.addEventListener('DOMContentLoaded', () => {
 // ═══ SINCRONIZACAO GOOGLE SHEETS ═══
 const CSV_URL = 'https://docs.google.com/spreadsheets/d/1UTGEbJCL4nFtxmqGysadaJ4zZxcGRVKUz-utLE5qhFk/gviz/tq?tqx=out:csv&gid=0';
 // Data/hora da última geração (build diário a partir da planilha) — America/Sao_Paulo
-const BUILD_TS = '05/06/2026 01:59';
+const BUILD_TS = '05/06/2026 02:08';
 
 function setSyncUI(state, label, time) {
   document.getElementById('syncDot').className   = 'sync-dot ' + state;
